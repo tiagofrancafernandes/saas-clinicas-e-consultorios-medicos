@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Tenant;
 use App\Actions\Appointment\BookAppointmentAction;
 use App\Actions\Appointment\CancelAppointmentAction;
 use App\Actions\Appointment\RescheduleAppointmentAction;
+use App\Enums\Tenant\AppointmentStatus;
+use App\Events\Tenant\PatientSummonedToRoom;
 use App\Http\Controllers\Controller;
 use App\Models\Tenant\Appointment;
 use Carbon\CarbonImmutable;
@@ -190,7 +192,7 @@ final class AppointmentController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        if (in_array($appointment->status, [\App\Enums\Tenant\AppointmentStatus::CANCELLED, \App\Enums\Tenant\AppointmentStatus::NO_SHOW, \App\Enums\Tenant\AppointmentStatus::COMPLETED], true)) {
+        if (in_array($appointment->status, [AppointmentStatus::CANCELLED, AppointmentStatus::NO_SHOW, AppointmentStatus::COMPLETED], true)) {
             return response()->json([
                 'message' => 'Cannot summon patient for an appointment that is finalized.',
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -201,10 +203,10 @@ final class AppointmentController extends Controller
             ?? 'Consulting Room 01';
 
         $appointment->update([
-            'status' => \App\Enums\Tenant\AppointmentStatus::IN_CONSULTATION,
+            'status' => AppointmentStatus::IN_CONSULTATION,
         ]);
 
-        \App\Events\Tenant\PatientSummonedToRoom::dispatch(
+        PatientSummonedToRoom::dispatch(
             (string) tenant('id'),
             $appointment,
             $roomName

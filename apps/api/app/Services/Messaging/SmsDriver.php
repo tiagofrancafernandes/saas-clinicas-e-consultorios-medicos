@@ -10,12 +10,12 @@ use Illuminate\Support\Str;
 final class SmsDriver implements MessagingDriverInterface
 {
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array{external_id: string, status: string, response: array<string, mixed>}
      */
     public function send(string $recipient, string $template, array $payload): array
     {
-        $externalId = 'sms_' . Str::random(24);
+        $externalId = 'sms_'.Str::random(24);
 
         return [
             'external_id' => $externalId,

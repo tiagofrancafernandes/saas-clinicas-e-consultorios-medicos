@@ -110,7 +110,7 @@ final class MessagingAndRealTimeTest extends TestCase
         tenancy()->end();
 
         // Execute central scan job
-        (new ScanUpcomingAppointmentsJob())->handle();
+        (new ScanUpcomingAppointmentsJob)->handle();
 
         // Verify only 1 reminder was queued
         Queue::assertPushed(DispatchAppointmentReminderJob::class, 1);
@@ -150,7 +150,7 @@ final class MessagingAndRealTimeTest extends TestCase
         ]);
 
         $job = new DispatchAppointmentReminderJob($appointment, 'WHATSAPP');
-        $job->handle(new WhatsAppDriver());
+        $job->handle(new WhatsAppDriver);
 
         // Verify log was stored in tenant schema
         $log = NotificationLog::where('appointment_id', $appointment->id)->first();

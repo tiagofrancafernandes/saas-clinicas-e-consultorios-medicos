@@ -24,8 +24,7 @@ final class DispatchAppointmentReminderJob implements ShouldQueue
     public function __construct(
         public readonly Appointment $appointment,
         public readonly string $channel = 'WHATSAPP'
-    ) {
-    }
+    ) {}
 
     public function handle(WhatsAppDriver $driver): void
     {

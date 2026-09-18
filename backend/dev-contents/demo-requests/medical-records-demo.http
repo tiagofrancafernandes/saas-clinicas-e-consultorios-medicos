@@ -1,0 +1,58 @@
+### List Accessible Medical Records for a Patient
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+# @prompt requesterProfessionalId The UUID of the viewing practitioner
+GET http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records?requester_professional_id={{requesterProfessionalId}}
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Create Confidential Clinical Note (Enforces Visibility Tiers: PRIVATE / SHARED_TEAM / PUBLIC_CLINIC)
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+# @prompt professionalId The UUID of the authoring professional
+POST http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "professional_id": "{{professionalId}}",
+    "title": "Neurological Assessment - Initial Exam",
+    "content": "Patient reports intermittent cephalalgia with photophobia. Cranial nerve examination intact. Prescribed prophylactic treatment.",
+    "visibility": "PRIVATE",
+    "type": "CLINICAL_NOTE"
+}
+
+###
+
+### View Specific Confidential Medical Record (Authorized via Author or Active Delegation)
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+# @prompt recordId The UUID of the medical record
+# @prompt requesterProfessionalId The UUID of the viewing practitioner
+GET http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records/{{recordId}}?requester_professional_id={{requesterProfessionalId}}
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Grant Temporary Professional Delegation (Covering Doctor Access Delegation)
+# @prompt tenantId The UUID of the tenant
+# @prompt grantorProfessionalId The author doctor granting access
+# @prompt granteeProfessionalId The substitute doctor receiving access
+# @prompt patientId The specific patient (or leave empty for all patients of grantor)
+POST http://localhost:8000/api/tenant/delegations
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "grantor_professional_id": "{{grantorProfessionalId}}",
+    "grantee_professional_id": "{{granteeProfessionalId}}",
+    "patient_id": "{{patientId}}",
+    "starts_at_utc": "2026-10-15T00:00:00Z",
+    "ends_at_utc": "2026-10-17T23:59:59Z",
+    "reason": "Covering on-call shift during annual leave"
+}

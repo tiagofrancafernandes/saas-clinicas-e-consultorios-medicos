@@ -5,7 +5,10 @@ declare(strict_types=1);
 use App\Http\Controllers\Tenant\AppointmentController;
 use App\Http\Controllers\Tenant\AppointmentTokenController;
 use App\Http\Controllers\Tenant\AvailabilityController;
+use App\Http\Controllers\Tenant\MedicalRecordController;
 use App\Http\Controllers\Tenant\PatientAuthController;
+use App\Http\Controllers\Tenant\ProfessionalDelegationController;
+use App\Http\Middleware\CheckTenantSubscription;
 use App\Http\Middleware\InitializeTenancyByHeader;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -33,10 +36,11 @@ Route::middleware([
     });
 });
 
-// REST API routes with header identification
+// REST API routes with header identification & subscription enforcement
 Route::prefix('api/tenant')->middleware([
     'api',
     InitializeTenancyByHeader::class,
+    CheckTenantSubscription::class,
 ])->group(function (): void {
     // Availability calculation
     Route::get('/availability/slots', [AvailabilityController::class, 'index']);
@@ -48,6 +52,12 @@ Route::prefix('api/tenant')->middleware([
     Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel']);
     Route::post('/appointments/{id}/reschedule', [AppointmentController::class, 'reschedule']);
     Route::post('/appointments/{id}/summon', [AppointmentController::class, 'summon']);
+
+    // Medical Records & Delegations
+    Route::get('/patients/{patientId}/medical-records', [MedicalRecordController::class, 'index']);
+    Route::post('/patients/{patientId}/medical-records', [MedicalRecordController::class, 'store']);
+    Route::get('/patients/{patientId}/medical-records/{recordId}', [MedicalRecordController::class, 'show']);
+    Route::post('/delegations', [ProfessionalDelegationController::class, 'store']);
 
     // Fast Action Tokens (Appointment confirmation/cancellation)
     Route::get('/tokens/{token}', [AppointmentTokenController::class, 'show']);

@@ -22,8 +22,7 @@ final class PatientSummonedToRoom implements ShouldBroadcastNow
         public readonly string $tenantId,
         public readonly Appointment $appointment,
         public readonly string $roomName
-    ) {
-    }
+    ) {}
 
     public function broadcastOn(): Channel
     {
