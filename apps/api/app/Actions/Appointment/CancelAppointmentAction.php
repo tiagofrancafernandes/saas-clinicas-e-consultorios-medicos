@@ -32,7 +32,7 @@ final class CancelAppointmentAction
             $lockedAppointment->update([
                 'status' => AppointmentStatus::CANCELLED,
                 'notes' => $reason !== null
-                    ? trim(($lockedAppointment->notes ?? '') . " [Cancelled by {$cancelledBy}: {$reason}]")
+                    ? trim(($lockedAppointment->notes ?? '')." [Cancelled by {$cancelledBy}: {$reason}]")
                     : $lockedAppointment->notes,
             ]);
 

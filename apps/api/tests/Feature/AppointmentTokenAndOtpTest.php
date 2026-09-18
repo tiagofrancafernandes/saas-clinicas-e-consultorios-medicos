@@ -14,7 +14,6 @@ use App\Models\Tenant\Professional;
 use App\Services\Auth\PatientOtpService;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -43,7 +42,7 @@ final class AppointmentTokenAndOtpTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Token Clinic',
-            'slug' => 'token-clinic-' . Str::random(5),
+            'slug' => 'token-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -93,7 +92,7 @@ final class AppointmentTokenAndOtpTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Invalid Token Clinic',
-            'slug' => 'inv-token-' . Str::random(5),
+            'slug' => 'inv-token-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -165,7 +164,7 @@ final class AppointmentTokenAndOtpTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'OTP Clinic',
-            'slug' => 'otp-clinic-' . Str::random(5),
+            'slug' => 'otp-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -198,7 +197,7 @@ final class AppointmentTokenAndOtpTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Invalid OTP Clinic',
-            'slug' => 'inv-otp-' . Str::random(5),
+            'slug' => 'inv-otp-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

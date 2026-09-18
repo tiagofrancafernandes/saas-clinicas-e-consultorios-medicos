@@ -41,7 +41,7 @@ final class SlotCalculatorTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Slot Test Clinic',
-            'slug' => 'slot-clinic-' . Str::random(5),
+            'slug' => 'slot-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -83,7 +83,7 @@ final class SlotCalculatorTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'No Shift Clinic',
-            'slug' => 'no-shift-' . Str::random(5),
+            'slug' => 'no-shift-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -118,7 +118,7 @@ final class SlotCalculatorTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Exclusion Test Clinic',
-            'slug' => 'exclusion-' . Str::random(5),
+            'slug' => 'exclusion-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

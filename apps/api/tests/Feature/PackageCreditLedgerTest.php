@@ -10,7 +10,6 @@ use App\Models\Central\Tenant;
 use App\Models\Tenant\AppointmentType;
 use App\Models\Tenant\Package;
 use App\Models\Tenant\Patient;
-use App\Models\Tenant\PatientCreditLedger;
 use App\Models\Tenant\PatientPackage;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -42,7 +41,7 @@ final class PackageCreditLedgerTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Ledger Clinic',
-            'slug' => 'ledger-clinic-' . Str::random(5),
+            'slug' => 'ledger-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -101,7 +100,7 @@ final class PackageCreditLedgerTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Expired Clinic',
-            'slug' => 'expired-clinic-' . Str::random(5),
+            'slug' => 'expired-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -143,7 +142,7 @@ final class PackageCreditLedgerTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Exhausted Clinic',
-            'slug' => 'exhausted-' . Str::random(5),
+            'slug' => 'exhausted-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

@@ -64,12 +64,12 @@ final class SlotCalculator
             }
 
             $shiftStartLocal = CarbonImmutable::parse(
-                $dateInClinicTz->toDateString() . ' ' . $availability->start_time,
+                $dateInClinicTz->toDateString().' '.$availability->start_time,
                 $clinicTimezone
             );
 
             $shiftEndLocal = CarbonImmutable::parse(
-                $dateInClinicTz->toDateString() . ' ' . $availability->end_time,
+                $dateInClinicTz->toDateString().' '.$availability->end_time,
                 $clinicTimezone
             );
 
@@ -92,6 +92,7 @@ final class SlotCalculator
 
                 if ($hasUnavailabilityCollision) {
                     $currentSlotStartLocal = $currentSlotEndLocal;
+
                     continue;
                 }
 
@@ -106,6 +107,7 @@ final class SlotCalculator
 
                 if ($hasAppointmentCollision) {
                     $currentSlotStartLocal = $currentSlotEndLocal;
+
                     continue;
                 }
 

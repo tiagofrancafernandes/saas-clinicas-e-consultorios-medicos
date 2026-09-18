@@ -34,7 +34,7 @@ final class ValidateAppointmentRulesAction
                 ->where('is_active', true)
                 ->exists();
 
-            if (!$insuranceAccepted) {
+            if (! $insuranceAccepted) {
                 throw new RuntimeException('The selected professional does not accept this health insurance provider.');
             }
 

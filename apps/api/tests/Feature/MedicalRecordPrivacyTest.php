@@ -41,7 +41,7 @@ final class MedicalRecordPrivacyTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Records Clinic',
-            'slug' => 'rec-clinic-' . Str::random(5),
+            'slug' => 'rec-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -96,7 +96,7 @@ final class MedicalRecordPrivacyTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Delegation Clinic',
-            'slug' => 'del-clinic-' . Str::random(5),
+            'slug' => 'del-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -156,7 +156,7 @@ final class MedicalRecordPrivacyTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Denied Clinic',
-            'slug' => 'denied-clinic-' . Str::random(5),
+            'slug' => 'denied-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

@@ -47,7 +47,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Cancel Test Clinic',
-            'slug' => 'cancel-clinic-' . Str::random(5),
+            'slug' => 'cancel-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -103,7 +103,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Package Cancel Clinic',
-            'slug' => 'pkg-cancel-' . Str::random(5),
+            'slug' => 'pkg-cancel-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -170,7 +170,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Finalized Clinic',
-            'slug' => 'finalized-' . Str::random(5),
+            'slug' => 'finalized-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -210,7 +210,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Reschedule Clinic',
-            'slug' => 'resched-' . Str::random(5),
+            'slug' => 'resched-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -253,7 +253,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Collision Reschedule Clinic',
-            'slug' => 'col-resched-' . Str::random(5),
+            'slug' => 'col-resched-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

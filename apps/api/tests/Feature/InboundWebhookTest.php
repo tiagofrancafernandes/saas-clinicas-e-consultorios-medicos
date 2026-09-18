@@ -39,11 +39,11 @@ final class InboundWebhookTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Webhook Clinic',
-            'slug' => 'webhook-clinic-' . Str::random(5),
+            'slug' => 'webhook-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
-        $externalMessageId = 'WHATSAPP_MSG_' . Str::random(16);
+        $externalMessageId = 'WHATSAPP_MSG_'.Str::random(16);
 
         $tenant->run(function () use ($externalMessageId): void {
             $professional = Professional::create([
@@ -104,11 +104,11 @@ final class InboundWebhookTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Cancel Webhook Clinic',
-            'slug' => 'cancel-wh-' . Str::random(5),
+            'slug' => 'cancel-wh-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
-        $externalMessageId = 'WHATSAPP_MSG_' . Str::random(16);
+        $externalMessageId = 'WHATSAPP_MSG_'.Str::random(16);
 
         $tenant->run(function () use ($externalMessageId): void {
             $professional = Professional::create([

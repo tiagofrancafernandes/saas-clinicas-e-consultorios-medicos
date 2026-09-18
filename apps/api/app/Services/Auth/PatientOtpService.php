@@ -54,6 +54,6 @@ final class PatientOtpService
 
     private static function getCacheKey(string $phone): string
     {
-        return 'patient_otp:' . md5($phone);
+        return 'patient_otp:'.md5($phone);
     }
 }

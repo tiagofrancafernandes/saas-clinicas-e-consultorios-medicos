@@ -44,7 +44,7 @@ final class InsuranceAndReturnRulesTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Insurance Clinic',
-            'slug' => 'ins-clinic-' . Str::random(5),
+            'slug' => 'ins-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -109,7 +109,7 @@ final class InsuranceAndReturnRulesTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Rejected Ins Clinic',
-            'slug' => 'rej-ins-' . Str::random(5),
+            'slug' => 'rej-ins-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -193,7 +193,7 @@ final class InsuranceAndReturnRulesTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Return Clinic',
-            'slug' => 'return-clinic-' . Str::random(5),
+            'slug' => 'return-clinic-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -252,7 +252,7 @@ final class InsuranceAndReturnRulesTest extends TestCase
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Late Return Clinic',
-            'slug' => 'late-return-' . Str::random(5),
+            'slug' => 'late-return-'.Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
