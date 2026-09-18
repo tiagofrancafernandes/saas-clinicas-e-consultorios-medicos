@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@import './design-tokens.css';
+@config "../../../tailwind.config.ts";
+
+@custom-variant dark (&:where(.dark, .dark *, [data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --color-primary: #f45b45;
+    --color-primary-50: #fff1ee;
+    --color-primary-100: #ffe1dc;
+    --color-primary-200: #ffc9c0;
+    --color-primary-300: #ffa99b;
+    --color-primary-400: #ff7d68;
+    --color-primary-500: #f45b45;
+    --color-primary-600: #dd3f2a;
+    --color-primary-700: #b93222;
+    --color-primary-800: #992f23;
+    --color-primary-900: #7f2d24;
+    --color-primary-950: #45130d;
+    --color-primary-hover: #dd3f2a;
+    --color-primary-subtle: #fff1ee;
+    --color-primary-border: #ffc9c0;
+    --color-primary-text: #b93222;
+
+    --color-secondary: #56564f;
+    --color-secondary-50: #f8f8f7;
+    --color-secondary-100: #efefed;
+    --color-secondary-200: #dededb;
+    --color-secondary-300: #c7c7c2;
+    --color-secondary-400: #9b9b94;
+    --color-secondary-500: #56564f;
+    --color-secondary-600: #40403a;
+    --color-secondary-700: #292925;
+    --color-secondary-800: #1d1d1a;
+    --color-secondary-900: #11110f;
+    --color-secondary-hover: #40403a;
+    --color-secondary-subtle: #f8f8f7;
+    --color-secondary-border: #dededb;
+    --color-secondary-text: #292925;
+
+    --color-neutral-0: #ffffff;
+    --color-neutral-25: #fcfcfb;
+    --color-neutral-50: #f8f8f7;
+    --color-neutral-100: #efefed;
+    --color-neutral-200: #dededb;
+    --color-neutral-300: #c7c7c2;
+    --color-neutral-400: #9b9b94;
+    --color-neutral-500: #73736c;
+    --color-neutral-600: #56564f;
+    --color-neutral-700: #40403a;
+    --color-neutral-800: #292925;
+    --color-neutral-900: #1d1d1a;
+    --color-neutral-950: #11110f;
+
+    --color-success: #16a34a;
+    --color-success-50: #ecfdf3;
+    --color-success-100: #dcfce7;
+    --color-success-200: #b7efc8;
+    --color-success-500: #22c55e;
+    --color-success-600: #16a34a;
+    --color-success-700: #15803d;
+    --color-success-hover: #15803d;
+    --color-success-subtle: #ecfdf3;
+    --color-success-border: #b7efc8;
+    --color-success-text: #067647;
+
+    --color-warning: #d97706;
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-200: #fde68a;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+    --color-warning-700: #b45309;
+    --color-warning-hover: #b45309;
+    --color-warning-subtle: #fffbeb;
+    --color-warning-border: #fde68a;
+    --color-warning-text: #a16207;
+
+    --color-danger: #e11d48;
+    --color-danger-50: #fff1f2;
+    --color-danger-100: #ffe4e6;
+    --color-danger-200: #fecdd3;
+    --color-danger-500: #f43f5e;
+    --color-danger-600: #e11d48;
+    --color-danger-700: #be123c;
+    --color-danger-hover: #be123c;
+    --color-danger-subtle: #fff1f2;
+    --color-danger-border: #fecdd3;
+    --color-danger-text: #be123c;
+
+    --color-info: #2563eb;
+    --color-info-50: #eff6ff;
+    --color-info-100: #dbeafe;
+    --color-info-200: #bfdbfe;
+    --color-info-500: #3b82f6;
+    --color-info-600: #2563eb;
+    --color-info-700: #1d4ed8;
+    --color-info-hover: #1d4ed8;
+    --color-info-subtle: #eff6ff;
+    --color-info-border: #bfdbfe;
+    --color-info-text: #1d4ed8;
+
+    --color-error: #dc2626;
+    --color-error-50: #fef2f2;
+    --color-error-100: #fee2e2;
+    --color-error-200: #fecaca;
+    --color-error-500: #ef4444;
+    --color-error-600: #dc2626;
+    --color-error-700: #b91c1c;
+    --color-error-hover: #b91c1c;
+    --color-error-subtle: #fef2f2;
+    --color-error-border: #fecaca;
+    --color-error-text: #b91c1c;
+
+    /* Surface & Design System Tokens */
+    --color-surface: var(--surface);
+    --color-surface-dim: var(--surface-dim);
+    --color-surface-bright: var(--surface-bright);
+    --color-surface-container-lowest: var(--surface-container-lowest);
+    --color-surface-container-low: var(--surface-container-low);
+    --color-surface-container: var(--surface-container);
+    --color-surface-container-high: var(--surface-container-high);
+    --color-surface-container-highest: var(--surface-container-highest);
+    --color-surface-variant: var(--surface-variant);
+    --color-surface-tint: var(--surface-tint);
+
+    --color-on-surface: var(--on-surface);
+    --color-on-surface-variant: var(--on-surface-variant);
+    --color-inverse-surface: var(--inverse-surface);
+    --color-inverse-on-surface: var(--inverse-on-surface);
+
+    --color-outline: var(--outline);
+    --color-outline-variant: var(--outline-variant);
+
+    --color-background: var(--background);
+    --color-on-background: var(--on-background);
+
+    --color-on-primary: var(--on-primary);
+    --color-primary-container: var(--primary-container);
+    --color-on-primary-container: var(--on-primary-container);
+    --color-inverse-primary: var(--inverse-primary);
+
+    --color-on-secondary: var(--on-secondary);
+    --color-secondary-container: var(--secondary-container);
+    --color-on-secondary-container: var(--on-secondary-container);
+
+    --color-tertiary: var(--tertiary);
+    --color-on-tertiary: var(--on-tertiary);
+    --color-tertiary-container: var(--tertiary-container);
+    --color-on-tertiary-container: var(--on-tertiary-container);
+
+    --color-on-error: var(--on-error);
+    --color-error-container: var(--error-container);
+    --color-on-error-container: var(--on-error-container);
+
+    --color-primary-fixed: var(--primary-fixed);
+    --color-primary-fixed-dim: var(--primary-fixed-dim);
+    --color-on-primary-fixed: var(--on-primary-fixed);
+    --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
+
+    --color-secondary-fixed: var(--secondary-fixed);
+    --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+    --color-on-secondary-fixed: var(--on-secondary-fixed);
+    --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
+
+    --color-tertiary-fixed: var(--tertiary-fixed);
+    --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+    --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+    --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+}
+
+@plugin '@tailwindcss/forms';
+@plugin "@tailwindcss/typography";
+
+@plugin "@iconify/tailwind4" {
+    prefix: 'iconify';
+    prefixes: mdi, fa7-solid, fa7-regular, cil, mdi-light, vscode-icons, tabler, lucide, streamline;
+    scale: 1.2;
+}
+
+iconify-icon,
+iconify-color,
+iconify,
+icon,
+Icon {
+    @apply iconify;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+iconify-color,
+color-icon,
+ColorIcon {
+    @apply iconify-color;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+.iconify-icon {
+    @apply iconify-color;
+}
+
+svg.iconify {
+    background-color: inherit;
+}
+
+.tmp--icon-list {
+    @apply w-full border border-amber-500 min-h-12;
+}
+
+.tmp--icon-list .tmp--icon-list-item,
+.tmp--icon-list > li,
+.tmp--icon-list > * {
+    @apply border border-amber-500 min-h-12;
+}
+
+html,
+body {
+    font-family: var(--font-admin-sans);
+    background: var(--admin-background);
+    color: var(--admin-text);
+}
+
+button:not([disabled]),
+select:not([disabled]) {
+    @apply cursor-pointer;
+    @apply font-label-sm;
+}
+
+button,
+input {
+    @apply focus:ring-0 focus:outline-none active:ring-0;
+}
+
+button,
+input,
+select {
+    @apply font-label-sm;
+}
+
+input,
+select {
+    @apply border-[var(--admin-primary)]/40;
+    @apply focus:ring-0 focus:outline-none active:ring-0 focus:border-[var(--admin-primary)] active:border-[var(--admin-primary)];
+    @apply placeholder:text-[color:var(--admin-primary)]/70;
+}
+
+input:disabled,
+input[disabled],
+select:disabled,
+select[disabled] {
+    @apply disabled:bg-[var(--admin-primary-subtle)]/80 disabled:border-[var(--admin-primary-border)]/80 disabled:text-[var(--admin-muted)] disabled:cursor-not-allowed;
+    @apply focus:ring-0 focus:outline-none active:ring-0;
+}
+
+select > option:not([disabled]) {
+    @apply cursor-pointer;
+}
+
+.iconify.tf-bg-color-none,
+svg.tf-bg-color-none,
+.tf-bg-color-none {
+    background: none;
+    background-color: none;
+    background-image: none;
+}
+
+label,
+nav a,
+nav a span
+{
+    @apply font-label-sm;
+}
+
+.tf-btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border font-label-sm transition-colors;
+}
+
+.tf-btn-auto {
+    @apply justify-center border-[var(--admin-border)] bg-white text-[var(--admin-muted)] hover:bg-neutral-50 hover:text-[var(--admin-text)] dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 cursor-pointer;
+}
+
+.tf-btn-default {
+    @apply inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-outline-variant/60 hover:bg-surface-container text-on-surface font-label-sm transition-colors;
+}
+
+/* Page & Layout Transitions */
+.page-enter-active,
+.page-leave-active,
+.layout-enter-active,
+.layout-leave-active {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.page-enter-from,
+.layout-enter-from {
+    opacity: 0;
+    transform: translateY(4px);
+}
+
+.page-leave-to,
+.layout-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-enter-active,
+    .page-leave-active,
+    .layout-enter-active,
+    .layout-leave-active {
+        transition: none !important;
+        transform: none !important;
+    }
+}

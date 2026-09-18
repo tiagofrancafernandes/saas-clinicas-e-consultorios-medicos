@@ -30,3 +30,19 @@ Planos são planejamento macro não desmembradas ou com controle de tarefas, enq
 ---
 ### Code Guidelines and Code Style Rules
 Em toda a execução respeite code guidelines descritas em `UNIVERSAL-CODE-STYLE-RULES.md`
+
+---
+### Arquivos de instrução
+Crie e mantenha atualizado os arquivos GEMINI.md e AGENTS.md assim como um README.md na raiz do repositório.
+
+
+## Referências de ui e design
+
+## Referências para o admin
+Para UI use como referência os arquivos `design-reference/admin/DESIGN.md` e `design-reference/admin/design.json` para o admin.
+
+Para o CSS com TailwindCSS v4 tem os estilos na pasta `design-reference/admin/styles` para seguir de guia mas para reforçar:
+- botões pequenos e bordas pequenas/discretas
+- pouco ou nenhuma borda do tipo `ring` comum no tailwindcss UI para active e focus (button, input etc). Remover ou deixar discreto/fino.
+- tipografia fina e pequena
+- icones iconify (pacote `@iconify/vue`)

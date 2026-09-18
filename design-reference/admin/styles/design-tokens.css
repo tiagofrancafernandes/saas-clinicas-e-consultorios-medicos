@@ -1,0 +1,238 @@
+:root {
+    --font-admin-sans: 'Ubuntu Sans', 'Aptos', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --admin-primary: #f45b45;
+    --admin-primary-hover: #dd3f2a;
+    --admin-primary-subtle: #fff1ee;
+    --admin-primary-border: #ffc9c0;
+    --admin-background: #f8f8f7;
+    --admin-surface: #ffffff;
+    --admin-border: #dededb;
+    --admin-text: #1d1d1a;
+    --admin-muted: #73736c;
+    --admin-success: #16a34a;
+    --admin-warning: #d97706;
+    --admin-info: #2563eb;
+    --admin-danger: #e11d48;
+    --admin-error: #dc2626;
+    --admin-radius-sm: 0.125rem;
+    --admin-radius-md: 0.25rem;
+    --admin-radius-lg: 0.375rem;
+    --admin-shadow-sm: 0 1px 2px rgb(17 17 15 / 0.04);
+    --admin-shadow-md: 0 8px 20px rgb(17 17 15 / 0.06);
+    --admin-shadow-lg: 0 16px 28px rgb(17 17 15 / 0.08);
+}
+
+:root[data-theme='dark'],
+:root.dark {
+    --admin-background: #141413;
+    --admin-surface: #1c1c1a;
+    --admin-border: #2f2f2b;
+    --admin-text: #f4f4f2;
+    --admin-muted: #b0b0a7;
+    --admin-primary-subtle: #3a1a16;
+    --admin-primary-border: #6b2c22;
+    --admin-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.24);
+    --admin-shadow-md: 0 10px 24px rgb(0 0 0 / 0.28);
+    --admin-shadow-lg: 0 18px 36px rgb(0 0 0 / 0.32);
+}
+
+:root,
+:root[data-theme='light'],
+:root.light {
+    color-scheme: light;
+}
+
+:root[data-theme='dark'],
+:root.dark {
+    color-scheme: dark;
+}
+
+/* ========================================
+   Public NFC Design System
+   ======================================== */
+
+:root {
+    /* Design System Colors */
+    --surface: #f7f9fb;
+    --surface-dim: #d8dadc;
+    --surface-bright: #f7f9fb;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f2f4f6;
+    --surface-container: #eceef0;
+    --surface-container-high: #e6e8ea;
+    --surface-container-highest: #e0e3e5;
+    --on-surface: #191c1e;
+    --on-surface-variant: #45464d;
+    --inverse-surface: #2d3133;
+    --inverse-on-surface: #eff1f3;
+    --outline: #76777d;
+    --outline-variant: #c6c6cd;
+    --surface-tint: #565e74;
+    --primary: var(--admin-primary);
+    --primary-hover: var(--admin-primary-hover);
+    --primary-subtle: var(--admin-primary-subtle);
+    --primary-border: var(--admin-primary-border);
+    --on-primary: #ffffff;
+    --primary-container: #fff1ee;
+    --on-primary-container: #b93222;
+    --inverse-primary: #ffc9c0;
+    --secondary: #56564f;
+    --secondary-hover: #40403a;
+    --secondary-subtle: #f8f8f7;
+    --secondary-border: #dededb;
+    --on-secondary: #ffffff;
+    --secondary-container: #efefed;
+    --on-secondary-container: #1d1d1a;
+    --tertiary: #000000;
+    --on-tertiary: #ffffff;
+    --tertiary-container: #002113;
+    --on-tertiary-container: #009668;
+    --success: var(--admin-success);
+    --success-subtle: #ecfdf3;
+    --success-border: #b7efc8;
+    --success-text: #067647;
+    --warning: var(--admin-warning);
+    --warning-subtle: #fffbeb;
+    --warning-border: #fde68a;
+    --warning-text: #a16207;
+    --danger: var(--admin-danger);
+    --danger-subtle: #fff1f2;
+    --danger-border: #fecdd3;
+    --danger-text: #be123c;
+    --info: var(--admin-info);
+    --info-subtle: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-text: #1d4ed8;
+    --error: var(--admin-error);
+    --error-subtle: #fef2f2;
+    --error-border: #fecaca;
+    --error-text: #b91c1c;
+    --on-error: #ffffff;
+    --error-container: #fef2f2;
+    --on-error-container: #b91c1c;
+    --primary-fixed: #dae2fd;
+    --primary-fixed-dim: #bec6e0;
+    --on-primary-fixed: #131b2e;
+    --on-primary-fixed-variant: #3f465c;
+    --secondary-fixed: #e1e0ff;
+    --secondary-fixed-dim: #c0c1ff;
+    --on-secondary-fixed: #07006c;
+    --on-secondary-fixed-variant: #2f2ebe;
+    --tertiary-fixed: #6ffbbe;
+    --tertiary-fixed-dim: #4edea3;
+    --on-tertiary-fixed: #002113;
+    --on-tertiary-fixed-variant: #005236;
+    --background: #f7f9fb;
+    --on-background: #191c1e;
+    --surface-variant: #e0e3e5;
+
+    /* Typography Families */
+    --font-headline: 'Hanken Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing - Modular Scale (8px base) */
+    --spacing-stack-sm: 0.5rem;
+    --spacing-stack-md: 1.5rem;
+    --spacing-stack-lg: 2.5rem;
+    --spacing-gutter: 1rem;
+    --spacing-margin-mobile: 1.25rem;
+
+    /* Layout */
+    --container-max: 480px;
+
+    /* Border Radius */
+    --radius-sm: 0.125rem;
+    --radius-DEFAULT: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    --shadow-card-hover: 0 8px 28px -4px rgba(15, 23, 42, 0.1);
+}
+
+/* Typography Utilities */
+@utility font-headline-lg {
+    font-family: var(--font-headline);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+}
+
+@utility font-headline-lg-mobile {
+    font-family: var(--font-headline);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+}
+
+@utility font-headline-md {
+    font-family: var(--font-headline);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+}
+
+@utility font-body-lg {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+@utility font-body-md {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+@utility font-label-md {
+    font-family: var(--font-headline);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.05em;
+}
+
+@utility font-label-sm {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+/* Spacing & Layout Utilities */
+@utility gap-stack-sm {
+    gap: var(--spacing-stack-sm);
+}
+
+@utility gap-stack-md {
+    gap: var(--spacing-stack-md);
+}
+
+@utility gap-stack-lg {
+    gap: var(--spacing-stack-lg);
+}
+
+@utility px-margin-mobile {
+    padding-left: var(--spacing-margin-mobile);
+    padding-right: var(--spacing-margin-mobile);
+}
+
+@utility max-w-container-max {
+    max-width: var(--container-max);
+}
+
+/* Shadow Utilities */
+@utility shadow-card {
+    box-shadow: var(--shadow-card);
+}
+
+@utility shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+}
