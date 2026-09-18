@@ -1,8 +1,8 @@
 @baseUrl = http://localhost:8000
 @tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@patientId = 44444444-4444-4444-4444-444444444444
 
 ### List Patient Files & Clinical Attachments
-# @prompt patientId The UUID of the patient
 GET {{baseUrl}}/api/tenant/patients/{{patientId}}/files
 Accept: application/json
 X-Tenant-ID: {{tenantId}}

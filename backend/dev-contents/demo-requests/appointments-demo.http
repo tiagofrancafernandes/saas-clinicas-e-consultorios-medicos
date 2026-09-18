@@ -1,8 +1,10 @@
 @baseUrl = http://localhost:8000
 @tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@professionalId = 11111111-1111-1111-1111-111111111111
+@patientId = 44444444-4444-4444-4444-444444444444
+@appointmentId = 55555555-5555-5555-5555-555555555555
 
 ### Get Available Slots for a Professional
-# @prompt professionalId The UUID of the professional
 GET {{baseUrl}}/api/tenant/availability/slots?professional_id={{professionalId}}&date=2026-10-15&slot_duration=30
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -17,8 +19,6 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Book New Appointment (Atomic Pessimistic Lock & Business Rules Validated)
-# @prompt professionalId The UUID of the professional
-# @prompt patientId The UUID of the patient
 POST {{baseUrl}}/api/tenant/appointments
 Content-Type: application/json
 Accept: application/json
@@ -36,7 +36,6 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Get Appointment Details by ID
-# @prompt appointmentId The UUID of the appointment
 GET {{baseUrl}}/api/tenant/appointments/{{appointmentId}}
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -44,7 +43,6 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Reschedule Appointment
-# @prompt appointmentId The UUID of the appointment
 POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/reschedule
 Content-Type: application/json
 Accept: application/json
@@ -58,7 +56,6 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Cancel Appointment (Triggers Credit Refund and Waitlist Auto-fill)
-# @prompt appointmentId The UUID of the appointment
 POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/cancel
 Content-Type: application/json
 Accept: application/json
@@ -71,7 +68,6 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Summon Patient to Consulting Room (Broadcasts Real-Time Event to TV Displays)
-# @prompt appointmentId The UUID of the appointment
 POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/summon
 Content-Type: application/json
 Accept: application/json

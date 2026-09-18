@@ -1,5 +1,11 @@
 @baseUrl = http://localhost:8000
 @tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@patientId = 44444444-4444-4444-4444-444444444444
+@requesterProfessionalId = 11111111-1111-1111-1111-111111111111
+@professionalId = 11111111-1111-1111-1111-111111111111
+@recordId = 66666666-6666-6666-6666-666666666666
+@grantorProfessionalId = 11111111-1111-1111-1111-111111111111
+@granteeProfessionalId = 22222222-2222-2222-2222-222222222222
 
 ### List Accessible Medical Records for a Patient
 # @prompt patientId The UUID of the patient

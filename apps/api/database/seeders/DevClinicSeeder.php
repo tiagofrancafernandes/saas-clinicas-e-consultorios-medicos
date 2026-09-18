@@ -6,12 +6,16 @@ namespace Database\Seeders;
 
 use App\Enums\Central\SubscriptionStatus;
 use App\Enums\Tenant\AppointmentStatus;
+use App\Enums\Tenant\RecordVisibility;
 use App\Models\Central\Tenant;
 use App\Models\Tenant\Appointment;
+use App\Models\Tenant\AppointmentToken;
 use App\Models\Tenant\AppointmentType;
 use App\Models\Tenant\ClinicRoom;
+use App\Models\Tenant\File;
 use App\Models\Tenant\HealthInsurance;
 use App\Models\Tenant\HealthInsurancePlan;
+use App\Models\Tenant\MedicalRecord;
 use App\Models\Tenant\Package;
 use App\Models\Tenant\Patient;
 use App\Models\Tenant\PatientHealthInsurance;
@@ -26,6 +30,13 @@ use Illuminate\Support\Str;
 final class DevClinicSeeder extends Seeder
 {
     public const string DEMO_TENANT_ID = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+    public const string DEMO_DR_CARTER_ID = '11111111-1111-1111-1111-111111111111';
+    public const string DEMO_DR_STONE_ID = '22222222-2222-2222-2222-222222222222';
+    public const string DEMO_DR_HOUSE_ID = '33333333-3333-3333-3333-333333333333';
+    public const string DEMO_PATIENT_CARLOS_ID = '44444444-4444-4444-4444-444444444444';
+    public const string DEMO_APPOINTMENT_ID = '55555555-5555-5555-5555-555555555555';
+    public const string DEMO_CONFIRMATION_TOKEN = 'demo_confirmation_token_carlos_abcdef1234567890abcdef123456789012';
+    public const string DEMO_MEDICAL_RECORD_ID = '66666666-6666-6666-6666-666666666666';
 
     public function run(): void
     {
@@ -79,7 +90,7 @@ final class DevClinicSeeder extends Seeder
 
             // Professionals
             $drCarter = Professional::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_DR_CARTER_ID,
                 'name' => 'Dr. Robert Carter',
                 'specialty' => 'Neurology',
                 'license_number' => 'CRM/SP 123456',
@@ -88,7 +99,7 @@ final class DevClinicSeeder extends Seeder
             ]);
 
             $drStone = Professional::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_DR_STONE_ID,
                 'name' => 'Dr. Amanda Stone',
                 'specialty' => 'Dermatology',
                 'license_number' => 'CRM/SP 654321',
@@ -97,7 +108,7 @@ final class DevClinicSeeder extends Seeder
             ]);
 
             $drHouse = Professional::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_DR_HOUSE_ID,
                 'name' => 'Dr. Gregory House',
                 'specialty' => 'Diagnostics',
                 'license_number' => 'CRM/SP 789012',
@@ -183,7 +194,7 @@ final class DevClinicSeeder extends Seeder
 
             // Patients
             $carlos = Patient::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_PATIENT_CARLOS_ID,
                 'name' => 'Carlos Silva',
                 'tax_id' => '12345678901',
                 'email' => 'carlos.silva@example.com',
@@ -227,8 +238,8 @@ final class DevClinicSeeder extends Seeder
             // Demo Appointments
             $tomorrow = CarbonImmutable::now()->addDay()->setTime(14, 0, 0);
 
-            Appointment::create([
-                'id' => (string) Str::uuid(),
+            $demoAppointment = Appointment::create([
+                'id' => static::DEMO_APPOINTMENT_ID,
                 'professional_id' => $drCarter->id,
                 'patient_id' => $carlos->id,
                 'clinic_room_id' => $room102->id,
@@ -240,6 +251,41 @@ final class DevClinicSeeder extends Seeder
                 'payment_status' => 'PENDING',
                 'origin_timezone' => 'America/Sao_Paulo',
                 'notes' => 'Patient requested initial consultation for migraine study',
+            ]);
+
+            // Fast action confirmation token (pre-seeded for demo requests & portal)
+            AppointmentToken::create([
+                'id' => (string) Str::uuid(),
+                'appointment_id' => $demoAppointment->id,
+                'token_hash' => hash('sha256', static::DEMO_CONFIRMATION_TOKEN),
+                'intended_action' => 'CONFIRMATION',
+                'expires_at_utc' => CarbonImmutable::now()->addDays(7),
+            ]);
+
+            // Sample Medical Record (Confidential Note)
+            MedicalRecord::create([
+                'id' => static::DEMO_MEDICAL_RECORD_ID,
+                'patient_id' => $carlos->id,
+                'professional_id' => $drCarter->id,
+                'appointment_id' => $demoAppointment->id,
+                'type' => 'CLINICAL_NOTE',
+                'visibility' => RecordVisibility::PRIVATE,
+                'title' => 'Neurological Assessment - Migraine Follow-up',
+                'content' => 'Patient reports reduction in cephalalgia frequency after starting prophylactic treatment. No visual aura detected.',
+            ]);
+
+            // Sample Patient File (Exam Document)
+            File::create([
+                'id' => (string) Str::uuid(),
+                'fileable_type' => Patient::class,
+                'fileable_id' => $carlos->id,
+                'collection' => 'exams',
+                'visibility' => 'SHARED_TEAM',
+                'disk' => 'local',
+                'file_path' => 'tenants/' . static::DEMO_TENANT_ID . '/exams/mri_brain_2026.pdf',
+                'original_filename' => 'mri_brain_carlos_silva.pdf',
+                'mime_type' => 'application/pdf',
+                'size_bytes' => 2048576,
             ]);
 
             // Waitlist entry

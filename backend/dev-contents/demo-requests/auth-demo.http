@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:8000
 @tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@token = demo_confirmation_token_carlos_abcdef1234567890abcdef123456789012
 
 ### Request 6-digit OTP Code for Patient Phone (10min TTL in Redis)
 POST {{baseUrl}}/api/tenant/auth/otp/request
