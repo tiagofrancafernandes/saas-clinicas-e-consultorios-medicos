@@ -1,16 +1,17 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
 ### List Patient Files & Clinical Attachments
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
-GET http://localhost:8000/api/tenant/patients/{{patientId}}/files
+GET {{baseUrl}}/api/tenant/patients/{{patientId}}/files
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Attach Document / Exam Result to Patient
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
-POST http://localhost:8000/api/tenant/patients/{{patientId}}/files
+POST {{baseUrl}}/api/tenant/patients/{{patientId}}/files
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}

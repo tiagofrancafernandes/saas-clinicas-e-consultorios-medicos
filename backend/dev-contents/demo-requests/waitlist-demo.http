@@ -1,16 +1,17 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
 ### List Active Waitlist Candidates
-# @prompt tenantId The UUID of the tenant
-GET http://localhost:8000/api/tenant/waitlist?status=WAITING
+GET {{baseUrl}}/api/tenant/waitlist?status=WAITING
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Add Patient to Schedule Waitlist
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
 # @prompt professionalId The UUID of the doctor
-POST http://localhost:8000/api/tenant/waitlist
+POST {{baseUrl}}/api/tenant/waitlist
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}

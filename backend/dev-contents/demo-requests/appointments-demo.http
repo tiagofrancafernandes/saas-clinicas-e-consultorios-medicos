@@ -1,25 +1,25 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
 ### Get Available Slots for a Professional
-# @prompt tenantId The UUID of the tenant
 # @prompt professionalId The UUID of the professional
-GET http://localhost:8000/api/tenant/availability/slots?professional_id={{professionalId}}&date=2026-10-15&slot_duration=30
+GET {{baseUrl}}/api/tenant/availability/slots?professional_id={{professionalId}}&date=2026-10-15&slot_duration=30
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### List All Appointments with Filters
-# @prompt tenantId The UUID of the tenant
-GET http://localhost:8000/api/tenant/appointments?date=2026-10-15
+GET {{baseUrl}}/api/tenant/appointments?date=2026-10-15
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Book New Appointment (Atomic Pessimistic Lock & Business Rules Validated)
-# @prompt tenantId The UUID of the tenant
 # @prompt professionalId The UUID of the professional
 # @prompt patientId The UUID of the patient
-POST http://localhost:8000/api/tenant/appointments
+POST {{baseUrl}}/api/tenant/appointments
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -36,18 +36,16 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Get Appointment Details by ID
-# @prompt tenantId The UUID of the tenant
 # @prompt appointmentId The UUID of the appointment
-GET http://localhost:8000/api/tenant/appointments/{{appointmentId}}
+GET {{baseUrl}}/api/tenant/appointments/{{appointmentId}}
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Reschedule Appointment
-# @prompt tenantId The UUID of the tenant
 # @prompt appointmentId The UUID of the appointment
-POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/reschedule
+POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/reschedule
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -60,9 +58,8 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Cancel Appointment (Triggers Credit Refund and Waitlist Auto-fill)
-# @prompt tenantId The UUID of the tenant
 # @prompt appointmentId The UUID of the appointment
-POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/cancel
+POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/cancel
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -74,9 +71,8 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### Summon Patient to Consulting Room (Broadcasts Real-Time Event to TV Displays)
-# @prompt tenantId The UUID of the tenant
 # @prompt appointmentId The UUID of the appointment
-POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/summon
+POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/summon
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}

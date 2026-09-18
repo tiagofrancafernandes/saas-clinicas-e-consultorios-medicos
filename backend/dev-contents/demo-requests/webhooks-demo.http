@@ -1,5 +1,7 @@
+@baseUrl = http://localhost:8000
+
 ### Inbound WhatsApp Webhook - Confirm Appointment
-POST http://localhost:8000/api/webhooks/whatsapp
+POST {{baseUrl}}/api/webhooks/whatsapp
 Content-Type: application/json
 Accept: application/json
 
@@ -11,7 +13,7 @@ Accept: application/json
 ###
 
 ### Inbound WhatsApp Webhook - Cancel Appointment
-POST http://localhost:8000/api/webhooks/whatsapp
+POST {{baseUrl}}/api/webhooks/whatsapp
 Content-Type: application/json
 Accept: application/json
 
@@ -23,7 +25,7 @@ Accept: application/json
 ###
 
 ### Inbound Webhook - Unrecognized Message / Log Not Found (Sad Path)
-POST http://localhost:8000/api/webhooks/whatsapp
+POST {{baseUrl}}/api/webhooks/whatsapp
 Content-Type: application/json
 Accept: application/json
 

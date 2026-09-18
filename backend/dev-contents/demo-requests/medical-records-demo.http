@@ -1,18 +1,19 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
 ### List Accessible Medical Records for a Patient
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
 # @prompt requesterProfessionalId The UUID of the viewing practitioner
-GET http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records?requester_professional_id={{requesterProfessionalId}}
+GET {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records?requester_professional_id={{requesterProfessionalId}}
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Create Confidential Clinical Note (Enforces Visibility Tiers: PRIVATE / SHARED_TEAM / PUBLIC_CLINIC)
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
 # @prompt professionalId The UUID of the authoring professional
-POST http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records
+POST {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
@@ -28,22 +29,20 @@ X-Tenant-ID: {{tenantId}}
 ###
 
 ### View Specific Confidential Medical Record (Authorized via Author or Active Delegation)
-# @prompt tenantId The UUID of the tenant
 # @prompt patientId The UUID of the patient
 # @prompt recordId The UUID of the medical record
 # @prompt requesterProfessionalId The UUID of the viewing practitioner
-GET http://localhost:8000/api/tenant/patients/{{patientId}}/medical-records/{{recordId}}?requester_professional_id={{requesterProfessionalId}}
+GET {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records/{{recordId}}?requester_professional_id={{requesterProfessionalId}}
 Accept: application/json
 X-Tenant-ID: {{tenantId}}
 
 ###
 
 ### Grant Temporary Professional Delegation (Covering Doctor Access Delegation)
-# @prompt tenantId The UUID of the tenant
 # @prompt grantorProfessionalId The author doctor granting access
 # @prompt granteeProfessionalId The substitute doctor receiving access
 # @prompt patientId The specific patient (or leave empty for all patients of grantor)
-POST http://localhost:8000/api/tenant/delegations
+POST {{baseUrl}}/api/tenant/delegations
 Content-Type: application/json
 Accept: application/json
 X-Tenant-ID: {{tenantId}}

@@ -1,17 +1,20 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
 ### Health Check
-GET http://localhost:8000/up
+GET {{baseUrl}}/up
 Accept: application/json
 
 ###
 
 ### List All Central Tenants
-GET http://localhost:8000/api/central/tenants
+GET {{baseUrl}}/api/central/tenants
 Accept: application/json
 
 ###
 
 ### Create New Tenant (Auto-provisions PostgreSQL Schema & Runs Migrations)
-POST http://localhost:8000/api/central/tenants
+POST {{baseUrl}}/api/central/tenants
 Content-Type: application/json
 Accept: application/json
 
@@ -29,6 +32,5 @@ Accept: application/json
 ###
 
 ### Get Tenant Details by ID
-# @prompt tenantId The UUID of the tenant
-GET http://localhost:8000/api/central/tenants/{{tenantId}}
+GET {{baseUrl}}/api/central/tenants/{{tenantId}}
 Accept: application/json
