@@ -70,3 +70,17 @@ X-Tenant-ID: {{tenantId}}
 {
     "reason": "Patient requested cancellation due to work trip"
 }
+
+###
+
+### Summon Patient to Consulting Room (Broadcasts Real-Time Event to TV Displays)
+# @prompt tenantId The UUID of the tenant
+# @prompt appointmentId The UUID of the appointment
+POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/summon
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "room_name": "Consulting Room 02"
+}

@@ -47,6 +47,7 @@ Route::prefix('api/tenant')->middleware([
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
     Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel']);
     Route::post('/appointments/{id}/reschedule', [AppointmentController::class, 'reschedule']);
+    Route::post('/appointments/{id}/summon', [AppointmentController::class, 'summon']);
 
     // Fast Action Tokens (Appointment confirmation/cancellation)
     Route::get('/tokens/{token}', [AppointmentTokenController::class, 'show']);

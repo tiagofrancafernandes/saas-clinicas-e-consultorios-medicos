@@ -41,7 +41,9 @@ function onInput(event: Event): void {
                 :required="required"
                 @input="onInput"
                 class="w-full h-8 px-2.5 text-xs bg-white text-[#1d1d1a] border rounded transition-colors placeholder:text-[#a0a099] focus:outline-none focus:border-[#454540] disabled:bg-[#f3f3f0] disabled:cursor-not-allowed"
-                :class="[error ? 'border-rose-400 focus:border-rose-500' : 'border-[#dededb]']"
+                :class="[
+                    error ? 'border-rose-400 focus:border-rose-500' : 'border-[#dededb]',
+                ]"
             />
         </div>
 

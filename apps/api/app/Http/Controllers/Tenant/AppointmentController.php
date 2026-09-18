@@ -176,4 +176,48 @@ final class AppointmentController extends Controller
             ], $status);
         }
     }
+
+    public function summon(Request $request, string $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'room_name' => ['nullable', 'string', 'max:80'],
+        ]);
+
+        $appointment = Appointment::query()->with(['patient', 'professional', 'clinicRoom'])->find($id);
+        if (! $appointment) {
+            return response()->json([
+                'message' => 'Appointment not found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        if (in_array($appointment->status, [\App\Enums\Tenant\AppointmentStatus::CANCELLED, \App\Enums\Tenant\AppointmentStatus::NO_SHOW, \App\Enums\Tenant\AppointmentStatus::COMPLETED], true)) {
+            return response()->json([
+                'message' => 'Cannot summon patient for an appointment that is finalized.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $roomName = $validated['room_name']
+            ?? $appointment->clinicRoom->name
+            ?? 'Consulting Room 01';
+
+        $appointment->update([
+            'status' => \App\Enums\Tenant\AppointmentStatus::IN_CONSULTATION,
+        ]);
+
+        \App\Events\Tenant\PatientSummonedToRoom::dispatch(
+            (string) tenant('id'),
+            $appointment,
+            $roomName
+        );
+
+        return response()->json([
+            'message' => 'Patient summoned to consulting room successfully.',
+            'data' => [
+                'appointment_id' => $appointment->id,
+                'patient_name' => $appointment->patient->name,
+                'room_name' => $roomName,
+                'status' => $appointment->status->value,
+            ],
+        ]);
+    }
 }

@@ -59,9 +59,7 @@ const widthClasses = {
                     class="w-full bg-white rounded-lg border border-[#dededb] shadow-[0_10px_25px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col max-h-[90vh]"
                     :class="widthClasses[maxWidth]"
                 >
-                    <div
-                        class="px-5 py-3.5 border-b border-[#dededb] flex items-center justify-between"
-                    >
+                    <div class="px-5 py-3.5 border-b border-[#dededb] flex items-center justify-between">
                         <div>
                             <h3 v-if="title" class="text-sm font-semibold text-[#1d1d1a]">
                                 {{ title }}
