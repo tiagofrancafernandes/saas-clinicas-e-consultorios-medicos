@@ -1,0 +1,23 @@
+### List Active Waitlist Candidates
+# @prompt tenantId The UUID of the tenant
+GET http://localhost:8000/api/tenant/waitlist?status=WAITING
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Add Patient to Schedule Waitlist
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+# @prompt professionalId The UUID of the doctor
+POST http://localhost:8000/api/tenant/waitlist
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "patient_id": "{{patientId}}",
+    "professional_id": "{{professionalId}}",
+    "preferred_date": "2026-10-15",
+    "preferred_shift": "MORNING"
+}

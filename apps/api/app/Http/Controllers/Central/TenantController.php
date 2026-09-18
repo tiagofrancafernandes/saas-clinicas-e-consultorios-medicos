@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Central;
 
 use App\Enums\Central\SubscriptionStatus;
+use App\Models\Central\CentralAuditLog;
 use App\Models\Central\Tenant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -53,6 +54,19 @@ final class TenantController
             'current_period_start_utc' => now(),
             'current_period_end_utc' => now()->addDays(30),
             'is_exempt' => false,
+        ]);
+
+        CentralAuditLog::create([
+            'id' => (string) Str::uuid(),
+            'tenant_id' => $tenant->id,
+            'event' => 'TENANT_CREATED',
+            'ip_address' => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 255),
+            'payload' => [
+                'name' => $tenant->name,
+                'slug' => $tenant->slug,
+                'timezone' => $tenant->timezone,
+            ],
         ]);
 
         return new JsonResponse([

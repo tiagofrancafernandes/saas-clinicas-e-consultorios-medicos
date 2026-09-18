@@ -5,9 +5,11 @@ declare(strict_types=1);
 use App\Http\Controllers\Tenant\AppointmentController;
 use App\Http\Controllers\Tenant\AppointmentTokenController;
 use App\Http\Controllers\Tenant\AvailabilityController;
+use App\Http\Controllers\Tenant\FileController;
 use App\Http\Controllers\Tenant\MedicalRecordController;
 use App\Http\Controllers\Tenant\PatientAuthController;
 use App\Http\Controllers\Tenant\ProfessionalDelegationController;
+use App\Http\Controllers\Tenant\WaitlistController;
 use App\Http\Middleware\CheckTenantSubscription;
 use App\Http\Middleware\InitializeTenancyByHeader;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +60,14 @@ Route::prefix('api/tenant')->middleware([
     Route::post('/patients/{patientId}/medical-records', [MedicalRecordController::class, 'store']);
     Route::get('/patients/{patientId}/medical-records/{recordId}', [MedicalRecordController::class, 'show']);
     Route::post('/delegations', [ProfessionalDelegationController::class, 'store']);
+
+    // Patient Documents & Files
+    Route::get('/patients/{patientId}/files', [FileController::class, 'index']);
+    Route::post('/patients/{patientId}/files', [FileController::class, 'store']);
+
+    // Smart Waitlist
+    Route::get('/waitlist', [WaitlistController::class, 'index']);
+    Route::post('/waitlist', [WaitlistController::class, 'store']);
 
     // Fast Action Tokens (Appointment confirmation/cancellation)
     Route::get('/tokens/{token}', [AppointmentTokenController::class, 'show']);

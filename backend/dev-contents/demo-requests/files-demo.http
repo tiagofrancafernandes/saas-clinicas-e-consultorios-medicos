@@ -1,0 +1,25 @@
+### List Patient Files & Clinical Attachments
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+GET http://localhost:8000/api/tenant/patients/{{patientId}}/files
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Attach Document / Exam Result to Patient
+# @prompt tenantId The UUID of the tenant
+# @prompt patientId The UUID of the patient
+POST http://localhost:8000/api/tenant/patients/{{patientId}}/files
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "original_filename": "magnetic_resonance_brain_2026.pdf",
+    "file_path": "tenants/exams/magnetic_resonance_brain_2026.pdf",
+    "mime_type": "application/pdf",
+    "size_bytes": 2048576,
+    "collection": "exams",
+    "visibility": "SHARED_TEAM"
+}
