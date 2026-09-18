@@ -1,0 +1,58 @@
+### Request 6-digit OTP Code for Patient Phone (10min TTL in Redis)
+# @prompt tenantId The UUID of the tenant
+POST http://localhost:8000/api/tenant/auth/otp/request
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "phone": "+5511999990001"
+}
+
+###
+
+### Verify OTP Code and Generate Scoped Sanctum Access Token
+# @prompt tenantId The UUID of the tenant
+# @prompt otpCode The 6-digit OTP code received
+POST http://localhost:8000/api/tenant/auth/otp/verify
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "phone": "+5511999990001",
+    "code": "{{otpCode}}"
+}
+
+###
+
+### Get Patient Profile with Bearer Sanctum Token
+# @prompt tenantId The UUID of the tenant
+# @prompt accessToken The Bearer token issued upon OTP verification
+GET http://localhost:8000/api/tenant/auth/me
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Inspect Fast Action Token Details (Self-service Portal Pre-check)
+# @prompt tenantId The UUID of the tenant
+# @prompt token The 64-char raw action token
+GET http://localhost:8000/api/tenant/tokens/{{token}}
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Consume Fast Action Token (1-Click Appointment Confirmation)
+# @prompt tenantId The UUID of the tenant
+# @prompt token The 64-char raw action token
+POST http://localhost:8000/api/tenant/tokens/{{token}}/consume
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "expected_action": "CONFIRMATION"
+}

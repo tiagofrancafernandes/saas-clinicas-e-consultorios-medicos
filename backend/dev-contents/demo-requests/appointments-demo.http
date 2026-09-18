@@ -1,0 +1,72 @@
+### Get Available Slots for a Professional
+# @prompt tenantId The UUID of the tenant
+# @prompt professionalId The UUID of the professional
+GET http://localhost:8000/api/tenant/availability/slots?professional_id={{professionalId}}&date=2026-10-15&slot_duration=30
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### List All Appointments with Filters
+# @prompt tenantId The UUID of the tenant
+GET http://localhost:8000/api/tenant/appointments?date=2026-10-15
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Book New Appointment (Atomic Pessimistic Lock & Business Rules Validated)
+# @prompt tenantId The UUID of the tenant
+# @prompt professionalId The UUID of the professional
+# @prompt patientId The UUID of the patient
+POST http://localhost:8000/api/tenant/appointments
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "professional_id": "{{professionalId}}",
+    "patient_id": "{{patientId}}",
+    "start_time_utc": "2026-10-15T13:00:00Z",
+    "end_time_utc": "2026-10-15T13:30:00Z",
+    "origin_timezone": "America/Sao_Paulo",
+    "notes": "Consultation booked via demonstration endpoint"
+}
+
+###
+
+### Get Appointment Details by ID
+# @prompt tenantId The UUID of the tenant
+# @prompt appointmentId The UUID of the appointment
+GET http://localhost:8000/api/tenant/appointments/{{appointmentId}}
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Reschedule Appointment
+# @prompt tenantId The UUID of the tenant
+# @prompt appointmentId The UUID of the appointment
+POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/reschedule
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "new_start_time_utc": "2026-10-15T15:00:00Z",
+    "new_end_time_utc": "2026-10-15T15:30:00Z"
+}
+
+###
+
+### Cancel Appointment (Triggers Credit Refund and Waitlist Auto-fill)
+# @prompt tenantId The UUID of the tenant
+# @prompt appointmentId The UUID of the appointment
+POST http://localhost:8000/api/tenant/appointments/{{appointmentId}}/cancel
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "reason": "Patient requested cancellation due to work trip"
+}
