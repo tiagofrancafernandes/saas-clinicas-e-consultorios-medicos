@@ -1,0 +1,33 @@
+### Inbound WhatsApp Webhook - Confirm Appointment
+POST http://localhost:8000/api/webhooks/whatsapp
+Content-Type: application/json
+Accept: application/json
+
+{
+    "context_id": "MSG_WHATSAPP_SAMPLE_001",
+    "payload": "CONFIRM"
+}
+
+###
+
+### Inbound WhatsApp Webhook - Cancel Appointment
+POST http://localhost:8000/api/webhooks/whatsapp
+Content-Type: application/json
+Accept: application/json
+
+{
+    "context_id": "MSG_WHATSAPP_SAMPLE_002",
+    "payload": "CANCEL"
+}
+
+###
+
+### Inbound Webhook - Unrecognized Message / Log Not Found (Sad Path)
+POST http://localhost:8000/api/webhooks/whatsapp
+Content-Type: application/json
+Accept: application/json
+
+{
+    "context_id": "NON_EXISTENT_MESSAGE_ID",
+    "payload": "CONFIRM"
+}

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Central\InboundWebhookController;
 use App\Http\Controllers\Central\TenantController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,3 +11,5 @@ Route::prefix('central')->group(function (): void {
     Route::post('/tenants', [TenantController::class, 'store']);
     Route::get('/tenants/{id}', [TenantController::class, 'show']);
 });
+
+Route::post('/webhooks/{provider}', [InboundWebhookController::class, 'handle']);
