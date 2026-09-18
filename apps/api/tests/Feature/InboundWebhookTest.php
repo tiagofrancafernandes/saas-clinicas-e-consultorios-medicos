@@ -27,6 +27,7 @@ final class InboundWebhookTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -34,16 +35,16 @@ final class InboundWebhookTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_webhook_confirms_appointment_and_updates_log(): void
+    public function testHappyPathWebhookConfirmsAppointmentAndUpdatesLog(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Webhook Clinic',
-            'slug' => 'webhook-clinic-'.Str::random(5),
+            'slug' => 'webhook-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
-        $externalMessageId = 'WHATSAPP_MSG_'.Str::random(16);
+        $externalMessageId = 'WHATSAPP_MSG_' . Str::random(16);
 
         $tenant->run(function () use ($externalMessageId): void {
             $professional = Professional::create([
@@ -99,16 +100,16 @@ final class InboundWebhookTest extends TestCase
         });
     }
 
-    public function test_happy_path_webhook_cancels_appointment_and_updates_log(): void
+    public function testHappyPathWebhookCancelsAppointmentAndUpdatesLog(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Cancel Webhook Clinic',
-            'slug' => 'cancel-wh-'.Str::random(5),
+            'slug' => 'cancel-wh-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
-        $externalMessageId = 'WHATSAPP_MSG_'.Str::random(16);
+        $externalMessageId = 'WHATSAPP_MSG_' . Str::random(16);
 
         $tenant->run(function () use ($externalMessageId): void {
             $professional = Professional::create([
@@ -163,7 +164,7 @@ final class InboundWebhookTest extends TestCase
         });
     }
 
-    public function test_sad_path_webhook_handles_missing_message_or_unknown_id_gracefully(): void
+    public function testSadPathWebhookHandlesMissingMessageOrUnknownIdGracefully(): void
     {
         // 1. Missing message context / payload -> ignored
         $response1 = $this->postJson('/api/webhooks/whatsapp', []);

@@ -45,6 +45,7 @@ final class ValidateAppointmentRulesAction
 
             // C. Check if plan requires prior authorization code
             $plan = $patientHealthInsurance->healthInsurancePlan;
+
             if ($plan !== null && $plan->requires_prior_authorization && empty(trim((string) $healthInsuranceAuthCode))) {
                 throw new RuntimeException('The selected insurance plan requires a prior authorization code.');
             }

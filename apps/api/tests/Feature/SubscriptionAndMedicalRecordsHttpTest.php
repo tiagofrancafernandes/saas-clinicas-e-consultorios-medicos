@@ -29,7 +29,7 @@ final class SubscriptionAndMedicalRecordsHttpTest extends TestCase
         $this->tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Subscription Test Clinic',
-            'slug' => 'sub-clinic-'.substr($tenantId, 0, 6),
+            'slug' => 'sub-clinic-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);
     }
@@ -41,6 +41,7 @@ final class SubscriptionAndMedicalRecordsHttpTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -48,7 +49,7 @@ final class SubscriptionAndMedicalRecordsHttpTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_suspended_subscription_blocks_mutations_but_allows_reads(): void
+    public function testSuspendedSubscriptionBlocksMutationsButAllowsReads(): void
     {
         // Set tenant subscription to SUSPENDED
         Subscription::create([
@@ -100,7 +101,7 @@ final class SubscriptionAndMedicalRecordsHttpTest extends TestCase
             ->assertJsonFragment(['subscription_status' => 'SUSPENDED']);
     }
 
-    public function test_medical_record_confidentiality_and_delegation_http_flow(): void
+    public function testMedicalRecordConfidentialityAndDelegationHttpFlow(): void
     {
         tenancy()->initialize($this->tenant);
 

@@ -49,6 +49,7 @@ final class WaitlistController extends Controller
         ]);
 
         $patient = Patient::query()->find($validated['patient_id']);
+
         if (! $patient) {
             return response()->json([
                 'message' => 'Patient not found.',
@@ -56,6 +57,7 @@ final class WaitlistController extends Controller
         }
 
         $professional = Professional::query()->find($validated['professional_id']);
+
         if (! $professional) {
             return response()->json([
                 'message' => 'Professional not found.',

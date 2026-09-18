@@ -15,7 +15,7 @@ final class WhatsAppDriver implements MessagingDriverInterface
      */
     public function send(string $recipient, string $template, array $payload): array
     {
-        $externalId = 'wamid.'.Str::random(32);
+        $externalId = 'wamid.' . Str::random(32);
 
         return [
             'external_id' => $externalId,

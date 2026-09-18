@@ -40,6 +40,7 @@ final class BookAppointmentAction
         return DB::transaction(function () use ($data): Appointment {
             /** @var Professional $professional */
             $professional = Professional::findOrFail($data['professional_id']);
+
             /** @var Patient $patient */
             $patient = Patient::findOrFail($data['patient_id']);
 

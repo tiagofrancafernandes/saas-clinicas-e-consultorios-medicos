@@ -17,6 +17,7 @@ final class FileController extends Controller
     public function index(string $patientId): JsonResponse
     {
         $patient = Patient::query()->find($patientId);
+
         if (! $patient) {
             return response()->json([
                 'message' => 'Patient not found.',
@@ -41,6 +42,7 @@ final class FileController extends Controller
     public function store(Request $request, string $patientId): JsonResponse
     {
         $patient = Patient::query()->find($patientId);
+
         if (! $patient) {
             return response()->json([
                 'message' => 'Patient not found.',

@@ -31,7 +31,7 @@ final class TenantHttpEndpointsTest extends TestCase
         $this->tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Endpoints Test Clinic',
-            'slug' => 'clinic-'.substr($tenantId, 0, 6),
+            'slug' => 'clinic-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);
     }
@@ -43,6 +43,7 @@ final class TenantHttpEndpointsTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -50,7 +51,7 @@ final class TenantHttpEndpointsTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_tenant_identification_fails_without_header_or_with_invalid_id(): void
+    public function testTenantIdentificationFailsWithoutHeaderOrWithInvalidId(): void
     {
         // Sad path: Missing header
         $responseNoHeader = $this->getJson('/api/tenant/appointments');
@@ -64,7 +65,7 @@ final class TenantHttpEndpointsTest extends TestCase
             ->assertJsonFragment(['message' => 'Tenant not found or invalid tenant identifier.']);
     }
 
-    public function test_availability_slots_endpoint_happy_and_sad_path(): void
+    public function testAvailabilitySlotsEndpointHappyAndSadPath(): void
     {
         tenancy()->initialize($this->tenant);
 
@@ -116,7 +117,7 @@ final class TenantHttpEndpointsTest extends TestCase
         $responseInvalid->assertStatus(422);
     }
 
-    public function test_appointment_booking_collision_and_cancellation_endpoints(): void
+    public function testAppointmentBookingCollisionAndCancellationEndpoints(): void
     {
         tenancy()->initialize($this->tenant);
 
@@ -203,7 +204,7 @@ final class TenantHttpEndpointsTest extends TestCase
             ->assertJsonFragment(['message' => 'Cannot cancel an appointment that has already been finalized (CANCELLED).']);
     }
 
-    public function test_appointment_token_inspection_and_consumption_endpoints(): void
+    public function testAppointmentTokenInspectionAndConsumptionEndpoints(): void
     {
         tenancy()->initialize($this->tenant);
 
@@ -273,7 +274,7 @@ final class TenantHttpEndpointsTest extends TestCase
         $notFoundResponse->assertStatus(404);
     }
 
-    public function test_patient_otp_authentication_endpoints_happy_and_sad_path(): void
+    public function testPatientOtpAuthenticationEndpointsHappyAndSadPath(): void
     {
         tenancy()->initialize($this->tenant);
 

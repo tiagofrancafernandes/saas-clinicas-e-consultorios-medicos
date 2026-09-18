@@ -15,7 +15,7 @@ final class SmsDriver implements MessagingDriverInterface
      */
     public function send(string $recipient, string $template, array $payload): array
     {
-        $externalId = 'sms_'.Str::random(24);
+        $externalId = 'sms_' . Str::random(24);
 
         return [
             'external_id' => $externalId,

@@ -25,6 +25,7 @@ final class MedicalRecordController extends Controller
         ]);
 
         $patient = Patient::query()->find($patientId);
+
         if (! $patient) {
             return response()->json([
                 'message' => 'Patient not found.',
@@ -32,6 +33,7 @@ final class MedicalRecordController extends Controller
         }
 
         $requester = Professional::query()->find($validated['requester_professional_id']);
+
         if (! $requester) {
             return response()->json([
                 'message' => 'Requesting professional not found.',
@@ -60,6 +62,7 @@ final class MedicalRecordController extends Controller
         ]);
 
         $record = MedicalRecord::query()->where('patient_id', $patientId)->find($recordId);
+
         if (! $record) {
             return response()->json([
                 'message' => 'Medical record not found.',
@@ -67,6 +70,7 @@ final class MedicalRecordController extends Controller
         }
 
         $requester = Professional::query()->find($validated['requester_professional_id']);
+
         if (! $requester) {
             return response()->json([
                 'message' => 'Requesting professional not found.',
@@ -89,6 +93,7 @@ final class MedicalRecordController extends Controller
     public function store(Request $request, string $patientId): JsonResponse
     {
         $patient = Patient::query()->find($patientId);
+
         if (! $patient) {
             return response()->json([
                 'message' => 'Patient not found.',
@@ -105,6 +110,7 @@ final class MedicalRecordController extends Controller
         ]);
 
         $professional = Professional::query()->find($validated['professional_id']);
+
         if (! $professional) {
             return response()->json([
                 'message' => 'Professional author not found.',

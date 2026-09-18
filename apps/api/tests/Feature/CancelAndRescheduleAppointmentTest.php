@@ -35,6 +35,7 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -42,12 +43,12 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_cancels_appointment_and_notifies_waitlist(): void
+    public function testHappyPathCancelsAppointmentAndNotifiesWaitlist(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Cancel Test Clinic',
-            'slug' => 'cancel-clinic-'.Str::random(5),
+            'slug' => 'cancel-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -98,12 +99,12 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         });
     }
 
-    public function test_happy_path_cancellation_refunds_package_credit(): void
+    public function testHappyPathCancellationRefundsPackageCredit(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Package Cancel Clinic',
-            'slug' => 'pkg-cancel-'.Str::random(5),
+            'slug' => 'pkg-cancel-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -165,12 +166,12 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         });
     }
 
-    public function test_sad_path_cannot_cancel_finalized_appointment(): void
+    public function testSadPathCannotCancelFinalizedAppointment(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Finalized Clinic',
-            'slug' => 'finalized-'.Str::random(5),
+            'slug' => 'finalized-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -205,12 +206,12 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         });
     }
 
-    public function test_happy_path_reschedules_to_available_slot(): void
+    public function testHappyPathReschedulesToAvailableSlot(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Reschedule Clinic',
-            'slug' => 'resched-'.Str::random(5),
+            'slug' => 'resched-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -248,12 +249,12 @@ final class CancelAndRescheduleAppointmentTest extends TestCase
         });
     }
 
-    public function test_sad_path_cannot_reschedule_to_colliding_slot_or_when_finalized(): void
+    public function testSadPathCannotRescheduleToCollidingSlotOrWhenFinalized(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Collision Reschedule Clinic',
-            'slug' => 'col-resched-'.Str::random(5),
+            'slug' => 'col-resched-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

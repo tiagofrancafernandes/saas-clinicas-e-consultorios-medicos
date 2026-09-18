@@ -32,6 +32,7 @@ final class InsuranceAndReturnRulesTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -39,12 +40,12 @@ final class InsuranceAndReturnRulesTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_booking_with_accepted_insurance_and_required_auth_code(): void
+    public function testHappyPathBookingWithAcceptedInsuranceAndRequiredAuthCode(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Insurance Clinic',
-            'slug' => 'ins-clinic-'.Str::random(5),
+            'slug' => 'ins-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -104,12 +105,12 @@ final class InsuranceAndReturnRulesTest extends TestCase
         });
     }
 
-    public function test_sad_path_rejects_unaccepted_insurance_or_missing_auth_code(): void
+    public function testSadPathRejectsUnacceptedInsuranceOrMissingAuthCode(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Rejected Ins Clinic',
-            'slug' => 'rej-ins-'.Str::random(5),
+            'slug' => 'rej-ins-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -188,12 +189,12 @@ final class InsuranceAndReturnRulesTest extends TestCase
         });
     }
 
-    public function test_happy_path_return_appointment_within_days_limit(): void
+    public function testHappyPathReturnAppointmentWithinDaysLimit(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Return Clinic',
-            'slug' => 'return-clinic-'.Str::random(5),
+            'slug' => 'return-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -247,12 +248,12 @@ final class InsuranceAndReturnRulesTest extends TestCase
         });
     }
 
-    public function test_sad_path_rejects_return_appointment_exceeding_days_limit_or_uncompleted_parent(): void
+    public function testSadPathRejectsReturnAppointmentExceedingDaysLimitOrUncompletedParent(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Late Return Clinic',
-            'slug' => 'late-return-'.Str::random(5),
+            'slug' => 'late-return-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

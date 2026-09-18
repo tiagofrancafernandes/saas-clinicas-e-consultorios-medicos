@@ -29,6 +29,7 @@ final class SlotCalculatorTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -36,12 +37,12 @@ final class SlotCalculatorTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_calculates_all_available_slots_in_shift(): void
+    public function testHappyPathCalculatesAllAvailableSlotsInShift(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Slot Test Clinic',
-            'slug' => 'slot-clinic-'.Str::random(5),
+            'slug' => 'slot-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -78,12 +79,12 @@ final class SlotCalculatorTest extends TestCase
         });
     }
 
-    public function test_sad_path_returns_empty_when_no_shift_exists_on_day(): void
+    public function testSadPathReturnsEmptyWhenNoShiftExistsOnDay(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'No Shift Clinic',
-            'slug' => 'no-shift-'.Str::random(5),
+            'slug' => 'no-shift-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -113,12 +114,12 @@ final class SlotCalculatorTest extends TestCase
         });
     }
 
-    public function test_sad_path_excludes_slots_overlapping_unavailability_and_existing_appointments(): void
+    public function testSadPathExcludesSlotsOverlappingUnavailabilityAndExistingAppointments(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Exclusion Test Clinic',
-            'slug' => 'exclusion-'.Str::random(5),
+            'slug' => 'exclusion-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

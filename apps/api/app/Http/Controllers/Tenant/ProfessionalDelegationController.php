@@ -28,6 +28,7 @@ final class ProfessionalDelegationController extends Controller
         ]);
 
         $grantor = Professional::query()->find($validated['grantor_professional_id']);
+
         if (! $grantor) {
             return response()->json([
                 'message' => 'Grantor professional not found.',
@@ -35,6 +36,7 @@ final class ProfessionalDelegationController extends Controller
         }
 
         $grantee = Professional::query()->find($validated['grantee_professional_id']);
+
         if (! $grantee) {
             return response()->json([
                 'message' => 'Grantee professional not found.',
@@ -43,6 +45,7 @@ final class ProfessionalDelegationController extends Controller
 
         if (! empty($validated['patient_id'])) {
             $patient = Patient::query()->find($validated['patient_id']);
+
             if (! $patient) {
                 return response()->json([
                     'message' => 'Target patient not found.',

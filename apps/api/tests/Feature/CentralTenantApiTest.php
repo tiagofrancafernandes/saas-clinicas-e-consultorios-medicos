@@ -19,6 +19,7 @@ final class CentralTenantApiTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -26,7 +27,7 @@ final class CentralTenantApiTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_can_list_tenants(): void
+    public function testCanListTenants(): void
     {
         $response = $this->getJson('/api/central/tenants');
 
@@ -36,7 +37,7 @@ final class CentralTenantApiTest extends TestCase
             ]);
     }
 
-    public function test_can_create_and_provision_tenant_via_api(): void
+    public function testCanCreateAndProvisionTenantViaApi(): void
     {
         $payload = [
             'name' => 'Clinica Esperanca',
@@ -67,7 +68,7 @@ final class CentralTenantApiTest extends TestCase
         ]);
 
         // Verify PostgreSQL schema was automatically created and migrated
-        $schemaName = 'tenant_'.$tenantId;
+        $schemaName = 'tenant_' . $tenantId;
         $schemaExists = DB::selectOne(
             'SELECT schema_name FROM information_schema.schemata WHERE schema_name = :schema',
             ['schema' => $schemaName]

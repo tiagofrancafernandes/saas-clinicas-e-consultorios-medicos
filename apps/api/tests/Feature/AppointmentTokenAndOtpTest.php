@@ -30,6 +30,7 @@ final class AppointmentTokenAndOtpTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -37,12 +38,12 @@ final class AppointmentTokenAndOtpTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_generate_and_consume_confirmation_token(): void
+    public function testHappyPathGenerateAndConsumeConfirmationToken(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Token Clinic',
-            'slug' => 'token-clinic-'.Str::random(5),
+            'slug' => 'token-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -87,12 +88,12 @@ final class AppointmentTokenAndOtpTest extends TestCase
         });
     }
 
-    public function test_sad_path_rejects_used_expired_or_invalid_tokens(): void
+    public function testSadPathRejectsUsedExpiredOrInvalidTokens(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Invalid Token Clinic',
-            'slug' => 'inv-token-'.Str::random(5),
+            'slug' => 'inv-token-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -159,12 +160,12 @@ final class AppointmentTokenAndOtpTest extends TestCase
         });
     }
 
-    public function test_happy_path_patient_otp_verification_issues_scoped_sanctum_token(): void
+    public function testHappyPathPatientOtpVerificationIssuesScopedSanctumToken(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'OTP Clinic',
-            'slug' => 'otp-clinic-'.Str::random(5),
+            'slug' => 'otp-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -192,12 +193,12 @@ final class AppointmentTokenAndOtpTest extends TestCase
         });
     }
 
-    public function test_sad_path_rejects_invalid_or_expired_otp(): void
+    public function testSadPathRejectsInvalidOrExpiredOtp(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Invalid OTP Clinic',
-            'slug' => 'inv-otp-'.Str::random(5),
+            'slug' => 'inv-otp-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

@@ -15,7 +15,7 @@ final class EmailDriver implements MessagingDriverInterface
      */
     public function send(string $recipient, string $template, array $payload): array
     {
-        $externalId = 'msg_em_'.Str::random(28);
+        $externalId = 'msg_em_' . Str::random(28);
 
         return [
             'external_id' => $externalId,

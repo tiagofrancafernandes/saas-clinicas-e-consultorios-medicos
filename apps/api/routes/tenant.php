@@ -33,9 +33,7 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function (): void {
-    Route::get('/', function (): string {
-        return 'Multi-tenant clinic portal. Tenant: '.tenant('id');
-    });
+    Route::get('/', fn (): string => 'Multi-tenant clinic portal. Tenant: ' . tenant('id'));
 });
 
 // REST API routes with header identification & subscription enforcement

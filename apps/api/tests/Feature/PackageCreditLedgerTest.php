@@ -29,6 +29,7 @@ final class PackageCreditLedgerTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -36,12 +37,12 @@ final class PackageCreditLedgerTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_deducts_and_refunds_credit_with_ledger_entries(): void
+    public function testHappyPathDeductsAndRefundsCreditWithLedgerEntries(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Ledger Clinic',
-            'slug' => 'ledger-clinic-'.Str::random(5),
+            'slug' => 'ledger-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -95,12 +96,12 @@ final class PackageCreditLedgerTest extends TestCase
         });
     }
 
-    public function test_sad_path_cannot_deduct_from_expired_package(): void
+    public function testSadPathCannotDeductFromExpiredPackage(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Expired Clinic',
-            'slug' => 'expired-clinic-'.Str::random(5),
+            'slug' => 'expired-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -137,12 +138,12 @@ final class PackageCreditLedgerTest extends TestCase
         });
     }
 
-    public function test_sad_path_cannot_deduct_when_credits_exhausted(): void
+    public function testSadPathCannotDeductWhenCreditsExhausted(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Exhausted Clinic',
-            'slug' => 'exhausted-'.Str::random(5),
+            'slug' => 'exhausted-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

@@ -29,6 +29,7 @@ final class MedicalRecordPrivacyTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -36,12 +37,12 @@ final class MedicalRecordPrivacyTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_happy_path_author_and_shared_team_can_access_records(): void
+    public function testHappyPathAuthorAndSharedTeamCanAccessRecords(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Records Clinic',
-            'slug' => 'rec-clinic-'.Str::random(5),
+            'slug' => 'rec-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -91,12 +92,12 @@ final class MedicalRecordPrivacyTest extends TestCase
         });
     }
 
-    public function test_happy_path_delegated_colleague_can_access_private_record(): void
+    public function testHappyPathDelegatedColleagueCanAccessPrivateRecord(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Delegation Clinic',
-            'slug' => 'del-clinic-'.Str::random(5),
+            'slug' => 'del-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -151,12 +152,12 @@ final class MedicalRecordPrivacyTest extends TestCase
         });
     }
 
-    public function test_sad_path_unauthorized_or_expired_delegation_denies_access_to_private_record(): void
+    public function testSadPathUnauthorizedOrExpiredDelegationDeniesAccessToPrivateRecord(): void
     {
         $tenant = Tenant::create([
             'id' => (string) Str::uuid(),
             'name' => 'Denied Clinic',
-            'slug' => 'denied-clinic-'.Str::random(5),
+            'slug' => 'denied-clinic-' . Str::random(5),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

@@ -59,17 +59,18 @@ final class SlotCalculator
 
         foreach ($availabilities as $availability) {
             $duration = $customDurationMinutes ?? (int) $availability->slot_duration_minutes;
+
             if ($duration <= 0) {
                 $duration = 30;
             }
 
             $shiftStartLocal = CarbonImmutable::parse(
-                $dateInClinicTz->toDateString().' '.$availability->start_time,
+                $dateInClinicTz->toDateString() . ' ' . $availability->start_time,
                 $clinicTimezone
             );
 
             $shiftEndLocal = CarbonImmutable::parse(
-                $dateInClinicTz->toDateString().' '.$availability->end_time,
+                $dateInClinicTz->toDateString() . ' ' . $availability->end_time,
                 $clinicTimezone
             );
 
@@ -83,9 +84,11 @@ final class SlotCalculator
 
                 // Check collision with unavailabilities
                 $hasUnavailabilityCollision = false;
+
                 foreach ($unavailabilities as $unavailability) {
                     if (self::intervalsOverlap($slotStartUtc, $slotEndUtc, $unavailability->start_time_utc, $unavailability->end_time_utc)) {
                         $hasUnavailabilityCollision = true;
+
                         break;
                     }
                 }
@@ -98,9 +101,11 @@ final class SlotCalculator
 
                 // Check collision with existing appointments
                 $hasAppointmentCollision = false;
+
                 foreach ($appointments as $appointment) {
                     if (self::intervalsOverlap($slotStartUtc, $slotEndUtc, $appointment->start_time_utc, $appointment->end_time_utc)) {
                         $hasAppointmentCollision = true;
+
                         break;
                     }
                 }

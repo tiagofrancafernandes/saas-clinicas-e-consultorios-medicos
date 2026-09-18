@@ -20,6 +20,7 @@ final class CheckTenantSubscription
         }
 
         $tenantId = tenant('id');
+
         if (! $tenantId) {
             return $next($request);
         }

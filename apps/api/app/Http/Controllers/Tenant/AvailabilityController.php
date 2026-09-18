@@ -23,6 +23,7 @@ final class AvailabilityController extends Controller
         ]);
 
         $professional = Professional::query()->find($validated['professional_id']);
+
         if (! $professional) {
             return response()->json([
                 'message' => 'Professional not found.',
@@ -31,7 +32,7 @@ final class AvailabilityController extends Controller
 
         $duration = ! empty($validated['slot_duration']) ? (int) $validated['slot_duration'] : null;
         $timezone = is_string(tenant('timezone')) ? (string) tenant('timezone') : 'America/Sao_Paulo';
-        $date = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $validated['date'].' 00:00:00', $timezone);
+        $date = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $validated['date'] . ' 00:00:00', $timezone);
 
         $slots = SlotCalculator::getAvailableSlots($professional, $date, $timezone, $duration);
 

@@ -28,7 +28,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         $this->tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Audit & Files Test Clinic',
-            'slug' => 'clinic-'.substr($tenantId, 0, 6),
+            'slug' => 'clinic-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);
     }
@@ -40,6 +40,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -47,7 +48,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_central_audit_log_records_tenant_creation(): void
+    public function testCentralAuditLogRecordsTenantCreation(): void
     {
         $payload = [
             'name' => 'Audited Medical Group',
@@ -69,7 +70,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         $this->assertSame('Audited Medical Group', $audit->payload['name']);
     }
 
-    public function test_patient_file_attachment_happy_and_sad_path(): void
+    public function testPatientFileAttachmentHappyAndSadPath(): void
     {
         tenancy()->initialize($this->tenant);
 
@@ -123,7 +124,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         $invalidResponse->assertStatus(422);
     }
 
-    public function test_waitlist_registration_and_listing_happy_and_sad_path(): void
+    public function testWaitlistRegistrationAndListingHappyAndSadPath(): void
     {
         tenancy()->initialize($this->tenant);
 

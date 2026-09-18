@@ -28,6 +28,7 @@ final class TenantSchemaAndBookingTest extends TestCase
 
         // Clean up any dynamic tenant schemas created during test run
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -35,18 +36,18 @@ final class TenantSchemaAndBookingTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_tenant_creation_provisions_isolated_postgresql_schema_with_all_tables(): void
+    public function testTenantCreationProvisionsIsolatedPostgresqlSchemaWithAllTables(): void
     {
         $tenantId = (string) Str::uuid();
         $tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Alfa Medical Clinic',
-            'slug' => 'alfa-medical-'.substr($tenantId, 0, 6),
+            'slug' => 'alfa-medical-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
             'settings' => ['reminder_notice_hours' => 24],
         ]);
 
-        $schemaName = 'tenant_'.$tenant->id;
+        $schemaName = 'tenant_' . $tenant->id;
 
         // 1. Verify schema exists in PostgreSQL
         $schemaExists = DB::selectOne(
@@ -96,13 +97,13 @@ final class TenantSchemaAndBookingTest extends TestCase
         }
     }
 
-    public function test_book_appointment_action_prevents_slot_collision(): void
+    public function testBookAppointmentActionPreventsSlotCollision(): void
     {
         $tenantId = (string) Str::uuid();
         $tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Beta Health Center',
-            'slug' => 'beta-health-'.substr($tenantId, 0, 6),
+            'slug' => 'beta-health-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);
 
@@ -147,13 +148,13 @@ final class TenantSchemaAndBookingTest extends TestCase
         });
     }
 
-    public function test_book_appointment_action_allows_adjacent_slots(): void
+    public function testBookAppointmentActionAllowsAdjacentSlots(): void
     {
         $tenantId = (string) Str::uuid();
         $tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Gamma Dental Clinic',
-            'slug' => 'gamma-dental-'.substr($tenantId, 0, 6),
+            'slug' => 'gamma-dental-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);
 

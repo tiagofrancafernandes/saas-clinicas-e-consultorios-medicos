@@ -40,15 +40,14 @@ final class InboundWebhookController
 
         /** @var Tenant $tenant */
         foreach (Tenant::all() as $tenant) {
-            $log = $tenant->run(function () use ($externalMessageId): ?NotificationLog {
-                return NotificationLog::with('appointment')
+            $log = $tenant->run(fn (): ?NotificationLog => NotificationLog::with('appointment')
                     ->where('external_message_id', $externalMessageId)
-                    ->first();
-            });
+                    ->first());
 
             if ($log !== null) {
                 $matchedTenant = $tenant;
                 $matchedLog = $log;
+
                 break;
             }
         }

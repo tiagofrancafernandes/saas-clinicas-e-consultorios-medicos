@@ -37,7 +37,7 @@ final class MessagingAndRealTimeTest extends TestCase
         $this->tenant = Tenant::create([
             'id' => $tenantId,
             'name' => 'Realtime Test Clinic',
-            'slug' => 'realtime-'.substr($tenantId, 0, 6),
+            'slug' => 'realtime-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
             'settings' => ['reminder_notice_hours' => 24],
         ]);
@@ -50,6 +50,7 @@ final class MessagingAndRealTimeTest extends TestCase
         }
 
         $schemas = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE 'tenant_%'");
+
         foreach ($schemas as $schema) {
             DB::statement("DROP SCHEMA IF EXISTS \"{$schema->schema_name}\" CASCADE");
         }
@@ -57,7 +58,7 @@ final class MessagingAndRealTimeTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_scan_upcoming_appointments_scans_tenants_and_dispatches_reminder_jobs(): void
+    public function testScanUpcomingAppointmentsScansTenantsAndDispatchesReminderJobs(): void
     {
         Queue::fake();
 
@@ -110,13 +111,13 @@ final class MessagingAndRealTimeTest extends TestCase
         tenancy()->end();
 
         // Execute central scan job
-        (new ScanUpcomingAppointmentsJob)->handle();
+        (new ScanUpcomingAppointmentsJob())->handle();
 
         // Verify only 1 reminder was queued
         Queue::assertPushed(DispatchAppointmentReminderJob::class, 1);
     }
 
-    public function test_dispatch_appointment_reminder_job_creates_notification_log(): void
+    public function testDispatchAppointmentReminderJobCreatesNotificationLog(): void
     {
         tenancy()->initialize($this->tenant);
 
@@ -150,7 +151,7 @@ final class MessagingAndRealTimeTest extends TestCase
         ]);
 
         $job = new DispatchAppointmentReminderJob($appointment, 'WHATSAPP');
-        $job->handle(new WhatsAppDriver);
+        $job->handle(new WhatsAppDriver());
 
         // Verify log was stored in tenant schema
         $log = NotificationLog::where('appointment_id', $appointment->id)->first();
@@ -164,7 +165,7 @@ final class MessagingAndRealTimeTest extends TestCase
         tenancy()->end();
     }
 
-    public function test_patient_summon_to_consulting_room_happy_and_sad_path(): void
+    public function testPatientSummonToConsultingRoomHappyAndSadPath(): void
     {
         Event::fake([PatientSummonedToRoom::class]);
 
@@ -219,9 +220,7 @@ final class MessagingAndRealTimeTest extends TestCase
             ->assertJsonPath('data.room_name', 'Consulting Room 03')
             ->assertJsonPath('data.status', 'IN_CONSULTATION');
 
-        Event::assertDispatched(PatientSummonedToRoom::class, function (PatientSummonedToRoom $event) use ($appointment): bool {
-            return $event->appointment->id === $appointment->id && $event->roomName === 'Consulting Room 03';
-        });
+        Event::assertDispatched(PatientSummonedToRoom::class, fn (PatientSummonedToRoom $event): bool => $event->appointment->id === $appointment->id && $event->roomName === 'Consulting Room 03');
 
         // 2. Sad path: Summoning an already cancelled appointment returns 422
         tenancy()->initialize($this->tenant);

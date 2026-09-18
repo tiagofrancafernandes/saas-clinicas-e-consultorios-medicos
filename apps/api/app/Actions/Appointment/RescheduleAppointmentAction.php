@@ -45,6 +45,7 @@ final class RescheduleAppointmentAction
 
             // 2. Room collision check if specified or previously assigned
             $roomIdToCheck = $newClinicRoomId ?? $lockedAppointment->clinic_room_id;
+
             if (! empty($roomIdToCheck)) {
                 $roomCollision = Appointment::query()
                     ->where('id', '!=', $lockedAppointment->id)

@@ -118,6 +118,7 @@ final class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::query()->find($id);
+
         if (! $appointment) {
             return response()->json([
                 'message' => 'Appointment not found.',
@@ -149,6 +150,7 @@ final class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::query()->find($id);
+
         if (! $appointment) {
             return response()->json([
                 'message' => 'Appointment not found.',
@@ -186,6 +188,7 @@ final class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::query()->with(['patient', 'professional', 'clinicRoom'])->find($id);
+
         if (! $appointment) {
             return response()->json([
                 'message' => 'Appointment not found.',
