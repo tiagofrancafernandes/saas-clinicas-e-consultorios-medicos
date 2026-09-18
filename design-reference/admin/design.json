@@ -1,452 +1,452 @@
 {
-    "schemaVersion": "1.0.0",
-    "name": "Admin Design Reference",
-    "purpose": "Design reference for administrative interfaces.",
-    "priority": "mandatory",
-    "visualDirection": {
-        "summary": "Modern operational admin UI with quiet surfaces, tomato-red primary accents, mostly outlined buttons, dense but readable information, and Tailwind UI style ergonomics.",
-        "inspirations": [
-            "Tailwind UI admin surfaces",
-            "Todoist UI/DX clarity",
-            "Cloudflare 2026 admin interface restraint"
-        ],
-        "mustFeelLike": [
-            "modern SaaS admin",
-            "precise operational tool",
-            "fast to scan",
-            "calm and professional",
-            "purpose-built for repeated use"
-        ],
-        "mustNotFeelLike": [
-            "Bootstrap CSS",
-            "generic admin template",
-            "marketing landing page",
-            "heavy card wall",
-            "purple SaaS dashboard",
-            "dark-only interface",
-            "over-rounded mobile app UI"
-        ]
-    },
-    "typography": {
-        "fontFamily": {
-            "name": "Satoshi",
-            "fallback": ["Aptos", "Ubuntu Sans", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-            "cssVariable": "--font-admin-sans",
-            "tailwindClass": "font-[var(--font-admin-sans)]",
-            "rationale": "Modern non-serif family with a warmer geometric tone close to Ubuntu, but less dated and less Bootstrap-like."
-        },
-        "scale": {
-            "pageTitle": "text-2xl font-semibold leading-8 text-neutral-950",
-            "sectionTitle": "text-base font-semibold leading-6 text-neutral-950",
-            "cardTitle": "text-sm font-semibold leading-5 text-neutral-900",
-            "body": "text-sm leading-6 text-neutral-700",
-            "muted": "text-sm leading-5 text-neutral-500",
-            "caption": "text-xs leading-4 text-neutral-500",
-            "tableHeader": "text-xs font-medium uppercase tracking-wide text-neutral-500"
-        },
-        "rules": [
-            "Use 0 letter spacing except small uppercase table headers and metadata labels.",
-            "Avoid hero-scale typography inside dashboards.",
-            "Keep labels compact and predictable.",
-            "Prefer sentence case for labels and actions."
-        ]
-    },
-    "colors": {
-        "primary": {
-            "name": "Tomato",
-            "50": "#fff1ee",
-            "100": "#ffe1dc",
-            "200": "#ffc9c0",
-            "300": "#ffa99b",
-            "400": "#ff7d68",
-            "500": "#f45b45",
-            "600": "#dd3f2a",
-            "700": "#b93222",
-            "800": "#992f23",
-            "900": "#7f2d24",
-            "950": "#45130d",
-            "default": "#f45b45",
-            "hover": "#dd3f2a",
-            "active": "#b93222",
-            "subtle": "#fff1ee",
-            "border": "#ffc9c0",
-            "text": "#b93222"
-        },
-        "neutral": {
-            "0": "#ffffff",
-            "25": "#fcfcfb",
-            "50": "#f8f8f7",
-            "100": "#efefed",
-            "200": "#dededb",
-            "300": "#c7c7c2",
-            "400": "#9b9b94",
-            "500": "#73736c",
-            "600": "#56564f",
-            "700": "#40403a",
-            "800": "#292925",
-            "900": "#1d1d1a",
-            "950": "#11110f"
-        },
-        "semantic": {
-            "success": {
-                "subtle": "#ecfdf3",
-                "border": "#b7efc8",
-                "text": "#067647",
-                "solid": "#16a34a",
-                "solidHover": "#15803d"
-            },
-            "warning": {
-                "subtle": "#fffbeb",
-                "border": "#fde68a",
-                "text": "#a16207",
-                "solid": "#d97706",
-                "solidHover": "#b45309"
-            },
-            "info": {
-                "subtle": "#eff6ff",
-                "border": "#bfdbfe",
-                "text": "#1d4ed8",
-                "solid": "#2563eb",
-                "solidHover": "#1d4ed8"
-            },
-            "danger": {
-                "subtle": "#fff1f2",
-                "border": "#fecdd3",
-                "text": "#be123c",
-                "solid": "#e11d48",
-                "solidHover": "#be123c"
-            },
-            "error": {
-                "subtle": "#fef2f2",
-                "border": "#fecaca",
-                "text": "#b91c1c",
-                "solid": "#dc2626",
-                "solidHover": "#b91c1c"
-            }
-        },
-        "surfaces": {
-            "app": "#f8f8f7",
-            "panel": "#ffffff",
-            "panelMuted": "#fcfcfb",
-            "raised": "#ffffff",
-            "overlay": "#ffffff",
-            "divider": "#efefed",
-            "border": "#dededb",
-            "focusRing": "#ffa99b"
-        },
-        "usageRules": [
-            "Use tomato red as the primary accent, not as a full-page wash.",
-            "Use neutral backgrounds for admin pages.",
-            "Prefer small status accents over large colorful panels.",
-            "Do not use Bootstrap-like blue as the primary brand color.",
-            "Avoid purple, purple-blue gradients, and one-hue dashboards."
-        ]
-    },
-    "tailwindTokens": {
-        "recommendedCssVariables": {
-            "--font-admin-sans": "\"Satoshi\", \"Aptos\", \"Ubuntu Sans\", \"Inter\", ui-sans-serif, system-ui, sans-serif",
-            "--admin-primary": "#f45b45",
-            "--admin-primary-hover": "#dd3f2a",
-            "--admin-primary-subtle": "#fff1ee",
-            "--admin-primary-border": "#ffc9c0",
-            "--admin-background": "#f8f8f7",
-            "--admin-surface": "#ffffff",
-            "--admin-border": "#dededb",
-            "--admin-text": "#1d1d1a",
-            "--admin-muted": "#73736c"
-        },
-        "layout": {
-            "pageShell": "min-h-screen bg-[var(--admin-background)] text-[var(--admin-text)]",
-            "mainContent": "mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 lg:px-8",
-            "contentStack": "space-y-5",
-            "section": "space-y-3",
-            "toolbar": "flex flex-col gap-3 border-b border-neutral-200 pb-4 sm:flex-row sm:items-center sm:justify-between",
-            "splitPanel": "grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]"
-        },
-        "surfaces": {
-            "panel": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
-            "panelBody": "p-4 sm:p-5",
-            "panelHeader": "border-b border-neutral-100 px-4 py-3 sm:px-5",
-            "tableSurface": "overflow-hidden rounded-lg border border-neutral-200 bg-white",
-            "inputSurface": "rounded-md border border-neutral-300 bg-white text-neutral-950 shadow-none"
-        },
-        "focus": {
-            "ring": "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--admin-primary-border)] focus-visible:ring-offset-2",
-            "within": "focus-within:ring-2 focus-within:ring-[var(--admin-primary-border)]"
-        }
-    },
-    "components": {
-        "buttons": {
-            "philosophy": "Buttons are mostly outlined. Solid buttons are reserved for the single most important action in a view.",
-            "base": "inline-flex h-9 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
-            "sizes": {
-                "xs": "h-7 gap-1.5 px-2 text-xs",
-                "sm": "h-8 gap-1.5 px-2.5 text-sm",
-                "md": "h-9 gap-2 px-3 text-sm",
-                "lg": "h-10 gap-2 px-4 text-sm"
-            },
-            "variants": {
-                "primaryOutlined": "border border-[var(--admin-primary-border)] bg-white text-[var(--admin-primary-hover)] hover:bg-[var(--admin-primary-subtle)]",
-                "primarySolid": "border border-[var(--admin-primary)] bg-[var(--admin-primary)] text-white hover:bg-[var(--admin-primary-hover)]",
-                "neutralOutlined": "border border-neutral-300 bg-white text-neutral-800 hover:bg-neutral-50",
-                "ghost": "border border-transparent bg-transparent text-neutral-700 hover:bg-neutral-100",
-                "dangerOutlined": "border border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
-                "dangerSolid": "border border-rose-600 bg-rose-600 text-white hover:bg-rose-700",
-                "warningOutlined": "border border-amber-200 bg-white text-amber-700 hover:bg-amber-50",
-                "warningSolid": "border border-amber-600 bg-amber-600 text-white hover:bg-amber-700",
-                "infoOutlined": "border border-blue-200 bg-white text-blue-700 hover:bg-blue-50",
-                "infoSolid": "border border-blue-600 bg-blue-600 text-white hover:bg-blue-700",
-                "successOutlined": "border border-green-200 bg-white text-green-700 hover:bg-green-50",
-                "successSolid": "border border-green-600 bg-green-600 text-white hover:bg-green-700",
-                "errorOutlined": "border border-red-200 bg-white text-red-700 hover:bg-red-50",
-                "errorSolid": "border border-red-600 bg-red-600 text-white hover:bg-red-700"
-            },
-            "rules": [
-                "Prefer outlined buttons for list actions, filters, table row actions, and secondary workflows.",
-                "Use one solid primary button per page or modal when a clear primary action exists.",
-                "Use icons for compact tool actions such as edit, delete, refresh, search, export, and settings.",
-                "Avoid Bootstrap-like large pill buttons, heavy shadows, and default blue primary actions."
-            ]
-        },
-        "forms": {
-            "label": "mb-1.5 block text-sm font-medium text-neutral-800",
-            "input": "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
-            "textarea": "min-h-24 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-950 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
-            "select": "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
-            "helpText": "mt-1 text-xs leading-5 text-neutral-500",
-            "errorText": "mt-1 text-xs leading-5 text-red-700"
-        },
-        "navigation": {
-            "sidebar": "border-r border-neutral-200 bg-white",
-            "sidebarItem": "flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-neutral-700 hover:bg-neutral-100",
-            "sidebarItemActive": "bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
-            "topbar": "border-b border-neutral-200 bg-white/95 backdrop-blur",
-            "breadcrumb": "flex items-center gap-2 text-sm text-neutral-500"
-        },
-        "tables": {
-            "container": "overflow-hidden rounded-lg border border-neutral-200 bg-white",
-            "table": "min-w-full divide-y divide-neutral-200",
-            "header": "bg-neutral-50",
-            "headerCell": "px-3 py-2 text-left text-xs font-medium uppercase tracking-wide text-neutral-500",
-            "body": "divide-y divide-neutral-100 bg-white",
-            "bodyCell": "px-3 py-3 text-sm text-neutral-700",
-            "row": "hover:bg-neutral-50",
-            "rowSelected": "bg-[var(--admin-primary-subtle)]"
-        },
-        "badges": {
-            "base": "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium",
-            "neutral": "border-neutral-200 bg-neutral-50 text-neutral-700",
-            "primary": "border-[var(--admin-primary-border)] bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
-            "success": "border-green-200 bg-green-50 text-green-700",
-            "warning": "border-amber-200 bg-amber-50 text-amber-700",
-            "info": "border-blue-200 bg-blue-50 text-blue-700",
-            "danger": "border-rose-200 bg-rose-50 text-rose-700",
-            "error": "border-red-200 bg-red-50 text-red-700"
-        },
-        "cards": {
-            "usage": "Use cards for repeated records, compact KPI panels, and modal-like contained tasks. Do not nest cards.",
-            "base": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
-            "compact": "rounded-lg border border-neutral-200 bg-white p-4",
-            "interactive": "rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
-        },
-        "modals": {
-            "panel": "w-full max-w-lg rounded-lg border border-neutral-200 bg-white shadow-xl",
-            "header": "border-b border-neutral-100 px-5 py-4",
-            "body": "px-5 py-4",
-            "footer": "flex justify-end gap-2 border-t border-neutral-100 px-5 py-4"
-        }
-    },
-    "layoutPatterns": {
-        "adminDashboard": {
-            "structure": [
-                "top utility bar with search and quick actions",
-                "compact KPI cards row",
-                "persistent sidebar",
-                "page header with title and actions",
-                "thin toolbar for filters",
-                "table-first content",
-                "details panels only when useful"
-            ],
-            "rules": [
-                "Prioritize tables and lists over large decorative cards.",
-                "Keep KPI cards compact but visually expressive with icons and deltas.",
-                "Use full-width page bands or plain sections instead of floating page sections.",
-                "Use sticky table headers and predictable row actions when tables grow."
-            ]
-        },
-        "crudPage": {
-            "structure": [
-                "title row",
-                "outlined action toolbar",
-                "filters row",
-                "data table",
-                "drawer or modal for create and edit"
-            ],
-            "primaryAction": "Use one solid tomato button for create when needed; keep every other action outlined or ghost."
-        }
-    },
-    "uiComponents": {
-        "adminTopBar": {
-            "base": "flex items-center gap-3 rounded-lg border border-neutral-200 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
-            "search": "h-11 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary-border)]",
-            "actionButton": "inline-flex h-11 items-center justify-center rounded-md border border-neutral-200 bg-white px-3 text-neutral-700 hover:bg-neutral-50"
-        },
-        "adminKpiCard": {
-            "base": "rounded-lg border border-neutral-200 bg-white p-4 shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
-            "iconWrap": "flex h-10 w-10 items-center justify-center rounded-md border border-[var(--admin-primary-border)] bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
-            "label": "text-sm text-neutral-500",
-            "value": "mt-2 text-2xl font-semibold tracking-tight text-neutral-950",
-            "deltaPositive": "mt-1 text-sm font-medium text-green-600",
-            "deltaNegative": "mt-1 text-sm font-medium text-red-600"
-        },
-        "adminSurfaceCard": {
-            "base": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
-            "header": "border-b border-neutral-100 px-4 py-3",
-            "body": "p-4"
-        }
-    },
-    "antiPatterns": {
-        "bootstrap": [
-            "Do not use Bootstrap-like blue primary buttons.",
-            "Do not use rounded-pill button groups.",
-            "Do not use thick bordered cards with generic blue headers.",
-            "Do not use alert blocks that resemble Bootstrap alerts.",
-            "Do not use default-looking btn-primary, btn-secondary, form-control visual patterns."
-        ],
-        "visualNoise": [
-            "Do not add gradient orbs, bokeh backgrounds, decorative blobs, or generic AI SaaS illustrations.",
-            "Do not use large shadows for ordinary admin panels.",
-            "Do not overuse rounded-xl and rounded-2xl in admin surfaces.",
-            "Do not make dashboards dominated by one hue.",
-            "Do not use marketing hero sections inside authenticated admin routes."
-        ],
-        "accessibility": [
-            "Do not rely on color alone for status.",
-            "Do not reduce focus visibility.",
-            "Do not use text below 12px for interactive controls.",
-            "Do not create icon-only buttons without accessible labels or tooltips."
-        ]
-    },
-    "implementationRules": [
-        "Use Tailwind utility classes and Nuxt UI conventions where applicable.",
-        "Use object syntax for conditional Vue classes.",
-        "Use semantic color names for variants: primary, neutral, success, warning, info, danger, error.",
-        "Use Iconify icons for all icons.",
-        "Keep admin cards at rounded-lg or less.",
-        "Default button variant should be outlined in admin views.",
-        "Prefer compact density with clear spacing over large marketing layouts.",
-        "Every new admin UI must check this file before implementation."
+  "schemaVersion": "1.0.0",
+  "name": "Admin Design Reference",
+  "purpose": "Design reference for administrative interfaces.",
+  "priority": "mandatory",
+  "visualDirection": {
+    "summary": "Modern operational admin UI with quiet surfaces, tomato-red primary accents, mostly outlined buttons, dense but readable information, and Tailwind UI style ergonomics.",
+    "inspirations": [
+      "Tailwind UI admin surfaces",
+      "Todoist UI/DX clarity",
+      "Cloudflare 2026 admin interface restraint"
     ],
-
-    "tables": {
-        "wrapper": "rounded-2xl bg-white border border-slate-200 overflow-hidden",
-        "header": "bg-slate-50",
-        "rowHover": "hover:bg-slate-50",
-        "pagination": "rounded-xl border"
+    "mustFeelLike": [
+      "modern SaaS admin",
+      "precise operational tool",
+      "fast to scan",
+      "calm and professional",
+      "purpose-built for repeated use"
+    ],
+    "mustNotFeelLike": [
+      "Bootstrap CSS",
+      "generic admin template",
+      "marketing landing page",
+      "heavy card wall",
+      "purple SaaS dashboard",
+      "dark-only interface",
+      "over-rounded mobile app UI"
+    ]
+  },
+  "typography": {
+    "fontFamily": {
+      "name": "Satoshi",
+      "fallback": ["Aptos", "Ubuntu Sans", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+      "cssVariable": "--font-admin-sans",
+      "tailwindClass": "font-[var(--font-admin-sans)]",
+      "rationale": "Modern non-serif family with a warmer geometric tone close to Ubuntu, but less dated and less Bootstrap-like."
     },
-    "forms": {
-        "spacing": "space-y-6",
-        "group": "grid gap-6 md:grid-cols-2",
-        "actions": "flex justify-end gap-3 pt-6"
-    },
-    "modals": {
-        "size": {
-            "sm": "max-w-md",
-            "md": "max-w-xl",
-            "lg": "max-w-3xl",
-            "xl": "max-w-5xl"
-        },
-        "overlay": "bg-black/40 backdrop-blur-sm",
-        "closeOnEsc": true,
-        "closeOnBackdrop": true
-    },
-    "pages": {
-        "index": {
-            "header": true,
-            "filters": true,
-            "stats": true
-        },
-        "form": {
-            "card": true,
-            "actionsSticky": true
-        },
-        "table": {
-            "filters": true,
-            "pagination": true,
-            "bulkActions": true
-        },
-        "grid": {
-            "filters": true,
-            "pagination": true
-        },
-        "list": {
-            "filters": true,
-            "pagination": true
-        }
+    "scale": {
+      "pageTitle": "text-2xl font-semibold leading-8 text-neutral-950",
+      "sectionTitle": "text-base font-semibold leading-6 text-neutral-950",
+      "cardTitle": "text-sm font-semibold leading-5 text-neutral-900",
+      "body": "text-sm leading-6 text-neutral-700",
+      "muted": "text-sm leading-5 text-neutral-500",
+      "caption": "text-xs leading-4 text-neutral-500",
+      "tableHeader": "text-xs font-medium uppercase tracking-wide text-neutral-500"
     },
     "rules": [
-        "Never use ring except ring-0.",
-        "Never use arbitrary colors.",
-        "Never use arbitrary spacing.",
-        "Always use semantic colors.",
-        "Always reuse component patterns.",
-        "Prefer rounded-xl.",
-        "Prefer shadow-sm.",
-        "Cards must have white background.",
-        "Use Inter font.",
-        "Sidebar is always collapsible.",
-        "Tables must always support pagination.",
-        "Forms must always have grouped actions.",
-        "Dialogs must have cancel and confirm buttons.",
-        "Danger actions require confirmation.",
-        "Primary actions use emerald color.",
-        "Secondary actions use slate color.",
-        "All pages must be responsive.",
-        "All interactive elements must have transition-all duration-200.",
-        "Never create a component visually different from existing ones."
-    ],
-    "recipes": {
-        "crud": ["PageHeader", "StatsCards", "Filters", "DataTable", "Pagination"],
-        "editForm": ["PageHeader", "FormCard", "FormGrid", "ActionsFooter"],
-        "dashboard": ["StatsCards", "Charts", "RecentActivity", "QuickActions"]
+      "Use 0 letter spacing except small uppercase table headers and metadata labels.",
+      "Avoid hero-scale typography inside dashboards.",
+      "Keep labels compact and predictable.",
+      "Prefer sentence case for labels and actions."
+    ]
+  },
+  "colors": {
+    "primary": {
+      "name": "Tomato",
+      "50": "#fff1ee",
+      "100": "#ffe1dc",
+      "200": "#ffc9c0",
+      "300": "#ffa99b",
+      "400": "#ff7d68",
+      "500": "#f45b45",
+      "600": "#dd3f2a",
+      "700": "#b93222",
+      "800": "#992f23",
+      "900": "#7f2d24",
+      "950": "#45130d",
+      "default": "#f45b45",
+      "hover": "#dd3f2a",
+      "active": "#b93222",
+      "subtle": "#fff1ee",
+      "border": "#ffc9c0",
+      "text": "#b93222"
     },
-    "qualityChecklist": [
-        "Responsive",
-        "Accessible",
-        "Consistent",
-        "Uses semantic colors",
-        "Uses only predefined spacing",
-        "Uses only predefined typography",
-        "Uses only predefined shadows",
-        "Uses only predefined radius",
-        "Uses existing components",
-        "No duplicated UI",
-        "No inline CSS",
-        "No arbitrary Tailwind values",
-        "No ring",
-        "No hardcoded colors",
-        "No inconsistent spacing"
-    ],
-    "forbidden": {
-        "tailwind": ["ring", "rounded-none", "shadow-2xl", "text-black", "bg-black"],
-        "css": ["inline-style", "!important"],
-        "components": ["multiple-primary-buttons", "nested-cards"]
+    "neutral": {
+      "0": "#ffffff",
+      "25": "#fcfcfb",
+      "50": "#f8f8f7",
+      "100": "#efefed",
+      "200": "#dededb",
+      "300": "#c7c7c2",
+      "400": "#9b9b94",
+      "500": "#73736c",
+      "600": "#56564f",
+      "700": "#40403a",
+      "800": "#292925",
+      "900": "#1d1d1a",
+      "950": "#11110f"
     },
-    "decisionTree": {
-        "deleteAction": {
-            "requires": ["confirmationDialog"]
-        },
-        "moreThan10Rows": {
-            "use": "dataTable"
-        },
-        "lessThan10Rows": {
-            "use": "simpleList"
-        },
-        "primaryAction": {
-            "variant": "primary"
-        },
-        "secondaryAction": {
-            "variant": "secondary"
-        }
+    "semantic": {
+      "success": {
+        "subtle": "#ecfdf3",
+        "border": "#b7efc8",
+        "text": "#067647",
+        "solid": "#16a34a",
+        "solidHover": "#15803d"
+      },
+      "warning": {
+        "subtle": "#fffbeb",
+        "border": "#fde68a",
+        "text": "#a16207",
+        "solid": "#d97706",
+        "solidHover": "#b45309"
+      },
+      "info": {
+        "subtle": "#eff6ff",
+        "border": "#bfdbfe",
+        "text": "#1d4ed8",
+        "solid": "#2563eb",
+        "solidHover": "#1d4ed8"
+      },
+      "danger": {
+        "subtle": "#fff1f2",
+        "border": "#fecdd3",
+        "text": "#be123c",
+        "solid": "#e11d48",
+        "solidHover": "#be123c"
+      },
+      "error": {
+        "subtle": "#fef2f2",
+        "border": "#fecaca",
+        "text": "#b91c1c",
+        "solid": "#dc2626",
+        "solidHover": "#b91c1c"
+      }
+    },
+    "surfaces": {
+      "app": "#f8f8f7",
+      "panel": "#ffffff",
+      "panelMuted": "#fcfcfb",
+      "raised": "#ffffff",
+      "overlay": "#ffffff",
+      "divider": "#efefed",
+      "border": "#dededb",
+      "focusRing": "#ffa99b"
+    },
+    "usageRules": [
+      "Use tomato red as the primary accent, not as a full-page wash.",
+      "Use neutral backgrounds for admin pages.",
+      "Prefer small status accents over large colorful panels.",
+      "Do not use Bootstrap-like blue as the primary brand color.",
+      "Avoid purple, purple-blue gradients, and one-hue dashboards."
+    ]
+  },
+  "tailwindTokens": {
+    "recommendedCssVariables": {
+      "--font-admin-sans": "\"Satoshi\", \"Aptos\", \"Ubuntu Sans\", \"Inter\", ui-sans-serif, system-ui, sans-serif",
+      "--admin-primary": "#f45b45",
+      "--admin-primary-hover": "#dd3f2a",
+      "--admin-primary-subtle": "#fff1ee",
+      "--admin-primary-border": "#ffc9c0",
+      "--admin-background": "#f8f8f7",
+      "--admin-surface": "#ffffff",
+      "--admin-border": "#dededb",
+      "--admin-text": "#1d1d1a",
+      "--admin-muted": "#73736c"
+    },
+    "layout": {
+      "pageShell": "min-h-screen bg-[var(--admin-background)] text-[var(--admin-text)]",
+      "mainContent": "mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 lg:px-8",
+      "contentStack": "space-y-5",
+      "section": "space-y-3",
+      "toolbar": "flex flex-col gap-3 border-b border-neutral-200 pb-4 sm:flex-row sm:items-center sm:justify-between",
+      "splitPanel": "grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]"
+    },
+    "surfaces": {
+      "panel": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
+      "panelBody": "p-4 sm:p-5",
+      "panelHeader": "border-b border-neutral-100 px-4 py-3 sm:px-5",
+      "tableSurface": "overflow-hidden rounded-lg border border-neutral-200 bg-white",
+      "inputSurface": "rounded-md border border-neutral-300 bg-white text-neutral-950 shadow-none"
+    },
+    "focus": {
+      "ring": "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--admin-primary-border)] focus-visible:ring-offset-2",
+      "within": "focus-within:ring-2 focus-within:ring-[var(--admin-primary-border)]"
     }
+  },
+  "components": {
+    "buttons": {
+      "philosophy": "Buttons are mostly outlined. Solid buttons are reserved for the single most important action in a view.",
+      "base": "inline-flex h-9 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
+      "sizes": {
+        "xs": "h-7 gap-1.5 px-2 text-xs",
+        "sm": "h-8 gap-1.5 px-2.5 text-sm",
+        "md": "h-9 gap-2 px-3 text-sm",
+        "lg": "h-10 gap-2 px-4 text-sm"
+      },
+      "variants": {
+        "primaryOutlined": "border border-[var(--admin-primary-border)] bg-white text-[var(--admin-primary-hover)] hover:bg-[var(--admin-primary-subtle)]",
+        "primarySolid": "border border-[var(--admin-primary)] bg-[var(--admin-primary)] text-white hover:bg-[var(--admin-primary-hover)]",
+        "neutralOutlined": "border border-neutral-300 bg-white text-neutral-800 hover:bg-neutral-50",
+        "ghost": "border border-transparent bg-transparent text-neutral-700 hover:bg-neutral-100",
+        "dangerOutlined": "border border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
+        "dangerSolid": "border border-rose-600 bg-rose-600 text-white hover:bg-rose-700",
+        "warningOutlined": "border border-amber-200 bg-white text-amber-700 hover:bg-amber-50",
+        "warningSolid": "border border-amber-600 bg-amber-600 text-white hover:bg-amber-700",
+        "infoOutlined": "border border-blue-200 bg-white text-blue-700 hover:bg-blue-50",
+        "infoSolid": "border border-blue-600 bg-blue-600 text-white hover:bg-blue-700",
+        "successOutlined": "border border-green-200 bg-white text-green-700 hover:bg-green-50",
+        "successSolid": "border border-green-600 bg-green-600 text-white hover:bg-green-700",
+        "errorOutlined": "border border-red-200 bg-white text-red-700 hover:bg-red-50",
+        "errorSolid": "border border-red-600 bg-red-600 text-white hover:bg-red-700"
+      },
+      "rules": [
+        "Prefer outlined buttons for list actions, filters, table row actions, and secondary workflows.",
+        "Use one solid primary button per page or modal when a clear primary action exists.",
+        "Use icons for compact tool actions such as edit, delete, refresh, search, export, and settings.",
+        "Avoid Bootstrap-like large pill buttons, heavy shadows, and default blue primary actions."
+      ]
+    },
+    "forms": {
+      "label": "mb-1.5 block text-sm font-medium text-neutral-800",
+      "input": "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
+      "textarea": "min-h-24 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-950 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
+      "select": "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-0 focus:ring-[var(--admin-primary-border)]",
+      "helpText": "mt-1 text-xs leading-5 text-neutral-500",
+      "errorText": "mt-1 text-xs leading-5 text-red-700"
+    },
+    "navigation": {
+      "sidebar": "border-r border-neutral-200 bg-white",
+      "sidebarItem": "flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-neutral-700 hover:bg-neutral-100",
+      "sidebarItemActive": "bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
+      "topbar": "border-b border-neutral-200 bg-white/95 backdrop-blur",
+      "breadcrumb": "flex items-center gap-2 text-sm text-neutral-500"
+    },
+    "tables": {
+      "container": "overflow-hidden rounded-lg border border-neutral-200 bg-white",
+      "table": "min-w-full divide-y divide-neutral-200",
+      "header": "bg-neutral-50",
+      "headerCell": "px-3 py-2 text-left text-xs font-medium uppercase tracking-wide text-neutral-500",
+      "body": "divide-y divide-neutral-100 bg-white",
+      "bodyCell": "px-3 py-3 text-sm text-neutral-700",
+      "row": "hover:bg-neutral-50",
+      "rowSelected": "bg-[var(--admin-primary-subtle)]"
+    },
+    "badges": {
+      "base": "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium",
+      "neutral": "border-neutral-200 bg-neutral-50 text-neutral-700",
+      "primary": "border-[var(--admin-primary-border)] bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
+      "success": "border-green-200 bg-green-50 text-green-700",
+      "warning": "border-amber-200 bg-amber-50 text-amber-700",
+      "info": "border-blue-200 bg-blue-50 text-blue-700",
+      "danger": "border-rose-200 bg-rose-50 text-rose-700",
+      "error": "border-red-200 bg-red-50 text-red-700"
+    },
+    "cards": {
+      "usage": "Use cards for repeated records, compact KPI panels, and modal-like contained tasks. Do not nest cards.",
+      "base": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
+      "compact": "rounded-lg border border-neutral-200 bg-white p-4",
+      "interactive": "rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+    },
+    "modals": {
+      "panel": "w-full max-w-lg rounded-lg border border-neutral-200 bg-white shadow-xl",
+      "header": "border-b border-neutral-100 px-5 py-4",
+      "body": "px-5 py-4",
+      "footer": "flex justify-end gap-2 border-t border-neutral-100 px-5 py-4"
+    }
+  },
+  "layoutPatterns": {
+    "adminDashboard": {
+      "structure": [
+        "top utility bar with search and quick actions",
+        "compact KPI cards row",
+        "persistent sidebar",
+        "page header with title and actions",
+        "thin toolbar for filters",
+        "table-first content",
+        "details panels only when useful"
+      ],
+      "rules": [
+        "Prioritize tables and lists over large decorative cards.",
+        "Keep KPI cards compact but visually expressive with icons and deltas.",
+        "Use full-width page bands or plain sections instead of floating page sections.",
+        "Use sticky table headers and predictable row actions when tables grow."
+      ]
+    },
+    "crudPage": {
+      "structure": [
+        "title row",
+        "outlined action toolbar",
+        "filters row",
+        "data table",
+        "drawer or modal for create and edit"
+      ],
+      "primaryAction": "Use one solid tomato button for create when needed; keep every other action outlined or ghost."
+    }
+  },
+  "uiComponents": {
+    "adminTopBar": {
+      "base": "flex items-center gap-3 rounded-lg border border-neutral-200 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
+      "search": "h-11 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-[var(--admin-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary-border)]",
+      "actionButton": "inline-flex h-11 items-center justify-center rounded-md border border-neutral-200 bg-white px-3 text-neutral-700 hover:bg-neutral-50"
+    },
+    "adminKpiCard": {
+      "base": "rounded-lg border border-neutral-200 bg-white p-4 shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
+      "iconWrap": "flex h-10 w-10 items-center justify-center rounded-md border border-[var(--admin-primary-border)] bg-[var(--admin-primary-subtle)] text-[var(--admin-primary-hover)]",
+      "label": "text-sm text-neutral-500",
+      "value": "mt-2 text-2xl font-semibold tracking-tight text-neutral-950",
+      "deltaPositive": "mt-1 text-sm font-medium text-green-600",
+      "deltaNegative": "mt-1 text-sm font-medium text-red-600"
+    },
+    "adminSurfaceCard": {
+      "base": "rounded-lg border border-neutral-200 bg-white shadow-[0_1px_2px_rgba(17,17,15,0.04)]",
+      "header": "border-b border-neutral-100 px-4 py-3",
+      "body": "p-4"
+    }
+  },
+  "antiPatterns": {
+    "bootstrap": [
+      "Do not use Bootstrap-like blue primary buttons.",
+      "Do not use rounded-pill button groups.",
+      "Do not use thick bordered cards with generic blue headers.",
+      "Do not use alert blocks that resemble Bootstrap alerts.",
+      "Do not use default-looking btn-primary, btn-secondary, form-control visual patterns."
+    ],
+    "visualNoise": [
+      "Do not add gradient orbs, bokeh backgrounds, decorative blobs, or generic AI SaaS illustrations.",
+      "Do not use large shadows for ordinary admin panels.",
+      "Do not overuse rounded-xl and rounded-2xl in admin surfaces.",
+      "Do not make dashboards dominated by one hue.",
+      "Do not use marketing hero sections inside authenticated admin routes."
+    ],
+    "accessibility": [
+      "Do not rely on color alone for status.",
+      "Do not reduce focus visibility.",
+      "Do not use text below 12px for interactive controls.",
+      "Do not create icon-only buttons without accessible labels or tooltips."
+    ]
+  },
+  "implementationRules": [
+    "Use Tailwind utility classes and Nuxt UI conventions where applicable.",
+    "Use object syntax for conditional Vue classes.",
+    "Use semantic color names for variants: primary, neutral, success, warning, info, danger, error.",
+    "Use Iconify icons for all icons.",
+    "Keep admin cards at rounded-lg or less.",
+    "Default button variant should be outlined in admin views.",
+    "Prefer compact density with clear spacing over large marketing layouts.",
+    "Every new admin UI must check this file before implementation."
+  ],
+
+  "tables": {
+    "wrapper": "rounded-2xl bg-white border border-slate-200 overflow-hidden",
+    "header": "bg-slate-50",
+    "rowHover": "hover:bg-slate-50",
+    "pagination": "rounded-xl border"
+  },
+  "forms": {
+    "spacing": "space-y-6",
+    "group": "grid gap-6 md:grid-cols-2",
+    "actions": "flex justify-end gap-3 pt-6"
+  },
+  "modals": {
+    "size": {
+      "sm": "max-w-md",
+      "md": "max-w-xl",
+      "lg": "max-w-3xl",
+      "xl": "max-w-5xl"
+    },
+    "overlay": "bg-black/40 backdrop-blur-sm",
+    "closeOnEsc": true,
+    "closeOnBackdrop": true
+  },
+  "pages": {
+    "index": {
+      "header": true,
+      "filters": true,
+      "stats": true
+    },
+    "form": {
+      "card": true,
+      "actionsSticky": true
+    },
+    "table": {
+      "filters": true,
+      "pagination": true,
+      "bulkActions": true
+    },
+    "grid": {
+      "filters": true,
+      "pagination": true
+    },
+    "list": {
+      "filters": true,
+      "pagination": true
+    }
+  },
+  "rules": [
+    "Never use ring except ring-0.",
+    "Never use arbitrary colors.",
+    "Never use arbitrary spacing.",
+    "Always use semantic colors.",
+    "Always reuse component patterns.",
+    "Prefer rounded-xl.",
+    "Prefer shadow-sm.",
+    "Cards must have white background.",
+    "Use Inter font.",
+    "Sidebar is always collapsible.",
+    "Tables must always support pagination.",
+    "Forms must always have grouped actions.",
+    "Dialogs must have cancel and confirm buttons.",
+    "Danger actions require confirmation.",
+    "Primary actions use emerald color.",
+    "Secondary actions use slate color.",
+    "All pages must be responsive.",
+    "All interactive elements must have transition-all duration-200.",
+    "Never create a component visually different from existing ones."
+  ],
+  "recipes": {
+    "crud": ["PageHeader", "StatsCards", "Filters", "DataTable", "Pagination"],
+    "editForm": ["PageHeader", "FormCard", "FormGrid", "ActionsFooter"],
+    "dashboard": ["StatsCards", "Charts", "RecentActivity", "QuickActions"]
+  },
+  "qualityChecklist": [
+    "Responsive",
+    "Accessible",
+    "Consistent",
+    "Uses semantic colors",
+    "Uses only predefined spacing",
+    "Uses only predefined typography",
+    "Uses only predefined shadows",
+    "Uses only predefined radius",
+    "Uses existing components",
+    "No duplicated UI",
+    "No inline CSS",
+    "No arbitrary Tailwind values",
+    "No ring",
+    "No hardcoded colors",
+    "No inconsistent spacing"
+  ],
+  "forbidden": {
+    "tailwind": ["ring", "rounded-none", "shadow-2xl", "text-black", "bg-black"],
+    "css": ["inline-style", "!important"],
+    "components": ["multiple-primary-buttons", "nested-cards"]
+  },
+  "decisionTree": {
+    "deleteAction": {
+      "requires": ["confirmationDialog"]
+    },
+    "moreThan10Rows": {
+      "use": "dataTable"
+    },
+    "lessThan10Rows": {
+      "use": "simpleList"
+    },
+    "primaryAction": {
+      "variant": "primary"
+    },
+    "secondaryAction": {
+      "variant": "secondary"
+    }
+  }
 }

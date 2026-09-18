@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
     --font-admin-sans: 'Ubuntu Sans', 'Aptos', 'Inter', ui-sans-serif, system-ui, sans-serif;
