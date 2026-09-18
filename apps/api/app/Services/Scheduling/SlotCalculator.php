@@ -86,7 +86,7 @@ final class SlotCalculator
                 $hasUnavailabilityCollision = false;
 
                 foreach ($unavailabilities as $unavailability) {
-                    if (self::intervalsOverlap($slotStartUtc, $slotEndUtc, $unavailability->start_time_utc, $unavailability->end_time_utc)) {
+                    if (static::intervalsOverlap($slotStartUtc, $slotEndUtc, $unavailability->start_time_utc, $unavailability->end_time_utc)) {
                         $hasUnavailabilityCollision = true;
 
                         break;
@@ -103,7 +103,7 @@ final class SlotCalculator
                 $hasAppointmentCollision = false;
 
                 foreach ($appointments as $appointment) {
-                    if (self::intervalsOverlap($slotStartUtc, $slotEndUtc, $appointment->start_time_utc, $appointment->end_time_utc)) {
+                    if (static::intervalsOverlap($slotStartUtc, $slotEndUtc, $appointment->start_time_utc, $appointment->end_time_utc)) {
                         $hasAppointmentCollision = true;
 
                         break;

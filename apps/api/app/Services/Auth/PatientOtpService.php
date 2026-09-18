@@ -17,8 +17,8 @@ final class PatientOtpService
         $sanitizedPhone = preg_replace('/[^\d+]/', '', $phone) ?? $phone;
         $otpCode = (string) random_int(100000, 999999);
 
-        $cacheKey = self::getCacheKey($sanitizedPhone);
-        Cache::put($cacheKey, $otpCode, self::OTP_TTL_SECONDS);
+        $cacheKey = static::getCacheKey($sanitizedPhone);
+        Cache::put($cacheKey, $otpCode, static::OTP_TTL_SECONDS);
 
         return $otpCode;
     }
@@ -26,7 +26,7 @@ final class PatientOtpService
     public static function verifyOtpAndGenerateToken(Patient $patient, string $enteredCode): string
     {
         $sanitizedPhone = preg_replace('/[^\d+]/', '', $patient->phone) ?? $patient->phone;
-        $cacheKey = self::getCacheKey($sanitizedPhone);
+        $cacheKey = static::getCacheKey($sanitizedPhone);
 
         $storedCode = Cache::get($cacheKey);
 

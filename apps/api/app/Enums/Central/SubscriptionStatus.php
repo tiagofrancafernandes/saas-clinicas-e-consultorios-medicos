@@ -14,6 +14,6 @@ enum SubscriptionStatus: string
 
     public function allowsWrites(): bool
     {
-        return in_array($this, [self::ACTIVE, self::PAST_DUE, self::COURTESY], true);
+        return in_array($this, [static::ACTIVE, static::PAST_DUE, static::COURTESY], true);
     }
 }

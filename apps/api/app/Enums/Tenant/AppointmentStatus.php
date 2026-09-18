@@ -16,11 +16,11 @@ enum AppointmentStatus: string
 
     public function isFinalized(): bool
     {
-        return in_array($this, [self::COMPLETED, self::CANCELLED, self::NO_SHOW], true);
+        return in_array($this, [static::COMPLETED, static::CANCELLED, static::NO_SHOW], true);
     }
 
     public function isBillable(): bool
     {
-        return $this === self::COMPLETED;
+        return $this === static::COMPLETED;
     }
 }

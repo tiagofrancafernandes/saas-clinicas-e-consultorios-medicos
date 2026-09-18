@@ -53,7 +53,7 @@ final class MedicalRecordAccessService
         Professional $requestingProfessional,
         ?CarbonImmutable $nowUtc = null
     ): void {
-        if (! self::canAccess($record, $requestingProfessional, $nowUtc)) {
+        if (! static::canAccess($record, $requestingProfessional, $nowUtc)) {
             throw new AuthorizationException('Access denied: this medical record is confidential and no active delegation was found.');
         }
     }

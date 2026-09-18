@@ -29,7 +29,7 @@ final class DevClinicSeeder extends Seeder
 
     public function run(): void
     {
-        $existing = Tenant::query()->find(self::DEMO_TENANT_ID);
+        $existing = Tenant::query()->find(static::DEMO_TENANT_ID);
 
         if ($existing) {
             return;
@@ -37,7 +37,7 @@ final class DevClinicSeeder extends Seeder
 
         // 1. Create Demo Tenant (triggers Stancl schema creation and tenant migrations)
         $tenant = Tenant::create([
-            'id' => self::DEMO_TENANT_ID,
+            'id' => static::DEMO_TENANT_ID,
             'name' => 'Clinica Santa Monica',
             'slug' => 'clinica-santa-monica',
             'tax_id' => '12345678000199',
