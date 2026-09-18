@@ -7,9 +7,11 @@ namespace App\Models\Tenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
 
 final class Patient extends Model
 {
+    use HasApiTokens;
     use HasUuids;
 
     protected $table = 'patients';
