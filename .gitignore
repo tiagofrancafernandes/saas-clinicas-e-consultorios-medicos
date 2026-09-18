@@ -1,4 +1,4 @@
-
+# Custom local ignore rules
 *no*commit*
 *No*Commit*
 *NO*COMMIT*
@@ -16,3 +16,27 @@ _ide_helper*
 .vite
 dist*
 
+# Node & Package Managers
+node_modules/
+.pnpm-store/
+.turbo/
+
+# Nuxt & Frontend build artifacts
+.nuxt/
+.output/
+.nitro/
+
+# PHP / Composer
+vendor/
+.phpunit.result.cache
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
