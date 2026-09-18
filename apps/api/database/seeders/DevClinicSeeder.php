@@ -30,6 +30,8 @@ use Illuminate\Support\Str;
 final class DevClinicSeeder extends Seeder
 {
     public const string DEMO_TENANT_ID = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+    public const string DEMO_ROOM_101_ID = '77777777-7777-7777-7777-777777777777';
+    public const string DEMO_ROOM_102_ID = '88888888-8888-8888-8888-888888888888';
     public const string DEMO_DR_CARTER_ID = '11111111-1111-1111-1111-111111111111';
     public const string DEMO_DR_STONE_ID = '22222222-2222-2222-2222-222222222222';
     public const string DEMO_DR_HOUSE_ID = '33333333-3333-3333-3333-333333333333';
@@ -75,14 +77,14 @@ final class DevClinicSeeder extends Seeder
         $tenant->run(function (): void {
             // Clinic rooms
             $room101 = ClinicRoom::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_ROOM_101_ID,
                 'name' => 'Room 101 - General Practice',
                 'description' => 'Equipped for outpatient clinical assessments',
                 'is_active' => true,
             ]);
 
             $room102 = ClinicRoom::create([
-                'id' => (string) Str::uuid(),
+                'id' => static::DEMO_ROOM_102_ID,
                 'name' => 'Room 102 - Neurology Suite',
                 'description' => 'Dedicated neurology and electroencephalogram room',
                 'is_active' => true,
