@@ -50,3 +50,9 @@ dist
 .env*
 
 tsconfig.tsbuildinfo
+
+apps/api/storage
+apps/api/vendor
+apps/api/node_modules
+apps/**/node_modules
+apps/*/node_modules
