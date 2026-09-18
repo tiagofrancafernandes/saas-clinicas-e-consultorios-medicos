@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+    --font-admin-sans: 'Ubuntu Sans', 'Aptos', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --admin-primary: #f45b45;
+    --admin-primary-hover: #dd3f2a;
+    --admin-primary-subtle: #fff1ee;
+    --admin-primary-border: #ffc9c0;
+    --admin-background: #f8f8f7;
+    --admin-surface: #ffffff;
+    --admin-border: #dededb;
+    --admin-text: #1d1d1a;
+    --admin-muted: #73736c;
+    --admin-success: #16a34a;
+    --admin-warning: #d97706;
+    --admin-info: #2563eb;
+    --admin-danger: #e11d48;
+    --admin-error: #dc2626;
+    --admin-radius-sm: 0.125rem;
+    --admin-radius-md: 0.25rem;
+    --admin-radius-lg: 0.375rem;
+}
+
+body {
+    font-family: var(--font-admin-sans);
+    background-color: var(--admin-background);
+    color: var(--admin-text);
+    -webkit-font-smoothing: antialiased;
+}

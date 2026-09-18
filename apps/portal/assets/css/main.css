@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+:root {
+    --font-portal-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+    font-family: var(--font-portal-sans);
+    background-color: #f9fafb;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+}

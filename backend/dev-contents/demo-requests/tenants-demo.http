@@ -1,0 +1,34 @@
+### Health Check
+GET http://localhost:8000/up
+Accept: application/json
+
+###
+
+### List All Central Tenants
+GET http://localhost:8000/api/central/tenants
+Accept: application/json
+
+###
+
+### Create New Tenant (Auto-provisions PostgreSQL Schema & Runs Migrations)
+POST http://localhost:8000/api/central/tenants
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "Clinica Santa Monica",
+    "slug": "clinica-santa-monica",
+    "tax_id": "12345678000199",
+    "timezone": "America/Sao_Paulo",
+    "settings": {
+        "reminder_notice_hours": 24,
+        "cancellation_window_hours": 4
+    }
+}
+
+###
+
+### Get Tenant Details by ID
+# @prompt tenantId The UUID of the tenant
+GET http://localhost:8000/api/central/tenants/{{tenantId}}
+Accept: application/json

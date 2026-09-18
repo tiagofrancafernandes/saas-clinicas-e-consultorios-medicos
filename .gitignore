@@ -29,6 +29,8 @@ node_modules/
 # PHP / Composer
 vendor/
 .phpunit.result.cache
+*.sqlite
+*.sqlite-journal
 
 # Environment files
 .env
