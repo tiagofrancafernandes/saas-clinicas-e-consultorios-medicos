@@ -50,6 +50,8 @@ Sample HTTP requests are available under `backend/dev-contents/demo-requests/`:
 - `appointments-demo.http`: Slot availability, booking, rescheduling, cancellation, and patient room summoning.
 - `auth-demo.http`: Redis OTP request & verification, Sanctum token usage, and 1-click fast action token consumption.
 - `medical-records-demo.http`: Confidential record creation, privacy tier checks, and doctor delegation granting.
+- `files-demo.http`: Polymorphic document and exam uploads attached to patients.
+- `waitlist-demo.http`: Smart schedule void waitlist enrollment and listing.
 - `webhooks-demo.http`: Inbound WhatsApp/SMS interactive button responses.
 
 ## Running Tests
@@ -61,7 +63,7 @@ cd apps/api
 php artisan test
 ```
 
-Current test suite status: **42 tests**, **199 assertions**, **0 failures**.
+Current test suite status: **45 tests**, **217 assertions**, **0 failures**.
 
 ## Building the Frontends
 
