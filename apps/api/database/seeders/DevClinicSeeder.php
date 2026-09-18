@@ -125,7 +125,6 @@ final class DevClinicSeeder extends Seeder
                 'id' => (string) Str::uuid(),
                 'name' => 'Unimed Seguros',
                 'ans_code' => '30001',
-                'requires_token' => false,
                 'is_active' => true,
             ]);
 
@@ -142,7 +141,6 @@ final class DevClinicSeeder extends Seeder
                 'id' => (string) Str::uuid(),
                 'name' => 'Bradesco Saúde',
                 'ans_code' => '005711',
-                'requires_token' => true,
                 'is_active' => true,
             ]);
 
@@ -187,10 +185,9 @@ final class DevClinicSeeder extends Seeder
             $carlos = Patient::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'Carlos Silva',
-                'cpf' => '12345678901',
+                'tax_id' => '12345678901',
                 'email' => 'carlos.silva@example.com',
                 'phone' => '+5511988776655',
-                'timezone' => 'America/Sao_Paulo',
             ]);
 
             PatientHealthInsurance::create([
@@ -214,19 +211,17 @@ final class DevClinicSeeder extends Seeder
             $mariana = Patient::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'Mariana Costa',
-                'cpf' => '23456789012',
+                'tax_id' => '23456789012',
                 'email' => 'mariana.costa@example.com',
                 'phone' => '+5511977665544',
-                'timezone' => 'America/Sao_Paulo',
             ]);
 
             $juliana = Patient::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'Juliana Mendes',
-                'cpf' => '34567890123',
+                'tax_id' => '34567890123',
                 'email' => 'juliana.mendes@example.com',
                 'phone' => '+5511988221100',
-                'timezone' => 'America/Sao_Paulo',
             ]);
 
             // Demo Appointments
@@ -241,7 +236,8 @@ final class DevClinicSeeder extends Seeder
                 'start_time_utc' => $tomorrow->setTimezone('UTC'),
                 'end_time_utc' => $tomorrow->addMinutes(30)->setTimezone('UTC'),
                 'status' => AppointmentStatus::SCHEDULED,
-                'billing_type' => 'private',
+                'price_in_cents' => 15000,
+                'payment_status' => 'PENDING',
                 'origin_timezone' => 'America/Sao_Paulo',
                 'notes' => 'Patient requested initial consultation for migraine study',
             ]);
