@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\Central\SubscriptionStatus;
+use App\Enums\Tenant\RecordVisibility;
 use App\Models\Central\Subscription;
 use App\Models\Central\Tenant;
+use App\Models\Tenant\MedicalRecord;
 use App\Models\Tenant\Patient;
 use App\Models\Tenant\Professional;
+use App\Models\Tenant\ProfessionalAvailability;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\DB;
