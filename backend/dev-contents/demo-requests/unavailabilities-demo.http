@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@professionalId = 11111111-1111-1111-1111-111111111111
+@blockId = 22222222-2222-2222-2222-222222222222
+
+### List Schedule Blocks (Vacations, Absences, Leaves)
+GET {{baseUrl}}/api/tenant/unavailabilities?start_date=2026-12-01&end_date=2026-12-31&timezone=America/Sao_Paulo
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+### Create Schedule Block
+POST {{baseUrl}}/api/tenant/unavailabilities
+Content-Type: application/json
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+{
+    "professional_id": "{{professionalId}}",
+    "start_at": "2026-12-10 08:00:00",
+    "end_at": "2026-12-10 18:00:00",
+    "timezone": "America/Sao_Paulo",
+    "reason": "Férias"
+}
+
+### Delete Schedule Block
+DELETE {{baseUrl}}/api/tenant/unavailabilities/{{blockId}}
+Accept: application/json
+X-Tenant-ID: {{tenantId}}

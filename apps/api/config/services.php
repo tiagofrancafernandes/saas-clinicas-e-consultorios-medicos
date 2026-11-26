@@ -38,5 +38,11 @@ return [
         'base_url' => env('EVOLUTION_API_BASE_URL', 'https://evolution-api.tiagofranca.com'),
         'global_api_key' => env('EVOLUTION_API_GLOBAL_KEY'),
         'timeout' => (int) env('EVOLUTION_API_TIMEOUT', 15),
+
+        /**
+         * For when you want to force a recipient (Useful for example for testing or local environment, demonstration or others)
+         */
+        'forced_recipient_enabled' => env('EVOLUTION_API_FORCED_RECIPIENT_ENABLED', false),
+        'forced_recipient' => preg_replace('/\D+/', '', strval(env('EVOLUTION_API_FORCED_RECIPIENT', null))) ?: null,
     ],
 ];

@@ -38,7 +38,7 @@ async function handleLogin(): Promise<void> {
     <div class="flex min-h-screen items-center justify-center bg-[#f9fafb] px-4">
         <div class="w-full max-w-sm rounded-md border border-gray-200 bg-white p-6">
             <div class="mb-5 flex items-center gap-2.5">
-                <div class="flex size-8 items-center justify-center rounded bg-blue-600 text-white">
+                <div class="flex size-8 items-center justify-center rounded bg-teal-600 text-white">
                     <Icon name="lucide:heart-pulse" class="size-4" />
                 </div>
                 <div>
@@ -76,7 +76,7 @@ async function handleLogin(): Promise<void> {
                     id="btn-login-submit"
                     type="submit"
                     :disabled="loading"
-                    class="flex h-8 w-full items-center justify-center gap-1.5 rounded bg-blue-600 text-[12px] font-normal text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                    class="flex h-8 w-full items-center justify-center gap-1.5 rounded bg-teal-600 text-[12px] font-normal text-white transition-colors hover:bg-teal-700 disabled:opacity-50"
                 >
                     <Icon v-if="loading" name="lucide:loader-2" class="size-3.5 animate-spin" />
                     <span>{{ loading ? 'Autenticando...' : 'Entrar no Portal' }}</span>

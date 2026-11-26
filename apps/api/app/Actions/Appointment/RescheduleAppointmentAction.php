@@ -6,6 +6,7 @@ namespace App\Actions\Appointment;
 
 use App\Enums\Tenant\AppointmentStatus;
 use App\Models\Tenant\Appointment;
+use App\Models\Tenant\ProfessionalUnavailability;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -41,6 +42,17 @@ final class RescheduleAppointmentAction
 
             if ($professionalCollision) {
                 throw new RuntimeException('The selected professional already has an appointment during this new time.');
+            }
+
+            // 1b. Check professional unavailability blocks (vacations, absences, leaves)
+            $unavailabilityCollision = ProfessionalUnavailability::query()
+                ->where('professional_id', $lockedAppointment->professional_id)
+                ->where('start_time_utc', '<', $newEndUtc)
+                ->where('end_time_utc', '>', $newStartUtc)
+                ->exists();
+
+            if ($unavailabilityCollision) {
+                throw new RuntimeException('The selected professional is unavailable (blocked schedule) during this new time.');
             }
 
             // 2. Room collision check if specified or previously assigned

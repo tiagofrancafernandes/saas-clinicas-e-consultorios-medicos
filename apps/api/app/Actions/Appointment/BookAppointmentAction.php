@@ -12,6 +12,7 @@ use App\Models\Tenant\Patient;
 use App\Models\Tenant\PatientHealthInsurance;
 use App\Models\Tenant\PatientPackage;
 use App\Models\Tenant\Professional;
+use App\Models\Tenant\ProfessionalUnavailability;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -74,6 +75,17 @@ final class BookAppointmentAction
 
             if ($professionalCollision) {
                 throw new RuntimeException('The selected professional already has an appointment during this time.');
+            }
+
+            // 2b. Check professional unavailability blocks (vacations, absences, leaves)
+            $unavailabilityCollision = ProfessionalUnavailability::query()
+                ->where('professional_id', $data['professional_id'])
+                ->where('start_time_utc', '<', $data['end_time_utc'])
+                ->where('end_time_utc', '>', $data['start_time_utc'])
+                ->exists();
+
+            if ($unavailabilityCollision) {
+                throw new RuntimeException('The selected professional is unavailable (blocked schedule) during this time.');
             }
 
             // 3. Lock check for room collision if room specified

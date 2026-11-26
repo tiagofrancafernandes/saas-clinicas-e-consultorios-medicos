@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:8000/api
+@token = your-sanctum-token
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+
+### List all patients
+GET {{baseUrl}}/tenant/patients
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+### Search patients for typeahead (preloaded / filtered)
+GET {{baseUrl}}/tenant/patients?search=silva&limit=20
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}

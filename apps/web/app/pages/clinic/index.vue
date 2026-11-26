@@ -215,7 +215,7 @@ async function handleSave(): Promise<void> {
                         id="btn-save-clinic-settings"
                         type="submit"
                         :disabled="saving"
-                        class="flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[12px] text-white hover:bg-blue-700 disabled:opacity-50"
+                        class="flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[12px] text-white hover:bg-teal-700 disabled:opacity-50"
                     >
                         <Icon name="lucide:check" class="size-3.5" />
                         <span>{{ saving ? 'Salvando...' : 'Salvar configurações' }}</span>

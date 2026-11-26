@@ -67,6 +67,20 @@ X-Tenant-ID: {{tenantId}}
 
 ###
 
+### List Appointments by Calendar Range (Day / Week / Month)
+GET {{baseUrl}}/api/tenant/appointments?start_date=2026-12-01&end_date=2026-12-07&timezone=America/Sao_Paulo&per_page=100
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
+### Confirm Appointment
+POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/confirm
+Accept: application/json
+X-Tenant-ID: {{tenantId}}
+
+###
+
 ### Summon Patient to Consulting Room (Broadcasts Real-Time Event to TV Displays)
 POST {{baseUrl}}/api/tenant/appointments/{{appointmentId}}/summon
 Content-Type: application/json

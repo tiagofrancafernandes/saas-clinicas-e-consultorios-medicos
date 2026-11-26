@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string|int|null $id
  * @property-read ?string $instance_name
  * @property-read ?string $attendant_name
+ * @property-read ?string $token
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WhatsAppInstance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WhatsAppInstance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WhatsAppInstance query()

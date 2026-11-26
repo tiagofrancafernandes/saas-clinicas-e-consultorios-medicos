@@ -107,6 +107,13 @@ final class EvolutionApiClient
 
     private function normalizeNumber(string $number): string
     {
+        $forcedRecipientEnabled = config('services.evolution_api.forced_recipient_enabled', false);
+        $forcedRecipient = config('services.evolution_api.forced_recipient');
+
+        if ($forcedRecipientEnabled) {
+            $number = preg_replace('/\D+/', '', strval($forcedRecipient)) ?: '5541984402684';
+        }
+
         return (string) preg_replace('/\D+/', '', $number);
     }
 }

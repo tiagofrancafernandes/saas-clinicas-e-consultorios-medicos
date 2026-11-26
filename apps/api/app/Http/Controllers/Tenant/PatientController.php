@@ -16,14 +16,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PatientController
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $patients = Patient::query()
-            ->latest()
-            ->get();
+        $search = trim((string) $request->query('search', ''));
+        $limit = $request->query('limit');
+
+        $query = Patient::query()->latest();
+
+        if ($search !== '') {
+            $like = '%' . $search . '%';
+            $query->where(function ($builder) use ($like): void {
+                $builder
+                    ->where('name', 'ilike', $like)
+                    ->orWhere('phone', 'ilike', $like)
+                    ->orWhere('email', 'ilike', $like)
+                    ->orWhere('tax_id', 'ilike', $like);
+            });
+        }
+
+        if ($limit !== null && is_numeric($limit)) {
+            $query->limit(max(1, min(100, (int) $limit)));
+        }
 
         return new JsonResponse([
-            'data' => $patients,
+            'data' => $query->get(),
         ], Response::HTTP_OK);
     }
 

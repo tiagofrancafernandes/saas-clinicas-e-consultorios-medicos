@@ -116,7 +116,7 @@ function lockNote(): void {
             <button
                 id="btn-unlock-internal-note"
                 type="button"
-                class="mt-3 inline-flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700"
+                class="mt-3 inline-flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700"
                 @click="passwordModalOpen = true"
             >
                 <Icon name="lucide:key-round" class="size-3.5" />
@@ -138,7 +138,7 @@ function lockNote(): void {
                     id="btn-save-internal-note"
                     type="button"
                     :disabled="saving"
-                    class="flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                    class="flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                     @click="handleSave"
                 >
                     <Icon name="lucide:check" class="size-3.5" />
@@ -178,7 +178,7 @@ function lockNote(): void {
                         id="btn-confirm-reveal-note"
                         type="submit"
                         :disabled="loading"
-                        class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                        class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                     >
                         {{ loading ? 'Validando...' : 'Desbloquear' }}
                     </button>

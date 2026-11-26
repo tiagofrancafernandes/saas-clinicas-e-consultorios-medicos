@@ -40,7 +40,7 @@ const emit = defineEmits<{ (e: 'close'): void; (e: 'confirm'): void }>();
                     id="btn-confirm-modal-action"
                     type="button"
                     class="h-7 rounded px-2.5 text-[11px] font-normal text-white transition-colors"
-                    :class="danger ? 'bg-rose-600 hover:bg-rose-700' : 'bg-blue-600 hover:bg-blue-700'"
+                    :class="danger ? 'bg-rose-600 hover:bg-rose-700' : 'bg-teal-600 hover:bg-teal-700'"
                     @click="emit('confirm')"
                 >
                     {{ confirmLabel }}

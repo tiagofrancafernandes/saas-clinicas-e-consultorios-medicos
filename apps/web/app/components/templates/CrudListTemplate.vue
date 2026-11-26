@@ -83,7 +83,7 @@ withDefaults(defineProps<Props>(), {
                     class="flex h-8 items-center gap-1.5 rounded border px-2.5 text-[12px] transition-colors"
                     :class="
                         table.filterPanelOpen.value || table.appliedFilters.value.length
-                            ? 'border-blue-300 bg-blue-50 text-blue-700'
+                            ? 'border-teal-300 bg-teal-50 text-teal-700'
                             : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                     "
                     @click="table.toggleFilterPanel()"
@@ -92,7 +92,7 @@ withDefaults(defineProps<Props>(), {
                     <span>Filtros</span>
                     <span
                         v-if="table.appliedFilters.value.length"
-                        class="rounded bg-blue-100 px-1.5 text-[10px] text-blue-700"
+                        class="rounded bg-teal-100 px-1.5 text-[10px] text-teal-700"
                     >
                         {{ table.appliedFilters.value.length }}
                     </span>

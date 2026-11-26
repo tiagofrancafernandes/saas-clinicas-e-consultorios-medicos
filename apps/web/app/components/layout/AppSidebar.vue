@@ -56,7 +56,7 @@ const initials = computed(() => {
         <!-- Fixed Sidebar Header -->
         <div class="flex h-[54px] shrink-0 items-center justify-between overflow-hidden border-b border-gray-100 px-3.5">
             <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5 overflow-hidden">
-                <div class="flex size-8 shrink-0 items-center justify-center rounded bg-blue-600 text-xs font-medium text-white">
+                <div class="flex size-8 shrink-0 items-center justify-center rounded bg-teal-600 text-xs font-medium text-white">
                     <Icon name="lucide:heart-pulse" class="size-4" />
                 </div>
                 <div v-show="visuallyExpanded" class="overflow-hidden whitespace-nowrap leading-tight">
@@ -99,7 +99,7 @@ const initials = computed(() => {
         <!-- Fixed Sidebar Footer -->
         <div class="shrink-0 overflow-hidden border-t border-gray-100 p-3">
             <div class="flex items-center gap-2.5 overflow-hidden rounded p-1">
-                <div class="flex size-7 shrink-0 items-center justify-center rounded bg-blue-50 text-[11px] font-medium text-blue-700">
+                <div class="flex size-7 shrink-0 items-center justify-center rounded bg-teal-50 text-[11px] font-medium text-teal-700">
                     {{ initials }}
                 </div>
                 <div v-show="visuallyExpanded" class="min-w-0 flex-1 overflow-hidden whitespace-nowrap">

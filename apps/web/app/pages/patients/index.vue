@@ -156,7 +156,7 @@ function confirmDelete(): void {
                 v-if="auth.can('patients.create')"
                 id="btn-new-patient"
                 type="button"
-                class="flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[12px] font-normal text-white hover:bg-blue-700"
+                class="flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[12px] font-normal text-white hover:bg-teal-700"
                 @click="createModalOpen = true"
             >
                 <Icon name="lucide:plus" class="size-3.5" />
@@ -184,7 +184,7 @@ function confirmDelete(): void {
         >
             <template #row="{ record }">
                 <td class="px-4 py-2.5">
-                    <NuxtLink :to="`/patients/${record.id}`" class="text-[12px] text-gray-900 hover:text-blue-600 hover:underline">
+                    <NuxtLink :to="`/patients/${record.id}`" class="text-[12px] text-gray-900 hover:text-teal-600 hover:underline">
                         {{ record.name }}
                     </NuxtLink>
                     <div class="text-[10px] text-gray-400">{{ record.email || 'Sem e-mail' }}</div>
@@ -207,7 +207,7 @@ function confirmDelete(): void {
                     <NuxtLink
                         :to="`/patients/${record.id}`"
                         title="Visualizar paciente"
-                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-blue-50 hover:text-blue-600"
+                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-teal-50 hover:text-teal-600"
                     >
                         <Icon name="lucide:eye" class="size-3.5" />
                     </NuxtLink>
@@ -261,7 +261,7 @@ function confirmDelete(): void {
 
             <div class="flex justify-end gap-2 border-t border-gray-100 pt-3">
                 <button type="button" class="h-7 rounded border border-gray-200 px-2.5 text-[11px] text-gray-600" @click="createModalOpen = false">Cancelar</button>
-                <button type="submit" class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700">Salvar</button>
+                <button type="submit" class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700">Salvar</button>
             </div>
         </form>
     </UiModal>

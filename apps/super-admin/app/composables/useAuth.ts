@@ -1,65 +1,60 @@
 import type { AuthUser, LoginPayload } from '~/types/auth';
-import { authService } from '~/services/authService';
+
+type SanctumUserPayload = ({ user?: AuthUser } & Partial<AuthUser>) | null;
 
 export function useAuth() {
-    const token = useCookie<string | null>('sa_token', {
-        default: () => null,
-        sameSite: 'lax',
-    });
-
-    const user = useState<AuthUser | null>('sa_user', () => null);
+    const { isAuthenticated, login: sanctumLogin, logout: sanctumLogout, refreshIdentity } = useSanctumAuth();
+    const sanctumUser = useSanctumUser<SanctumUserPayload>();
     const loading = useState<boolean>('sa_auth_loading', () => false);
 
-    const isAuthenticated = computed(() => Boolean(token.value));
-    const isSuperAdmin = computed(() => user.value?.roles.includes('SUPER_ADMIN') ?? false);
+    const user = computed<AuthUser | null>(() => {
+        const raw = sanctumUser.value;
+        if (!raw) {
+            return null;
+        }
+        if ('user' in raw && raw.user) {
+            return raw.user;
+        }
+        if ('id' in raw && 'roles' in raw) {
+            return raw as AuthUser;
+        }
+        return null;
+    });
+
+    const isSuperAdmin = computed(() => user.value?.roles?.includes('SUPER_ADMIN') ?? false);
 
     async function login(payload: LoginPayload): Promise<void> {
         loading.value = true;
         try {
-            const response = await authService.login(payload);
-            if (!response.user.roles.includes('SUPER_ADMIN')) {
+            await sanctumLogin(payload as unknown as Record<string, unknown>);
+            if (!user.value) {
+                await refreshIdentity();
+            }
+            if (!isSuperAdmin.value) {
+                await sanctumLogout();
                 throw new Error('Acesso restrito a Super Administradores.');
             }
-            token.value = response.token;
-            user.value = response.user;
+        } catch (error: unknown) {
+            const err = error as { data?: { message?: string }; message?: string };
+            throw new Error(err.data?.message || err.message || 'Credenciais inválidas.');
         } finally {
             loading.value = false;
         }
     }
 
     async function fetchMe(): Promise<AuthUser | null> {
-        if (!token.value) {
-            user.value = null;
+        if (!isAuthenticated.value) {
             return null;
         }
-
-        try {
-            const response = await authService.me();
-            user.value = response.user;
-            return response.user;
-        } catch {
-            token.value = null;
-            user.value = null;
-            return null;
-        }
+        await refreshIdentity();
+        return user.value;
     }
 
     async function logout(): Promise<void> {
-        try {
-            if (token.value) {
-                await authService.logout();
-            }
-        } catch {
-            // Clear local session even if remote token revocation fails
-        } finally {
-            token.value = null;
-            user.value = null;
-            await navigateTo('/login');
-        }
+        await sanctumLogout();
     }
 
     return {
-        token,
         user,
         loading,
         isAuthenticated,

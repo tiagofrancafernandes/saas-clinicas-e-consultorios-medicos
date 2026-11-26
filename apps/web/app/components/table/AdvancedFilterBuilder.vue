@@ -107,11 +107,11 @@ function removeCondition(id: string): void {
                                     :key="field.key"
                                     type="button"
                                     class="flex h-8 w-full items-center justify-between px-2.5 text-left text-[12px] hover:bg-gray-50"
-                                    :class="cond.field === field.key ? 'text-blue-700 font-normal' : 'text-gray-700'"
+                                    :class="cond.field === field.key ? 'text-teal-700 font-normal' : 'text-gray-700'"
                                     @click="changeField(cond, field.key)"
                                 >
                                     <span>{{ field.label }}</span>
-                                    <Icon v-if="cond.field === field.key" name="lucide:check" class="size-3 text-blue-600" />
+                                    <Icon v-if="cond.field === field.key" name="lucide:check" class="size-3 text-teal-600" />
                                 </button>
                             </div>
                         </div>
@@ -135,11 +135,11 @@ function removeCondition(id: string): void {
                                     :key="op.value"
                                     type="button"
                                     class="flex h-8 w-full items-center justify-between px-2.5 text-left text-[12px] hover:bg-gray-50"
-                                    :class="cond.operator === op.value ? 'text-blue-700 font-normal' : 'text-gray-700'"
+                                    :class="cond.operator === op.value ? 'text-teal-700 font-normal' : 'text-gray-700'"
                                     @click="cond.operator = op.value; cond.value = ''; openDropdown = null"
                                 >
                                     <span>{{ op.label }}</span>
-                                    <Icon v-if="cond.operator === op.value" name="lucide:check" class="size-3 text-blue-600" />
+                                    <Icon v-if="cond.operator === op.value" name="lucide:check" class="size-3 text-teal-600" />
                                 </button>
                             </div>
                         </div>
@@ -168,7 +168,7 @@ function removeCondition(id: string): void {
                                     @click="cond.value = opt.value; openDropdown = null"
                                 >
                                     <span>{{ opt.label }}</span>
-                                    <Icon v-if="String(cond.value) === String(opt.value)" name="lucide:check" class="size-3 text-blue-600" />
+                                    <Icon v-if="String(cond.value) === String(opt.value)" name="lucide:check" class="size-3 text-teal-600" />
                                 </button>
                             </div>
                         </div>
@@ -196,7 +196,7 @@ function removeCondition(id: string): void {
                 <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
                     <button
                         type="button"
-                        class="flex h-7 items-center gap-1.5 rounded px-2 text-[11px] text-blue-600 hover:bg-blue-50"
+                        class="flex h-7 items-center gap-1.5 rounded px-2 text-[11px] text-teal-600 hover:bg-teal-50"
                         @click="addCondition"
                     >
                         <Icon name="lucide:plus" class="size-3.5" />
@@ -215,7 +215,7 @@ function removeCondition(id: string): void {
                         <button
                             id="btn-apply-advanced-filters"
                             type="button"
-                            class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700"
+                            class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700"
                             @click="emit('apply')"
                         >
                             Aplicar
@@ -234,15 +234,15 @@ function removeCondition(id: string): void {
             <div
                 v-for="cond in appliedFilters"
                 :key="cond.id"
-                class="inline-flex h-6 items-center overflow-hidden rounded border border-blue-100 bg-blue-50 text-[11px] text-blue-800"
+                class="inline-flex h-6 items-center overflow-hidden rounded border border-teal-100 bg-teal-50 text-[11px] text-teal-800"
             >
                 <span class="px-2">{{ getField(cond)?.label }}</span>
-                <span class="text-blue-300">|</span>
-                <span class="px-1.5 text-blue-600">{{ getOperatorLabel(cond) }}</span>
+                <span class="text-teal-300">|</span>
+                <span class="px-1.5 text-teal-600">{{ getOperatorLabel(cond) }}</span>
                 <span v-if="cond.value !== ''" class="pr-2">{{ getValueLabel(cond) }}</span>
                 <button
                     type="button"
-                    class="flex h-full w-6 items-center justify-center border-l border-blue-100 text-blue-400 hover:bg-rose-50 hover:text-rose-600"
+                    class="flex h-full w-6 items-center justify-center border-l border-teal-100 text-teal-400 hover:bg-rose-50 hover:text-rose-600"
                     @click="emit('remove-applied', cond.id)"
                 >
                     <Icon name="lucide:x" class="size-3" />

@@ -122,7 +122,7 @@ async function saveUserPermissions(): Promise<void> {
                 v-if="auth.can('users.create')"
                 id="btn-new-clinic-user"
                 type="button"
-                class="flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[12px] font-normal text-white hover:bg-blue-700"
+                class="flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[12px] font-normal text-white hover:bg-teal-700"
                 @click="createModalOpen = true"
             >
                 <Icon name="lucide:user-plus" class="size-3.5" />
@@ -206,7 +206,7 @@ async function saveUserPermissions(): Promise<void> {
             </div>
             <div class="flex justify-end gap-2 border-t border-gray-100 pt-3">
                 <button type="button" class="h-7 rounded border border-gray-200 px-2.5 text-[11px] text-gray-600" @click="createModalOpen = false">Cancelar</button>
-                <button type="submit" class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700">Criar usuário</button>
+                <button type="submit" class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700">Criar usuário</button>
             </div>
         </form>
     </UiModal>
@@ -230,7 +230,7 @@ async function saveUserPermissions(): Promise<void> {
                             type="checkbox"
                             :checked="selectedUser.role_permissions.includes(perm) || editingExtras.includes(perm)"
                             :disabled="selectedUser.role_permissions.includes(perm)"
-                            class="size-3.5 accent-blue-600"
+                            class="size-3.5 accent-teal-600"
                             @change="toggleExtra(perm)"
                         />
                         <span class="font-mono text-[11px] text-gray-800">{{ perm }}</span>
@@ -242,7 +242,7 @@ async function saveUserPermissions(): Promise<void> {
 
             <div class="flex justify-end gap-2 border-t border-gray-100 pt-3">
                 <button type="button" class="h-7 rounded border border-gray-200 px-2.5 text-[11px] text-gray-600" @click="permsModalOpen = false">Cancelar</button>
-                <button type="button" class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700" @click="saveUserPermissions">Salvar permissões</button>
+                <button type="button" class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700" @click="saveUserPermissions">Salvar permissões</button>
             </div>
         </div>
     </UiModal>

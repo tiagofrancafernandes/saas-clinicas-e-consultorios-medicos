@@ -20,8 +20,10 @@ final class SlotCalculator
         Professional $professional,
         CarbonImmutable $targetDate,
         string $clinicTimezone = 'America/Sao_Paulo',
-        ?int $customDurationMinutes = null
+        ?int $customDurationMinutes = null,
+        bool $includePast = true
     ): array {
+        $nowUtc = CarbonImmutable::now('UTC');
         // 1. Day of week in clinic timezone (0 = Sunday, 6 = Saturday)
         $dateInClinicTz = $targetDate->setTimezone($clinicTimezone);
         $dayOfWeek = (int) $dateInClinicTz->dayOfWeek;
@@ -81,6 +83,12 @@ final class SlotCalculator
 
                 $slotStartUtc = $currentSlotStartLocal->setTimezone('UTC');
                 $slotEndUtc = $currentSlotEndLocal->setTimezone('UTC');
+
+                if (! $includePast && $slotStartUtc->lte($nowUtc)) {
+                    $currentSlotStartLocal = $currentSlotEndLocal;
+
+                    continue;
+                }
 
                 // Check collision with unavailabilities
                 $hasUnavailabilityCollision = false;

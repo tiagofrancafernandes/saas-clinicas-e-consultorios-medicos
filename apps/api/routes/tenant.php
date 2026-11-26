@@ -12,7 +12,9 @@ use App\Http\Controllers\Tenant\MedicalRecordController;
 use App\Http\Controllers\Tenant\PatientAuthController;
 use App\Http\Controllers\Tenant\PatientController;
 use App\Http\Controllers\Tenant\PatientMessageController;
+use App\Http\Controllers\Tenant\ProfessionalController;
 use App\Http\Controllers\Tenant\ProfessionalDelegationController;
+use App\Http\Controllers\Tenant\ProfessionalUnavailabilityController;
 use App\Http\Controllers\Tenant\TenantWhatsAppManagementController;
 use App\Http\Controllers\Tenant\UserManagementController;
 use App\Http\Controllers\Tenant\WaitlistController;
@@ -58,7 +60,17 @@ Route::prefix('api/tenant')->middleware([
         Route::put('/users/{userId}/permissions', [UserManagementController::class, 'updatePermissions'])
             ->middleware('permission:' . PermissionName::USERS_PERMISSIONS_ASSIGN->value);
 
-        // Availability & Appointments
+        // Availability, Professionals, Unavailabilities & Appointments
+        Route::get('/professionals', [ProfessionalController::class, 'index'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
+        Route::get('/clinic-rooms', [ProfessionalController::class, 'rooms'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
+        Route::get('/unavailabilities', [ProfessionalUnavailabilityController::class, 'index'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
+        Route::post('/unavailabilities', [ProfessionalUnavailabilityController::class, 'store'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_CREATE->value);
+        Route::delete('/unavailabilities/{id}', [ProfessionalUnavailabilityController::class, 'destroy'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_CANCEL->value);
         Route::get('/availability/slots', [AvailabilityController::class, 'index'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
         Route::get('/appointments', [AppointmentController::class, 'index'])
@@ -67,6 +79,8 @@ Route::prefix('api/tenant')->middleware([
             ->middleware('permission:' . PermissionName::APPOINTMENTS_CREATE->value);
         Route::get('/appointments/{id}', [AppointmentController::class, 'show'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
+        Route::post('/appointments/{id}/confirm', [AppointmentController::class, 'confirm'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_CREATE->value);
         Route::post('/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_CANCEL->value);
         Route::post('/appointments/{id}/reschedule', [AppointmentController::class, 'reschedule'])

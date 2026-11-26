@@ -10,8 +10,8 @@ definePageMeta({ permission: 'waitlist.view' });
 const auth = useAuthStore();
 
 const entries = ref<WaitlistItem[]>([
-    { id: 'w1', patient_name: 'Fernanda Alves', phone: '5541988223344', preferred_shift: 'MORNING', specialty: 'Neurologia', status: 'WAITING', created_at: '2026-11-24' },
-    { id: 'w2', patient_name: 'Roberto Dias', phone: '5541977334455', preferred_shift: 'AFTERNOON', specialty: 'Dermatologia', status: 'NOTIFIED', created_at: '2026-11-25' },
+    { id: 'w1', patient_name: 'Fernanda Alves', phone: '5541984402684', preferred_shift: 'MORNING', specialty: 'Neurologia', status: 'WAITING', created_at: '2026-11-24' },
+    { id: 'w2', patient_name: 'Roberto Dias', phone: '5541984402684', preferred_shift: 'AFTERNOON', specialty: 'Dermatologia', status: 'NOTIFIED', created_at: '2026-11-25' },
 ]);
 
 const columns: TableColumn[] = [
@@ -92,7 +92,7 @@ function notifyCandidate(item: WaitlistItem): void {
                     v-if="auth.can('waitlist.manage')"
                     type="button"
                     title="Notificar encaixe"
-                    class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-blue-50 hover:text-blue-600"
+                    class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-teal-50 hover:text-teal-600"
                     @click="notifyCandidate(record)"
                 >
                     <Icon name="lucide:send" class="size-3.5" />

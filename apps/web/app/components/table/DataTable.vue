@@ -35,7 +35,7 @@ const emit = defineEmits<{
                             <input
                                 type="checkbox"
                                 :checked="records.length > 0 && records.every((r) => selectedIds.includes(r.id))"
-                                class="size-3.5 cursor-pointer accent-blue-600"
+                                class="size-3.5 cursor-pointer accent-teal-600"
                                 @change="emit('toggle-all', ($event.target as HTMLInputElement).checked)"
                             />
                         </th>
@@ -55,7 +55,7 @@ const emit = defineEmits<{
                                     v-if="col.sortable !== false"
                                     :name="sortBy === col.key && sortDirection === 'asc' ? 'lucide:chevron-up' : 'lucide:chevron-down'"
                                     class="size-3"
-                                    :class="sortBy === col.key ? 'text-blue-600' : 'text-gray-300'"
+                                    :class="sortBy === col.key ? 'text-teal-600' : 'text-gray-300'"
                                 />
                             </div>
                         </th>
@@ -67,13 +67,13 @@ const emit = defineEmits<{
                         v-for="record in records"
                         :key="record.id"
                         class="transition-colors hover:bg-gray-50/70"
-                        :class="selectedIds.includes(record.id) ? 'bg-blue-50/30' : ''"
+                        :class="selectedIds.includes(record.id) ? 'bg-teal-50/30' : ''"
                     >
                         <td class="px-4 py-2.5 lg:px-5">
                             <input
                                 type="checkbox"
                                 :checked="selectedIds.includes(record.id)"
-                                class="size-3.5 cursor-pointer accent-blue-600"
+                                class="size-3.5 cursor-pointer accent-teal-600"
                                 @change="emit('toggle-row', record.id)"
                             />
                         </td>
@@ -102,7 +102,7 @@ const emit = defineEmits<{
                 Mostrando <span class="text-gray-800">{{ totalCount ? startIndex + 1 : 0 }}</span>
                 a <span class="text-gray-800">{{ Math.min(startIndex + perPage, totalCount) }}</span>
                 de <span class="text-gray-800">{{ totalCount }}</span> registros
-                <span v-if="selectedIds.length" class="ml-2 text-blue-600">· {{ selectedIds.length }} selecionado(s)</span>
+                <span v-if="selectedIds.length" class="ml-2 text-teal-600">· {{ selectedIds.length }} selecionado(s)</span>
             </div>
 
             <div class="flex items-center gap-3">
@@ -134,7 +134,7 @@ const emit = defineEmits<{
                         :key="page"
                         type="button"
                         class="size-7 rounded border text-[11px] transition-colors"
-                        :class="currentPage === page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
+                        :class="currentPage === page ? 'border-teal-600 bg-teal-600 text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
                         @click="emit('update:currentPage', page)"
                     >
                         {{ page }}

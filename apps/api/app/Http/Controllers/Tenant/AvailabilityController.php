@@ -33,8 +33,9 @@ final class AvailabilityController extends Controller
         $duration = ! empty($validated['slot_duration']) ? (int) $validated['slot_duration'] : null;
         $timezone = is_string(tenant('timezone')) ? (string) tenant('timezone') : 'America/Sao_Paulo';
         $date = CarbonImmutable::createFromFormat('Y-m-d H:i:s', $validated['date'] . ' 00:00:00', $timezone);
+        $includePast = $request->boolean('include_past', false);
 
-        $slots = SlotCalculator::getAvailableSlots($professional, $date, $timezone, $duration);
+        $slots = SlotCalculator::getAvailableSlots($professional, $date, $timezone, $duration, $includePast);
 
         return response()->json([
             'data' => $slots,

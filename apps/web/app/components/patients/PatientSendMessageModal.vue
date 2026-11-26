@@ -226,7 +226,7 @@ async function handleSubmit(): Promise<void> {
                         id="checkbox-schedule-message"
                         v-model="form.schedule"
                         type="checkbox"
-                        class="size-3.5 accent-blue-600"
+                        class="size-3.5 accent-teal-600"
                     />
                     <span>Agendar envio</span>
                 </label>
@@ -294,7 +294,7 @@ async function handleSubmit(): Promise<void> {
                     id="btn-submit-patient-message"
                     type="submit"
                     :disabled="sending"
-                    class="flex h-7 items-center gap-1.5 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                    class="flex h-7 items-center gap-1.5 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                 >
                     <Icon v-if="sending" name="lucide:loader-2" class="size-3 animate-spin" />
                     <span>{{ form.schedule ? 'Agendar mensagem' : 'Enviar agora' }}</span>

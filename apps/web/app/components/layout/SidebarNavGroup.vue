@@ -31,14 +31,20 @@ watch(hasActiveChild, (active) => {
     <div class="space-y-0.5 overflow-hidden">
         <button
             type="button"
-            class="flex h-8 w-full items-center justify-between overflow-hidden rounded px-2.5 text-left text-[12px] font-normal text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
+            :class="[
+                'flex h-8 w-full items-center justify-between overflow-hidden rounded px-2.5 text-left text-[12px] font-normal transition-colors group',
+                hasActiveChild ? 'text-white bg-teal-700 text-white' : 'text-teal-700 hover:bg-teal-500 hover:text-white',
+            ]"
             @click="isExpanded = !isExpanded"
         >
             <span class="flex min-w-0 items-center gap-2.5 overflow-hidden">
                 <Icon
                     :name="group.icon"
                     class="size-4 shrink-0"
-                    :class="hasActiveChild ? 'text-blue-600' : 'text-gray-400'"
+                    :class="[
+                        hasActiveChild ? 'text-white' : 'text-teal-700',
+                        'group-hover:bg-teal-500 group-hover:text-white',
+                    ]"
                 />
                 <span
                     v-show="!compact"
@@ -50,8 +56,11 @@ watch(hasActiveChild, (active) => {
             <Icon
                 v-show="!compact"
                 name="lucide:chevron-right"
-                class="size-3.5 shrink-0 text-gray-400 transition-transform duration-150"
-                :class="isExpanded ? 'rotate-90' : ''"
+                class="size-3.5 shrink-0 text-teal-700 group-hover:bg-teal-500 group-hover:text-white transition-transform duration-150"
+                :class="[
+                    hasActiveChild ? 'text-white' : 'text-teal-700',
+                    isExpanded ? 'rotate-90' : ''
+                ]"
             />
         </button>
 
@@ -71,8 +80,8 @@ watch(hasActiveChild, (active) => {
                     class="flex h-8 items-center gap-2.5 overflow-hidden rounded px-2.5 text-[12px] whitespace-nowrap transition-colors"
                     :class="
                         (child.to === '/' ? route.path === '/' : route.path.startsWith(child.to))
-                            ? 'bg-blue-50 text-blue-700 font-normal'
-                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            ? 'bg-teal-500 text-white font-normal'
+                            : 'text-teal-700 hover:bg-teal-500 hover:text-white'
                     "
                 >
                     <Icon :name="child.icon" class="size-3.5 shrink-0" />

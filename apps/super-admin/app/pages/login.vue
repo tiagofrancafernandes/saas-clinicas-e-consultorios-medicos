@@ -18,7 +18,6 @@ async function handleLogin(): Promise<void> {
             password: form.password,
         });
         notify.success('Login realizado com sucesso.');
-        await navigateTo('/');
     } catch (error: unknown) {
         notify.error((error as Error).message || 'Credenciais inválidas.');
     }

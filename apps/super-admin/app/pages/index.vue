@@ -117,7 +117,11 @@ onMounted(loadDashboard);
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-[12px] font-light">
                         <tr v-for="t in recentTenants" :key="t.id" class="hover:bg-gray-50/70">
-                            <td class="px-4 py-2.5 font-normal text-gray-900">{{ t.name }}</td>
+                            <td class="px-4 py-2.5 font-normal text-gray-900 hover:underline">
+                                <NuxtLink :to="`/tenants/${t.id}`">
+                                    {{ t.name }}
+                                </NuxtLink>
+                            </td>
                             <td class="px-4 py-2.5 font-mono text-[11px] text-gray-500">{{ t.slug }}</td>
                             <td class="px-4 py-2.5">
                                 <UiBadge

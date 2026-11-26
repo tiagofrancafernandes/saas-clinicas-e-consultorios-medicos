@@ -90,9 +90,11 @@ final class TenantHttpEndpointsTest extends TestCase
 
         tenancy()->end();
 
+        $futureThursday = CarbonImmutable::now('UTC')->next(CarbonImmutable::THURSDAY)->toDateString();
+
         // Happy path: Valid request returns generated slots
         $response = $this->withHeaders(['X-Tenant-ID' => $this->tenant->id])
-            ->getJson("/api/tenant/availability/slots?professional_id={$professional->id}&date=2026-10-15&slot_duration=30");
+            ->getJson("/api/tenant/availability/slots?professional_id={$professional->id}&date={$futureThursday}&slot_duration=30");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -151,12 +153,14 @@ final class TenantHttpEndpointsTest extends TestCase
 
         tenancy()->end();
 
+        $futureThursday = CarbonImmutable::now('UTC')->next(CarbonImmutable::THURSDAY)->toDateString();
+
         // 1. Happy path: Book appointment
         $bookPayload = [
             'professional_id' => $professional->id,
             'patient_id' => $patient->id,
-            'start_time_utc' => '2026-10-15T17:00:00Z',
-            'end_time_utc' => '2026-10-15T17:30:00Z',
+            'start_time_utc' => "{$futureThursday}T17:00:00Z",
+            'end_time_utc' => "{$futureThursday}T17:30:00Z",
             'origin_timezone' => 'America/Sao_Paulo',
             'notes' => 'Initial consultation via API',
         ];
@@ -180,8 +184,8 @@ final class TenantHttpEndpointsTest extends TestCase
         // 3. Happy path: Reschedule appointment to free slot
         $rescheduleResponse = $this->withHeaders(['X-Tenant-ID' => $this->tenant->id])
             ->postJson("/api/tenant/appointments/{$appointmentId}/reschedule", [
-                'new_start_time_utc' => '2026-10-15T17:30:00Z',
-                'new_end_time_utc' => '2026-10-15T18:00:00Z',
+                'new_start_time_utc' => "{$futureThursday}T17:30:00Z",
+                'new_end_time_utc' => "{$futureThursday}T18:00:00Z",
             ]);
 
         $rescheduleResponse->assertStatus(200)

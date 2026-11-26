@@ -79,7 +79,7 @@ async function executeMessageAction(): Promise<void> {
 function statusBadgeClass(status: string): string {
     if (status === 'SENT') return 'border-emerald-200 bg-emerald-50 text-emerald-700';
     if (status === 'SCHEDULED') return 'border-amber-200 bg-amber-50 text-amber-700';
-    if (status === 'PROCESSING') return 'border-blue-200 bg-blue-50 text-blue-700';
+    if (status === 'PROCESSING') return 'border-teal-200 bg-teal-50 text-teal-700';
     if (status === 'FAILED') return 'border-rose-200 bg-rose-50 text-rose-700';
     return 'border-gray-200 bg-gray-100 text-gray-500';
 }
@@ -221,7 +221,7 @@ onMounted(loadPatient);
                     <button
                         id="btn-send-message-dropdown"
                         type="button"
-                        class="inline-flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[12px] text-white hover:bg-blue-700"
+                        class="inline-flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[12px] text-white hover:bg-teal-700"
                         @click="messageDropdownOpen = !messageDropdownOpen"
                     >
                         <Icon name="lucide:send" class="size-3.5" />
@@ -306,7 +306,7 @@ onMounted(loadPatient);
                 class="inline-flex h-9 items-center gap-1.5 border-b-2 px-3 text-[12px] transition-colors"
                 :class="
                     activeTab === tab.id
-                        ? 'border-blue-600 text-blue-700'
+                        ? 'border-teal-600 text-teal-700'
                         : 'border-transparent text-gray-500 hover:text-gray-800'
                 "
                 @click="selectTab(tab.id as PatientTabId)"
@@ -403,7 +403,7 @@ onMounted(loadPatient);
                         <template v-if="msg.status === 'SCHEDULED'">
                             <button
                                 type="button"
-                                class="inline-flex h-7 items-center gap-1 rounded border border-blue-200 bg-blue-50 px-2 text-[11px] text-blue-700 hover:bg-blue-100"
+                                class="inline-flex h-7 items-center gap-1 rounded border border-teal-200 bg-teal-50 px-2 text-[11px] text-teal-700 hover:bg-teal-100"
                                 @click="confirmMessageAction = { type: 'send-now', message: msg }"
                             >
                                 <Icon name="lucide:send" class="size-3" />
@@ -494,7 +494,7 @@ onMounted(loadPatient);
                         class="inline-flex h-7 items-center gap-1.5 rounded px-3 text-[11px] text-white disabled:opacity-50"
                         :class="
                             confirmMessageAction.type === 'send-now'
-                                ? 'bg-blue-600 hover:bg-blue-700'
+                                ? 'bg-teal-600 hover:bg-teal-700'
                                 : 'bg-rose-600 hover:bg-rose-700'
                         "
                         @click="executeMessageAction"

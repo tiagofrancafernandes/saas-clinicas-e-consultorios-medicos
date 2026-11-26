@@ -60,13 +60,13 @@ const quickModules = computed(() =>
                 v-for="mod in quickModules"
                 :key="mod.to"
                 :to="mod.to"
-                class="group rounded border border-gray-200 bg-white p-4 transition-colors hover:border-blue-300"
+                class="group rounded border border-gray-200 bg-white p-4 transition-colors hover:border-teal-300"
             >
                 <div class="flex items-center justify-between">
-                    <div class="flex size-8 items-center justify-center rounded border border-gray-200 bg-gray-50 text-gray-600 group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-600">
+                    <div class="flex size-8 items-center justify-center rounded border border-gray-200 bg-gray-50 text-gray-600 group-hover:border-teal-200 group-hover:bg-teal-50 group-hover:text-teal-600">
                         <Icon :name="mod.icon" class="size-4" />
                     </div>
-                    <Icon name="lucide:arrow-right" class="size-3.5 text-gray-300 group-hover:text-blue-600" />
+                    <Icon name="lucide:arrow-right" class="size-3.5 text-gray-300 group-hover:text-teal-600" />
                 </div>
                 <h2 class="mt-3 text-[13px] font-normal text-gray-900">{{ mod.title }}</h2>
                 <p class="mt-0.5 text-[11px] text-gray-400">{{ mod.desc }}</p>

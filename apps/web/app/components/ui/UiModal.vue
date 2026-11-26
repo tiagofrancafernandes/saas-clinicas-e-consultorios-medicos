@@ -3,11 +3,11 @@ interface Props {
     open: boolean;
     title: string;
     description?: string;
-    maxWidth?: 'sm' | 'md' | 'lg';
+    maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 }
 
 withDefaults(defineProps<Props>(), {
-    maxWidth: 'md',
+    maxWidth: 'xl',
 });
 
 const emit = defineEmits<{ (e: 'close'): void }>();
@@ -16,6 +16,8 @@ const widths = {
     sm: 'max-w-sm',
     md: 'max-w-md',
     lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
 };
 </script>
 

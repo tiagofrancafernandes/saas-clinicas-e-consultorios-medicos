@@ -119,7 +119,7 @@ async function handleSend(): Promise<void> {
                     id="btn-submit-wa-send-test"
                     type="submit"
                     :disabled="sending"
-                    class="flex h-7 items-center gap-1.5 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                    class="flex h-7 items-center gap-1.5 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                 >
                     <Icon v-if="sending" name="lucide:loader-2" class="size-3 animate-spin" />
                     <span>{{ sending ? 'Enviando...' : 'Enviar teste' }}</span>

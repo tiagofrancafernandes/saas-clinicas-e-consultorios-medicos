@@ -162,7 +162,7 @@ async function testConnection(record: WhatsAppInstanceSummary): Promise<void> {
     <TemplatesCrudListTemplate
         title="Administração de WhatsApp"
         description="Gerencie ativação, padrão (default), categoria e nome do atendente das instâncias vinculadas pelo Super Admin."
-        table-title="Instâncias Evolution API da Clínica"
+        table-title="Instâncias de API do WhatsApp"
         table-description="O cadastro de novas instâncias é exclusivo do Super Admin."
         search-placeholder="Buscar por label, número ou atendente..."
         :table="table"
@@ -190,7 +190,7 @@ async function testConnection(record: WhatsAppInstanceSummary): Promise<void> {
                 <td class="px-4 py-2.5">
                     <div class="flex items-center gap-1.5">
                         <span class="text-[12px] text-gray-900">{{ record.label }}</span>
-                        <span v-if="record.is_default" class="rounded bg-blue-50 px-1.5 py-0.5 text-[9px] text-blue-700">DEFAULT</span>
+                        <span v-if="record.is_default" class="rounded bg-teal-50 px-1.5 py-0.5 text-[9px] text-teal-700">DEFAULT</span>
                     </div>
                     <div class="font-mono text-[10px] text-gray-400">{{ record.instance_name }}</div>
                 </td>
@@ -223,7 +223,7 @@ async function testConnection(record: WhatsAppInstanceSummary): Promise<void> {
                     <button
                         type="button"
                         title="Editar configurações"
-                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-blue-50 hover:text-blue-600"
+                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-teal-50 hover:text-teal-600"
                         @click="openEdit(record)"
                     >
                         <Icon name="lucide:pencil" class="size-3.5" />
@@ -239,7 +239,7 @@ async function testConnection(record: WhatsAppInstanceSummary): Promise<void> {
                     <button
                         type="button"
                         title="Enviar mensagem de teste"
-                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-blue-50 hover:text-blue-600"
+                        class="inline-flex size-7 items-center justify-center rounded text-gray-400 hover:bg-teal-50 hover:text-teal-600"
                         @click="openSendTest(record)"
                     >
                         <Icon name="lucide:send" class="size-3.5" />
@@ -282,17 +282,17 @@ async function testConnection(record: WhatsAppInstanceSummary): Promise<void> {
             </div>
             <div class="flex items-center gap-4 pt-1">
                 <label class="flex items-center gap-1.5">
-                    <input v-model="editForm.active" type="checkbox" class="size-3.5 accent-blue-600" />
+                    <input v-model="editForm.active" type="checkbox" class="size-3.5 accent-teal-600" />
                     <span>Ativa</span>
                 </label>
                 <label class="flex items-center gap-1.5">
-                    <input v-model="editForm.is_default" type="checkbox" class="size-3.5 accent-blue-600" />
+                    <input v-model="editForm.is_default" type="checkbox" class="size-3.5 accent-teal-600" />
                     <span>Definir como padrão (Default)</span>
                 </label>
             </div>
             <div class="flex justify-end gap-2 border-t border-gray-100 pt-3">
                 <button type="button" class="h-7 rounded border border-gray-200 px-2.5 text-[11px] text-gray-600" @click="editModalOpen = false">Cancelar</button>
-                <button type="submit" class="h-7 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700">Salvar</button>
+                <button type="submit" class="h-7 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700">Salvar</button>
             </div>
         </form>
     </UiModal>
