@@ -189,7 +189,7 @@ async function handleSubmit(): Promise<void> {
         :open="props.open"
         title="Enviar mensagem (WhatsApp)"
         :description="`Paciente: ${props.patientName}`"
-        max-width="sm"
+        max-width="lg"
         @close="emit('close')"
     >
         <form class="space-y-3 text-[12px]" @submit.prevent="handleSubmit">
