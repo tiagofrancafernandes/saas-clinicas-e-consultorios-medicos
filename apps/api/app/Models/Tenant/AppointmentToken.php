@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\Appointment|null $appointment
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentToken newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentToken newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentToken query()
+ * @mixin \Eloquent
+ */
 final class AppointmentToken extends Model
 {
     use HasUuids;

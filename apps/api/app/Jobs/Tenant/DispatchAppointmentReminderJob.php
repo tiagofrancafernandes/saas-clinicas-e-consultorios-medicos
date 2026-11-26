@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Tenant;
 
+use App\Enums\Tenant\WhatsAppCategory;
 use App\Models\Tenant\Appointment;
 use App\Models\Tenant\NotificationLog;
 use App\Services\Messaging\WhatsAppDriver;
@@ -38,6 +39,7 @@ final class DispatchAppointmentReminderJob implements ShouldQueue
         $recipient = $patient->phone;
         $template = 'appointment_reminder';
         $payload = [
+            'category' => WhatsAppCategory::REMINDERS->value,
             'appointment_id' => $this->appointment->id,
             'patient_name' => $patient->name,
             'doctor_name' => $this->appointment->professional->name ?? 'Professional',

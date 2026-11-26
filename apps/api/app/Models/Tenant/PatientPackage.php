@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\PatientCreditLedger> $creditLedgers
+ * @property-read int|null $credit_ledgers_count
+ * @property-read \App\Models\Tenant\Package|null $package
+ * @property-read \App\Models\Tenant\Patient|null $patient
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientPackage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientPackage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientPackage query()
+ * @mixin \Eloquent
+ */
 final class PatientPackage extends Model
 {
     use HasUuids;

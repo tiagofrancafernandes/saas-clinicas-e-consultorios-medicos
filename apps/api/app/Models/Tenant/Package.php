@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \App\Models\Tenant\AppointmentType|null $appointmentType
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\PatientPackage> $patientPackages
+ * @property-read int|null $patient_packages_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package query()
+ * @mixin \Eloquent
+ */
 final class Package extends Model
 {
     use HasUuids;

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Dashboard — Customers</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+        button, input { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-[#f9fafb] text-gray-900 antialiased">
+
+<div x-data="adminDashboard()" class="min-h-screen">
+    <!-- Mobile overlay -->
+    <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"
+         class="fixed inset-0 z-40 bg-black/30 lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+           class="fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col border-r border-gray-200 bg-white transition-transform duration-200">
+        <div class="flex h-[60px] shrink-0 items-center border-b border-gray-100 px-5">
+            <div class="flex size-8 items-center justify-center rounded-md bg-blue-600 text-sm font-bold text-white">A</div>
+            <span class="ml-2.5 text-[15px] font-semibold tracking-tight">Acme Dashboard</span>
+            <button @click="sidebarOpen = false" class="ml-auto text-gray-400 lg:hidden" aria-label="Close menu">✕</button>
+        </div>
+
+        <nav class="flex-1 space-y-6 overflow-y-auto px-3 py-4">
+            <div>
+                <div class="mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Workspace</div>
+                <div class="space-y-0.5">
+                    <template x-for="item in mainNavigation" :key="item.label">
+                        <button @click="navigate(item.label)"
+                                :class="activeNavigation === item.label ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+                                class="flex h-9 w-full items-center gap-3 rounded-md px-2.5 text-left text-[13px] transition-colors">
+                            <span class="size-4 shrink-0" x-html="item.icon"></span>
+                            <span x-text="item.label"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div>
+                <div class="mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Management</div>
+                <div class="space-y-0.5">
+                    <template x-for="item in managementNavigation" :key="item.label">
+                        <button @click="navigate(item.label)"
+                                :class="activeNavigation === item.label ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+                                class="flex h-9 w-full items-center gap-3 rounded-md px-2.5 text-left text-[13px] transition-colors">
+                            <span class="size-4 shrink-0" x-html="item.icon"></span>
+                            <span x-text="item.label"></span>
+                            <span x-show="item.badge" x-text="item.badge"
+                                  class="ml-auto rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div>
+                <div class="mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">System</div>
+                <button @click="navigate('Settings')"
+                        class="flex h-9 w-full items-center gap-3 rounded-md px-2.5 text-[13px] text-gray-600 hover:bg-gray-50">
+                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                        <circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2Z" transform="translate(-1 -1)"/>
+                    </svg>
+                    Settings
+                </button>
+            </div>
+        </nav>
+
+        <div class="border-t border-gray-100 p-3">
+            <div class="flex cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-gray-50">
+                <div class="flex size-8 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">TF</div>
+                <div class="min-w-0 flex-1">
+                    <div class="truncate text-[13px] font-medium">Tiago França</div>
+                    <div class="truncate text-[11px] text-gray-400">Administrator</div>
+                </div>
+                <svg class="size-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex min-h-screen flex-col lg:ml-[240px]">
+        <header class="sticky top-0 z-30 flex h-[60px] items-center border-b border-gray-200 bg-white px-4 lg:px-7">
+            <button @click="sidebarOpen = true" class="mr-3 text-gray-500 lg:hidden" aria-label="Open menu">
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="flex items-center gap-2 text-[13px]">
+                <span class="text-gray-400">Workspace</span>
+                <svg class="size-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                <span class="font-medium text-gray-800" x-text="activeNavigation"></span>
+            </div>
+            <div class="ml-auto flex items-center gap-2">
+                <button class="hidden h-8 items-center gap-2 rounded-md border border-gray-200 px-3 text-gray-400 hover:bg-gray-50 sm:flex">
+                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                    <span class="text-xs">Search...</span><span class="ml-4 rounded border border-gray-200 px-1.5 py-0.5 text-[10px]">/</span>
+                </button>
+                <button class="relative flex size-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100" aria-label="Notifications">
+                    <svg class="size-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+                    <span class="absolute right-1 top-1 size-1.5 rounded-full bg-red-500"></span>
+                </button>
+                <div class="mx-1 h-5 w-px bg-gray-200"></div>
+                <div class="flex size-8 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">TF</div>
+            </div>
+        </header>
+
+        <main class="mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 lg:px-7 lg:py-7">
+            <!-- Page heading -->
+            <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                <div>
+                    <h1 class="text-[22px] font-semibold tracking-tight text-gray-900">Customers</h1>
+                    <p class="mt-1 text-[13px] text-gray-500">Manage your customers, their status and account information.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="flex h-8 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 text-[13px] font-medium text-gray-700 hover:bg-gray-50">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3"/></svg>
+                        Export
+                    </button>
+                    <button @click="openCreate()" class="flex h-8 items-center gap-2 rounded-md bg-blue-600 px-3 text-[13px] font-medium text-white hover:bg-blue-700">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Add customer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="mb-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
+                <template x-for="stat in stats" :key="stat.label">
+                    <div class="rounded-md border border-gray-200 bg-white px-4 py-3.5">
+                        <div class="text-[12px] text-gray-500" x-text="stat.label"></div>
+                        <div class="mt-2 flex items-end justify-between">
+                            <div class="text-[23px] font-semibold tracking-tight tabular-nums" x-text="stat.value"></div>
+                            <span class="mb-1 text-[11px] font-medium" :class="stat.positive ? 'text-green-600' : 'text-gray-400'" x-text="stat.change"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Table card -->
+            <section class="rounded-md border border-gray-200 bg-white">
+                <div class="flex items-center justify-between border-b border-gray-100 px-4 py-4 lg:px-5">
+                    <div>
+                        <h2 class="text-[14px] font-semibold">All customers</h2>
+                        <p class="mt-0.5 text-[12px] text-gray-400">A list of all registered customers.</p>
+                    </div>
+                    <button class="hidden items-center gap-2 text-[12px] text-gray-500 hover:text-gray-800 sm:flex">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M7 12h10m-7 5h4"/></svg>
+                        Customize columns
+                    </button>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="flex flex-wrap items-center gap-2 border-b border-gray-100 px-4 py-3 lg:px-5">
+                    <div class="relative min-w-[180px] max-w-[340px] flex-1">
+                        <svg class="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                        <input x-model="search" @input="currentPage = 1" type="search" placeholder="Search customers..."
+                               class="h-8 w-full rounded-md border border-gray-200 bg-white pl-8 pr-3 text-[12px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                    </div>
+                    <button @click="toggleFilterPanel()"
+                            :class="filterPanel || appliedFilters.length ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
+                            class="flex h-8 items-center gap-2 rounded-md border px-3 text-[12px] font-medium transition-colors">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16l-6.5 7.5v5l-3 1v-6L4 5Z"/></svg>
+                        Filters
+                        <span x-show="appliedFilters.length" x-text="appliedFilters.length" class="rounded bg-blue-100 px-1.5 text-[10px] text-blue-700"></span>
+                    </button>
+                    <button @click="resetAll()" title="Reset" class="flex size-8 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-50">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.8-2L20 12M4 12l2.6 5a7 7 0 0 0 11.8-2"/></svg>
+                    </button>
+                    <div class="ml-auto hidden items-center gap-2 text-[11px] text-gray-400 md:flex">
+                        Sort:
+                        <span class="text-[12px] text-gray-600" x-text="sortLabel"></span>
+                    </div>
+                </div>
+
+                <!-- Advanced filter builder -->
+                <div x-show="filterPanel" x-cloak
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 -translate-y-1"
+                     class="relative z-20 border-b border-gray-100 bg-white">
+                    <div class="p-4 lg:px-5">
+                        <div class="mb-4 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-[13px] font-semibold text-gray-800">Filters</h3>
+                                <p class="mt-0.5 text-[11px] text-gray-400">Define conditions to filter your records.</p>
+                            </div>
+                            <button @click="filterPanel = false" class="flex size-7 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-700" aria-label="Close filters">
+                                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m18 6-12 12M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="space-y-2">
+                            <template x-for="filter in filters" :key="filter.id">
+                                <div class="flex flex-wrap items-center gap-1.5 sm:flex-nowrap">
+                                    <!-- Field custom dropdown -->
+                                    <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative w-full shrink-0 sm:w-[145px]">
+                                        <button type="button" @click="open = !open"
+                                                class="flex h-9 w-full items-center justify-between gap-2 rounded-md border bg-white px-3 text-[13px] transition-colors"
+                                                :class="open ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-200 hover:border-gray-300'">
+                                            <span class="truncate" x-text="getField(filter).label"></span>
+                                            <svg class="size-3.5 shrink-0 text-gray-400 transition-transform duration-150" :class="open ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m7 10 5 5 5-5"/></svg>
+                                        </button>
+                                        <div x-show="open" x-cloak
+                                             x-transition:enter="transition ease-out duration-100"
+                                             x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                             x-transition:leave="transition ease-in duration-75"
+                                             x-transition:leave-start="opacity-100 scale-100"
+                                             x-transition:leave-end="opacity-0 scale-95"
+                                             class="absolute left-0 top-full z-50 mt-1 w-full min-w-[170px] origin-top-left rounded-md border border-gray-200 bg-white py-1 shadow-xl">
+                                            <template x-for="field in fields" :key="field.key">
+                                                <button type="button" @click="changeFilter(filter, field.key); open = false"
+                                                        class="flex h-9 w-full items-center justify-between px-3 text-left text-[13px] transition-colors hover:bg-gray-50"
+                                                        :class="filter.field === field.key ? 'font-medium text-blue-700' : 'text-gray-700'">
+                                                    <span x-text="field.label"></span>
+                                                    <svg x-show="filter.field === field.key" class="size-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Operator custom dropdown -->
+                                    <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative w-full shrink-0 sm:w-[165px]">
+                                        <button type="button" @click="open = !open"
+                                                class="flex h-9 w-full items-center justify-between gap-2 rounded-md border bg-white px-3 text-[13px] transition-colors"
+                                                :class="open ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-200 hover:border-gray-300'">
+                                            <span class="truncate" x-text="getOperatorLabel(filter)"></span>
+                                            <svg class="size-3.5 shrink-0 text-gray-400 transition-transform duration-150" :class="open ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m7 10 5 5 5-5"/></svg>
+                                        </button>
+                                        <div x-show="open" x-cloak
+                                             x-transition:enter="transition ease-out duration-100"
+                                             x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                             x-transition:leave="transition ease-in duration-75"
+                                             x-transition:leave-start="opacity-100 scale-100"
+                                             x-transition:leave-end="opacity-0 scale-95"
+                                             class="absolute left-0 top-full z-50 mt-1 w-full min-w-[190px] origin-top-left rounded-md border border-gray-200 bg-white py-1 shadow-xl">
+                                            <template x-for="operator in getOperators(filter)" :key="operator.value">
+                                                <button type="button" @click="filter.operator = operator.value; filter.value = ''; open = false"
+                                                        class="flex h-9 w-full items-center justify-between px-3 text-left text-[13px] transition-colors hover:bg-gray-50"
+                                                        :class="filter.operator === operator.value ? 'font-medium text-blue-700' : 'text-gray-700'">
+                                                    <span x-text="operator.label"></span>
+                                                    <svg x-show="filter.operator === operator.value" class="size-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Enum / boolean custom dropdown -->
+                                    <template x-if="getField(filter).options">
+                                        <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative min-w-[140px] flex-1">
+                                            <button type="button" @click="open = !open"
+                                                    class="flex h-9 w-full items-center justify-between gap-2 rounded-md border bg-white px-3 text-[13px] transition-colors"
+                                                    :class="open ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-200 hover:border-gray-300'">
+                                                <span class="truncate" :class="filter.value === '' ? 'text-gray-400' : 'text-gray-800'" x-text="getValueLabel(filter) || 'Select a value'"></span>
+                                                <svg class="size-3.5 shrink-0 text-gray-400 transition-transform duration-150" :class="open ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m7 10 5 5 5-5"/></svg>
+                                            </button>
+                                            <div x-show="open" x-cloak
+                                                 x-transition:enter="transition ease-out duration-100"
+                                                 x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                                 x-transition:leave="transition ease-in duration-75"
+                                                 x-transition:leave-start="opacity-100 scale-100"
+                                                 x-transition:leave-end="opacity-0 scale-95"
+                                                 class="absolute left-0 top-full z-50 mt-1 w-full min-w-[170px] origin-top-left rounded-md border border-gray-200 bg-white py-1 shadow-xl">
+                                                <template x-for="option in getField(filter).options" :key="option.value">
+                                                    <button type="button" @click="filter.value = option.value; open = false"
+                                                            class="flex h-9 w-full items-center justify-between px-3 text-left text-[13px] transition-colors hover:bg-gray-50"
+                                                            :class="String(filter.value) === String(option.value) ? 'font-medium text-blue-700' : 'text-gray-700'">
+                                                        <span x-text="option.label"></span>
+                                                        <svg x-show="String(filter.value) === String(option.value)" class="size-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+                                                    </button>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <!-- Text / number / date input -->
+                                    <template x-if="!getField(filter).options && !['is_empty', 'is_not_empty'].includes(filter.operator)">
+                                        <input x-model="filter.value"
+                                               :type="getField(filter).type === 'date' ? 'date' : getField(filter).type === 'number' ? 'number' : 'text'"
+                                               :placeholder="getField(filter).type === 'number' ? 'Enter a number' : getField(filter).type === 'date' ? 'Select date' : 'Enter a value'"
+                                               class="h-9 min-w-[140px] flex-1 rounded-md border border-gray-200 px-3 text-[13px] outline-none transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                                    </template>
+
+                                    <button type="button" @click="removeFilter(filter.id)" title="Remove filter"
+                                            class="flex size-9 shrink-0 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3"/></svg>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+                            <button type="button" @click="addFilter()"
+                                    class="flex h-8 items-center gap-1.5 rounded px-2 text-[12px] font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-800">
+                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+                                Add filter
+                            </button>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[11px] text-gray-400">All conditions are combined with AND</span>
+                                <button type="button" @click="resetFilters(); filterPanel = false" class="h-8 rounded-md px-3 text-[12px] text-gray-600 hover:bg-gray-100">Clear all</button>
+                                <button type="button" @click="applyFilters()" class="h-8 rounded-md bg-blue-600 px-3 text-[12px] font-medium text-white transition-colors hover:bg-blue-700">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applied filter pills -->
+                <div x-show="appliedFilters.length" x-cloak
+                     class="flex flex-wrap items-center gap-2 border-b border-gray-100 px-4 py-2.5 lg:px-5">
+                    <span class="mr-1 text-[11px] text-gray-400">Filters:</span>
+                    <template x-for="filter in appliedFilters" :key="filter.id">
+                        <div class="inline-flex h-7 items-center overflow-hidden rounded-md border border-blue-100 bg-blue-50 text-[11px] text-blue-800">
+                            <span class="px-2 font-medium" x-text="getField(filter).label"></span>
+                            <span class="text-blue-300">|</span>
+                            <span class="px-2 text-blue-600" x-text="getOperatorLabel(filter)"></span>
+                            <span x-show="filter.value !== ''" class="pr-2 font-medium" x-text="getValueLabel(filter)"></span>
+                            <button type="button" @click="removeAppliedFilter(filter.id)" title="Remove filter"
+                                    class="flex h-full w-7 items-center justify-center border-l border-blue-100 text-blue-400 transition-colors hover:bg-red-50 hover:text-red-600">
+                                <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 6-12 12M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </template>
+                    <button type="button" @click="resetFilters()" class="ml-1 text-[11px] text-gray-400 hover:text-red-600">Clear all</button>
+                </div>
+
+                <!-- Data table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full whitespace-nowrap text-left">
+                        <thead class="bg-gray-50 text-gray-500">
+                            <tr>
+                                <th class="w-10 px-4 py-3 lg:px-5">
+                                    <input type="checkbox"
+                                           @change="toggleAll($event.target.checked)"
+                                           :checked="paginatedRecords.length > 0 && paginatedRecords.every(record => selected.includes(record.id))"
+                                           class="size-[14px] cursor-pointer accent-blue-600">
+                                </th>
+                                <template x-for="column in columns" :key="column.key">
+                                    <th @click="sort(column.key)" class="cursor-pointer select-none px-4 py-3 text-[11px] font-semibold hover:text-gray-900">
+                                        <div class="flex items-center gap-1.5">
+                                            <span x-text="column.label"></span>
+                                            <svg class="size-3" :class="sortBy === column.key ? 'text-blue-600' : 'text-gray-300'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path :d="sortBy === column.key && sortDirection === 'asc' ? 'm7 14 5-5 5 5' : 'm7 10 5 5 5-5'"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </template>
+                                <th class="px-4 py-3 text-right text-[11px] font-semibold lg:px-5">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <template x-for="record in paginatedRecords" :key="record.id">
+                                <tr class="transition-colors hover:bg-gray-50/70" :class="selected.includes(record.id) ? 'bg-blue-50/40' : ''">
+                                    <td class="px-4 py-3 lg:px-5">
+                                        <input type="checkbox" :checked="selected.includes(record.id)" @change="toggleSelection(record.id)" class="size-[14px] cursor-pointer accent-blue-600">
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="flex size-8 items-center justify-center rounded-md text-[11px] font-semibold" :class="record.avatarColor" x-text="record.name.substring(0, 2).toUpperCase()"></div>
+                                            <div>
+                                                <div class="text-[12px] font-medium text-gray-900" x-text="record.name"></div>
+                                                <div class="mt-0.5 text-[11px] text-gray-400" x-text="record.email"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-[12px] text-gray-600" x-text="record.company"></td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium"
+                                              :class="{'bg-green-50 text-green-700': record.status === 'Active', 'bg-yellow-50 text-yellow-700': record.status === 'Pending', 'bg-red-50 text-red-700': record.status === 'Suspended'}">
+                                            <span class="size-1.5 rounded-full" :class="{'bg-green-500': record.status === 'Active', 'bg-yellow-500': record.status === 'Pending', 'bg-red-500': record.status === 'Suspended'}"></span>
+                                            <span x-text="record.status"></span>
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-[12px]" :class="record.active ? 'text-green-600' : 'text-gray-400'" x-text="record.active ? 'Yes' : 'No'"></td>
+                                    <td class="px-4 py-3 text-[12px] tabular-nums text-gray-500" x-text="formatDate(record.created_at)"></td>
+                                    <td class="px-4 py-3 text-[12px] tabular-nums text-gray-600" x-text="record.size + ' MB'"></td>
+                                    <td class="px-4 py-3 text-right lg:px-5">
+                                        <div class="flex items-center justify-end gap-1">
+                                            <button @click="editRecord(record)" title="Edit" class="flex size-7 items-center justify-center rounded text-gray-400 hover:bg-blue-50 hover:text-blue-600">
+                                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m14 6 4 4M4 20l4-.8L19 8a2.8 2.8 0 0 0-4-4L4 15v5Z"/></svg>
+                                            </button>
+                                            <button @click="deleteRecord(record)" title="Delete" class="flex size-7 items-center justify-center rounded text-gray-400 hover:bg-red-50 hover:text-red-600">
+                                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3"/></svg>
+                                            </button>
+                                            <button title="More options" class="flex size-7 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-800">
+                                                <svg class="size-3.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr x-show="filteredRecords.length === 0">
+                                <td colspan="8" class="py-16 text-center">
+                                    <div class="mx-auto mb-3 flex size-10 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                                    </div>
+                                    <div class="text-[13px] font-medium text-gray-700">No records found</div>
+                                    <div class="mt-1 text-[12px] text-gray-400">Try adjusting your search or filters.</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex flex-col items-center justify-between gap-3 border-t border-gray-100 px-4 py-3 sm:flex-row lg:px-5">
+                    <div class="text-[11px] text-gray-500">
+                        Showing <span class="font-medium text-gray-800" x-text="filteredRecords.length ? startIndex + 1 : 0"></span>
+                        to <span class="font-medium text-gray-800" x-text="Math.min(startIndex + perPage, filteredRecords.length)"></span>
+                        of <span class="font-medium text-gray-800" x-text="filteredRecords.length"></span> results
+                        <span x-show="selected.length" class="ml-2 text-blue-600">· <span x-text="selected.length"></span> selected</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] text-gray-500">Rows per page</span>
+                            <select x-model.number="perPage" @change="currentPage = 1" class="h-7 rounded border border-gray-200 bg-white px-1.5 text-[11px] outline-none">
+                                <option :value="5">5</option><option :value="10">10</option><option :value="20">20</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" class="flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Previous page">
+                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                            </button>
+                            <template x-for="page in pageNumbers" :key="page">
+                                <button @click="currentPage = page" x-text="page"
+                                        :class="currentPage === page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
+                                        class="size-7 rounded border text-[11px] font-medium"></button>
+                            </template>
+                            <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages || totalPages === 0" class="flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Next page">
+                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="flex flex-wrap items-center justify-between gap-2 border-t border-gray-200 bg-white px-4 py-4 lg:px-7">
+            <span class="text-[11px] text-gray-400">© 2026 Acme Dashboard. All rights reserved.</span>
+            <div class="flex items-center gap-4 text-[11px] text-gray-400">
+                <a href="#" class="hover:text-gray-700">Documentation</a>
+                <a href="#" class="hover:text-gray-700">Support</a>
+                <span>v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Create / Edit modal -->
+    <div x-show="showCreateModal" x-cloak x-transition.opacity
+         @click.self="showCreateModal = false" @keydown.escape.window="showCreateModal = false"
+         class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/40 p-4">
+        <div x-transition.scale.origin.center class="w-full max-w-[480px] rounded-lg bg-white shadow-xl">
+            <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+                <div>
+                    <h3 class="text-[15px] font-semibold" x-text="editingRecord ? 'Edit customer' : 'Add customer'"></h3>
+                    <p class="mt-0.5 text-[12px] text-gray-400">Enter customer information.</p>
+                </div>
+                <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-700" aria-label="Close modal">✕</button>
+            </div>
+            <form @submit.prevent="saveRecord()" class="space-y-4 p-5">
+                <div>
+                    <label class="mb-1.5 block text-[12px] font-medium">Name</label>
+                    <input required x-model="form.name" type="text" placeholder="Customer name" class="h-9 w-full rounded-md border border-gray-200 px-3 text-[13px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-[12px] font-medium">Email</label>
+                    <input required x-model="form.email" type="email" placeholder="email@example.com" class="h-9 w-full rounded-md border border-gray-200 px-3 text-[13px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-[12px] font-medium">Company</label>
+                    <input required x-model="form.company" type="text" placeholder="Company name" class="h-9 w-full rounded-md border border-gray-200 px-3 text-[13px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-[12px] font-medium">Status</label>
+                    <select x-model="form.status" class="h-9 w-full rounded-md border border-gray-200 bg-white px-3 text-[13px] outline-none focus:border-blue-400">
+                        <option value="Active">Active</option><option value="Pending">Pending</option><option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                    <button type="button" @click="showCreateModal = false" class="h-8 rounded-md border border-gray-200 px-3 text-[12px] font-medium hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="h-8 rounded-md bg-blue-600 px-3 text-[12px] font-medium text-white hover:bg-blue-700">Save customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function adminDashboard() {
+    return {
+        sidebarOpen: false,
+        activeNavigation: 'Customers',
+        filterPanel: false,
+        showCreateModal: false,
+        search: '',
+        currentPage: 1,
+        perPage: 5,
+        sortBy: 'id',
+        sortDirection: 'desc',
+        selected: [],
+        nextId: 112,
+        editingRecord: null,
+        form: { name: '', email: '', company: '', status: 'Active' },
+
+        mainNavigation: [
+            { label: 'Overview', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>' },
+            { label: 'Analytics', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M8 16v-4m5 4V6m5 10V9"/></svg>' }
+        ],
+        managementNavigation: [
+            { label: 'Customers', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="4"/><path d="M3 21v-2a6 6 0 0 1 12 0v2m2-13a4 4 0 0 1 0 8m1 2a5 5 0 0 1 3 5"/></svg>' },
+            { label: 'Orders', badge: '12', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h4"/></svg>' },
+            { label: 'Products', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 5v10l9 5 9-5V8M12 13v10"/></svg>' },
+            { label: 'Transactions', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-13 5h4"/></svg>' }
+        ],
+        stats: [
+            { label: 'Total customers', value: '2,840', change: '+12.5%', positive: true },
+            { label: 'Active customers', value: '2,410', change: '+8.2%', positive: true },
+            { label: 'Pending approval', value: '128', change: 'Needs attention', positive: false },
+            { label: 'Suspended', value: '302', change: 'No change', positive: false }
+        ],
+
+        fields: [
+            {
+                key: 'name', label: 'Name', type: 'text',
+                operators: [
+                    { value: 'contains', label: 'contains' },
+                    { value: 'not_contains', label: 'does not contain' },
+                    { value: 'equals', label: 'equals' },
+                    { value: 'not_equals', label: 'does not equal' },
+                    { value: 'starts_with', label: 'starts with' },
+                    { value: 'ends_with', label: 'ends with' },
+                    { value: 'is_empty', label: 'is empty' },
+                    { value: 'is_not_empty', label: 'is not empty' }
+                ]
+            },
+            {
+                key: 'status', label: 'Status', type: 'enum',
+                options: [
+                    { value: 'Active', label: 'Active' },
+                    { value: 'Pending', label: 'Pending' },
+                    { value: 'Suspended', label: 'Suspended' }
+                ],
+                operators: [
+                    { value: 'equals', label: 'is' },
+                    { value: 'not_equals', label: 'is not' }
+                ]
+            },
+            {
+                key: 'active', label: 'Active', type: 'boolean',
+                options: [{ value: 'true', label: 'True' }, { value: 'false', label: 'False' }],
+                operators: [{ value: 'equals', label: 'is' }]
+            },
+            {
+                key: 'created_at', label: 'Created at', type: 'date',
+                operators: [
+                    { value: 'equals', label: 'is' },
+                    { value: 'gt', label: 'after' },
+                    { value: 'lt', label: 'before' },
+                    { value: 'gte', label: 'on or after' },
+                    { value: 'lte', label: 'on or before' }
+                ]
+            },
+            {
+                key: 'size', label: 'Size', type: 'number',
+                operators: [
+                    { value: 'equals', label: 'equals' },
+                    { value: 'gt', label: 'greater than' },
+                    { value: 'gte', label: 'greater than or equal' },
+                    { value: 'lt', label: 'less than' },
+                    { value: 'lte', label: 'less than or equal' }
+                ]
+            }
+        ],
+
+        columns: [
+            { key: 'name', label: 'Customer' },
+            { key: 'company', label: 'Company' },
+            { key: 'status', label: 'Status' },
+            { key: 'active', label: 'Active' },
+            { key: 'created_at', label: 'Created at' },
+            { key: 'size', label: 'Size' }
+        ],
+
+        filters: [],
+        appliedFilters: [],
+
+        records: [
+            { id: 100, name: 'John Anderson', email: 'john@example.com', company: 'Acme Inc.', status: 'Active', active: true, created_at: '2026-01-15', size: 120, avatarColor: 'bg-blue-100 text-blue-700' },
+            { id: 101, name: 'Sarah Mitchell', email: 'sarah@example.com', company: 'Tech Solutions', status: 'Pending', active: false, created_at: '2026-02-20', size: 450, avatarColor: 'bg-purple-100 text-purple-700' },
+            { id: 102, name: 'Michael Brown', email: 'michael@example.com', company: 'Cloud Systems', status: 'Active', active: true, created_at: '2026-03-10', size: 85, avatarColor: 'bg-green-100 text-green-700' },
+            { id: 103, name: 'Emily Davis', email: 'emily@example.com', company: 'Delta Networks', status: 'Suspended', active: false, created_at: '2026-04-05', size: 320, avatarColor: 'bg-orange-100 text-orange-700' },
+            { id: 104, name: 'David Wilson', email: 'david@example.com', company: 'Epsilon Digital', status: 'Active', active: true, created_at: '2026-05-22', size: 680, avatarColor: 'bg-pink-100 text-pink-700' },
+            { id: 105, name: 'Jessica Taylor', email: 'jessica@example.com', company: 'Gamma Services', status: 'Pending', active: true, created_at: '2026-06-12', size: 210, avatarColor: 'bg-yellow-100 text-yellow-700' },
+            { id: 106, name: 'Robert Martin', email: 'robert@example.com', company: 'Omega Cloud', status: 'Suspended', active: false, created_at: '2026-07-18', size: 90, avatarColor: 'bg-indigo-100 text-indigo-700' },
+            { id: 107, name: 'Amanda White', email: 'amanda@example.com', company: 'Nova Technologies', status: 'Active', active: true, created_at: '2026-08-01', size: 540, avatarColor: 'bg-cyan-100 text-cyan-700' },
+            { id: 108, name: 'Christopher Lee', email: 'chris@example.com', company: 'Blue Systems', status: 'Active', active: true, created_at: '2026-08-12', size: 150, avatarColor: 'bg-teal-100 text-teal-700' },
+            { id: 109, name: 'Olivia Harris', email: 'olivia@example.com', company: 'North Solutions', status: 'Pending', active: false, created_at: '2026-08-19', size: 275, avatarColor: 'bg-rose-100 text-rose-700' },
+            { id: 110, name: 'Daniel Clark', email: 'daniel@example.com', company: 'Digital House', status: 'Active', active: true, created_at: '2026-09-01', size: 380, avatarColor: 'bg-lime-100 text-lime-700' },
+            { id: 111, name: 'Sophia Lewis', email: 'sophia@example.com', company: 'Web Services', status: 'Suspended', active: false, created_at: '2026-09-12', size: 95, avatarColor: 'bg-violet-100 text-violet-700' }
+        ],
+
+        get filteredRecords() {
+            const search = this.search.toLowerCase().trim();
+
+            return this.records
+                .filter(record => {
+                    if (!search) return true;
+                    return [record.name, record.email, record.company, record.status]
+                        .some(value => String(value).toLowerCase().includes(search));
+                })
+                .filter(record => this.appliedFilters.every(filter => this.matchesFilter(record, filter)))
+                .sort((a, b) => {
+                    const first = a[this.sortBy];
+                    const second = b[this.sortBy];
+                    const comparison = typeof first === 'number'
+                        ? first - second
+                        : String(first).localeCompare(String(second));
+                    return this.sortDirection === 'asc' ? comparison : -comparison;
+                });
+        },
+
+        get totalPages() {
+            return Math.ceil(this.filteredRecords.length / this.perPage);
+        },
+
+        get startIndex() {
+            return (this.currentPage - 1) * this.perPage;
+        },
+
+        get paginatedRecords() {
+            return this.filteredRecords.slice(this.startIndex, this.startIndex + this.perPage);
+        },
+
+        get pageNumbers() {
+            const total = this.totalPages;
+            if (total <= 5) return Array.from({ length: total }, (_, index) => index + 1);
+
+            let start = Math.max(1, this.currentPage - 2);
+            let end = Math.min(total, start + 4);
+            start = Math.max(1, end - 4);
+
+            return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+        },
+
+        get sortLabel() {
+            const column = this.columns.find(item => item.key === this.sortBy);
+            return `${column?.label ?? this.sortBy} (${this.sortDirection === 'asc' ? 'Ascending' : 'Descending'})`;
+        },
+
+        navigate(label) {
+            this.activeNavigation = label;
+            this.sidebarOpen = false;
+        },
+
+        toggleFilterPanel() {
+            this.filterPanel = !this.filterPanel;
+            if (this.filterPanel && this.filters.length === 0) this.addFilter();
+        },
+
+        sort(key) {
+            if (this.sortBy === key) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortBy = key;
+                this.sortDirection = 'asc';
+            }
+            this.currentPage = 1;
+        },
+
+        addFilter() {
+            this.filters.push({
+                id: `${Date.now()}-${Math.random()}`,
+                field: 'name',
+                operator: 'contains',
+                value: ''
+            });
+        },
+
+        removeFilter(id) {
+            this.filters = this.filters.filter(filter => filter.id !== id);
+        },
+
+        resetFilters() {
+            this.filters = [];
+            this.appliedFilters = [];
+            this.currentPage = 1;
+        },
+
+        resetAll() {
+            this.resetFilters();
+            this.search = '';
+            this.sortBy = 'id';
+            this.sortDirection = 'desc';
+            this.currentPage = 1;
+            this.selected = [];
+        },
+
+        changeFilter(filter, fieldKey) {
+            const field = this.fields.find(item => item.key === fieldKey);
+            if (!field) return;
+            filter.field = fieldKey;
+            filter.operator = field.operators[0].value;
+            filter.value = '';
+        },
+
+        getField(filter) {
+            return this.fields.find(field => field.key === filter.field) ?? this.fields[0];
+        },
+
+        getOperators(filter) {
+            return this.getField(filter).operators;
+        },
+
+        getOperatorLabel(filter) {
+            return this.getOperators(filter).find(operator => operator.value === filter.operator)?.label ?? '';
+        },
+
+        getValueLabel(filter) {
+            const field = this.getField(filter);
+            if (!field || filter.value === '') return '';
+            if (field.options) {
+                return field.options.find(option => String(option.value) === String(filter.value))?.label ?? filter.value;
+            }
+            return filter.value;
+        },
+
+        matchesFilter(record, filter) {
+            const field = this.getField(filter);
+            const actual = record[filter.field];
+            const expected = filter.value;
+
+            if (filter.operator === 'is_empty') return actual === null || actual === undefined || actual === '';
+            if (filter.operator === 'is_not_empty') return actual !== null && actual !== undefined && actual !== '';
+            if (expected === '') return true;
+
+            if (field.type === 'text') {
+                const first = String(actual ?? '').toLowerCase();
+                const second = String(expected).toLowerCase();
+                switch (filter.operator) {
+                    case 'contains': return first.includes(second);
+                    case 'not_contains': return !first.includes(second);
+                    case 'equals': return first === second;
+                    case 'not_equals': return first !== second;
+                    case 'starts_with': return first.startsWith(second);
+                    case 'ends_with': return first.endsWith(second);
+                    default: return true;
+                }
+            }
+
+            if (field.type === 'boolean') return actual === (expected === 'true');
+
+            if (field.type === 'number') {
+                const first = Number(actual);
+                const second = Number(expected);
+                switch (filter.operator) {
+                    case 'equals': return first === second;
+                    case 'gt': return first > second;
+                    case 'gte': return first >= second;
+                    case 'lt': return first < second;
+                    case 'lte': return first <= second;
+                    default: return true;
+                }
+            }
+
+            if (field.type === 'date' || field.type === 'enum') {
+                switch (filter.operator) {
+                    case 'equals': return actual === expected;
+                    case 'not_equals': return actual !== expected;
+                    case 'gt': return actual > expected;
+                    case 'gte': return actual >= expected;
+                    case 'lt': return actual < expected;
+                    case 'lte': return actual <= expected;
+                    default: return true;
+                }
+            }
+
+            return true;
+        },
+
+        applyFilters() {
+            const invalid = this.filters.some(filter =>
+                !['is_empty', 'is_not_empty'].includes(filter.operator) && filter.value === ''
+            );
+            if (invalid) return;
+
+            this.appliedFilters = this.filters.map(filter => ({ ...filter }));
+            this.currentPage = 1;
+            this.filterPanel = false;
+        },
+
+        removeAppliedFilter(id) {
+            this.appliedFilters = this.appliedFilters.filter(filter => filter.id !== id);
+            this.filters = this.filters.filter(filter => filter.id !== id);
+            this.currentPage = 1;
+        },
+
+        toggleSelection(id) {
+            this.selected = this.selected.includes(id)
+                ? this.selected.filter(item => item !== id)
+                : [...this.selected, id];
+        },
+
+        toggleAll(checked) {
+            const ids = this.paginatedRecords.map(record => record.id);
+            if (checked) {
+                this.selected = [...new Set([...this.selected, ...ids])];
+                return;
+            }
+            this.selected = this.selected.filter(id => !ids.includes(id));
+        },
+
+        formatDate(date) {
+            return new Intl.DateTimeFormat('pt-BR').format(new Date(`${date}T12:00:00`));
+        },
+
+        openCreate() {
+            this.editingRecord = null;
+            this.form = { name: '', email: '', company: '', status: 'Active' };
+            this.showCreateModal = true;
+        },
+
+        editRecord(record) {
+            this.editingRecord = record;
+            this.form = {
+                name: record.name,
+                email: record.email,
+                company: record.company,
+                status: record.status
+            };
+            this.showCreateModal = true;
+        },
+
+        deleteRecord(record) {
+            if (!confirm(`Delete ${record.name}?`)) return;
+            this.records = this.records.filter(item => item.id !== record.id);
+            this.selected = this.selected.filter(id => id !== record.id);
+            if (this.currentPage > this.totalPages) this.currentPage = Math.max(1, this.totalPages);
+        },
+
+        saveRecord() {
+            if (this.editingRecord) {
+                Object.assign(this.editingRecord, this.form);
+            } else {
+                this.records.unshift({
+                    id: this.nextId++,
+                    ...this.form,
+                    active: true,
+                    created_at: new Date().toISOString().slice(0, 10),
+                    size: 0,
+                    avatarColor: 'bg-blue-100 text-blue-700'
+                });
+            }
+
+            this.editingRecord = null;
+            this.form = { name: '', email: '', company: '', status: 'Active' };
+            this.showCreateModal = false;
+            this.currentPage = 1;
+        }
+    };
+}
+</script>
+</body>
+</html>

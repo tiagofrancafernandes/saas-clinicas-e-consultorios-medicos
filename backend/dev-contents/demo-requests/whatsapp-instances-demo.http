@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@instanceId = 00000000-0000-0000-0000-000000000001
+
+### 1. List Tenant WhatsApp Instances (Super Admin)
+GET {{baseUrl}}/api/central/tenants/{{tenantId}}/whatsapp-instances
+Accept: application/json
+
+### 2. Register New Evolution API WhatsApp Instance (Default)
+POST {{baseUrl}}/api/central/tenants/{{tenantId}}/whatsapp-instances
+Content-Type: application/json
+Accept: application/json
+
+{
+    "label": "Principal Atendimento",
+    "phone_number": "5541984402684",
+    "instance_name": "Tiago 2684 baileys",
+    "token": "C2FBA7C967A5-4A80-A96A-EED2A0DE328D",
+    "category": "DEFAULT",
+    "is_default": true,
+    "active": true,
+    "attendant_name": "Atendimento Clínica"
+}
+
+### 3. Test Evolution API Instance Connection
+POST {{baseUrl}}/api/central/tenants/{{tenantId}}/whatsapp-instances/{{instanceId}}/test-connection
+Accept: application/json
+
+### 4. Check Tenant WhatsApp Verifier Status
+GET {{baseUrl}}/api/tenant/whatsapp/status
+X-Tenant-ID: {{tenantId}}
+Accept: application/json
+
+### 5. Verify Patient Phone Number on WhatsApp
+POST {{baseUrl}}/api/tenant/whatsapp/check-number
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "phone": "5541984402684"
+}

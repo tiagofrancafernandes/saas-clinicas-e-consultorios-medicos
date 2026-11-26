@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\HealthInsurance|null $healthInsurance
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurancePlan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurancePlan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurancePlan query()
+ * @mixin \Eloquent
+ */
 final class HealthInsurancePlan extends Model
 {
     use HasUuids;

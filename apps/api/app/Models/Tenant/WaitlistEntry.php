@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\AppointmentType|null $appointmentType
+ * @property-read \App\Models\Tenant\Patient|null $patient
+ * @property-read \App\Models\Tenant\Professional|null $professional
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WaitlistEntry newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WaitlistEntry newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WaitlistEntry query()
+ * @mixin \Eloquent
+ */
 final class WaitlistEntry extends Model
 {
     use HasUuids;

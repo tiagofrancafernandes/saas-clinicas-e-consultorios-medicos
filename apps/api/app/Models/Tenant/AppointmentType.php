@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\Appointment> $appointments
+ * @property-read int|null $appointments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\Package> $packages
+ * @property-read int|null $packages_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentType query()
+ * @mixin \Eloquent
+ */
 final class AppointmentType extends Model
 {
     use HasUuids;

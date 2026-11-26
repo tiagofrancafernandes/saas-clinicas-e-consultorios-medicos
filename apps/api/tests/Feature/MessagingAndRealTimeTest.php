@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\Tenant\AppointmentStatus;
+use App\Enums\Tenant\NotificationLogStatus;
 use App\Events\Tenant\PatientSummonedToRoom;
 use App\Jobs\Central\ScanUpcomingAppointmentsJob;
 use App\Jobs\Tenant\DispatchAppointmentReminderJob;
@@ -160,7 +161,7 @@ final class MessagingAndRealTimeTest extends TestCase
         $this->assertSame('PRE_REMINDER', $log->type);
         $this->assertSame('+5511988882222', $log->recipient);
         $this->assertStringStartsWith('wamid.', $log->external_message_id);
-        $this->assertSame('SENT', $log->status);
+        $this->assertSame(NotificationLogStatus::SENT, $log->status);
 
         tenancy()->end();
     }

@@ -1,0 +1,56 @@
+@baseUrl = http://localhost:8000
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@token = replace_with_sanctum_token
+
+### 1. Login (Clinic Admin or Super Admin)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "admin@clinica1.com",
+    "password": "password"
+}
+
+### 2. List Clinic Users with Roles & Extra Permissions
+GET {{baseUrl}}/api/tenant/users
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+Accept: application/json
+
+### 3. Get Fixed Permissions & Roles Catalog
+GET {{baseUrl}}/api/tenant/permissions
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+Accept: application/json
+
+### 4. Create Clinic User with Role + Extra Individual Permission
+POST {{baseUrl}}/api/tenant/users
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "Dr. Extra Perm",
+    "email": "drextra@clinica1.com",
+    "password": "password",
+    "role": "PROFESSIONAL",
+    "extra_permissions": [
+        "patients.create",
+        "patients.update"
+    ]
+}
+
+### 5. Update Extra Direct Permissions for an Individual User
+PUT {{baseUrl}}/api/tenant/users/3/permissions
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "extra_permissions": [
+        "patients.create"
+    ]
+}

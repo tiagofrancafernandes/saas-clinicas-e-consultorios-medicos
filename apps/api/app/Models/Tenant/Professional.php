@@ -9,6 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\Appointment> $appointments
+ * @property-read int|null $appointments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\ProfessionalAvailability> $availabilities
+ * @property-read int|null $availabilities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\HealthInsurance> $healthInsurances
+ * @property-read int|null $health_insurances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\ProfessionalUnavailability> $unavailabilities
+ * @property-read int|null $unavailabilities_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Professional newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Professional newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Professional query()
+ * @mixin \Eloquent
+ */
 final class Professional extends Model
 {
     use HasUuids;

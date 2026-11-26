@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property RecordVisibility $visibility
+ * @property-read \App\Models\Tenant\Appointment|null $appointment
+ * @property-read \App\Models\Tenant\Patient|null $patient
+ * @property-read \App\Models\Tenant\Professional|null $professional
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MedicalRecord newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MedicalRecord newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MedicalRecord query()
+ * @mixin \Eloquent
+ */
 final class MedicalRecord extends Model
 {
     use HasUuids;

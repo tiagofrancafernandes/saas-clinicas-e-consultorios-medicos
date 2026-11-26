@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\Appointment> $appointments
+ * @property-read int|null $appointments_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ClinicRoom newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ClinicRoom newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ClinicRoom query()
+ * @mixin \Eloquent
+ */
 final class ClinicRoom extends Model
 {
     use HasUuids;

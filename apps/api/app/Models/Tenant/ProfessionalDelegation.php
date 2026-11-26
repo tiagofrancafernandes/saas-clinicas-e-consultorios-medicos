@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\Professional|null $grantee
+ * @property-read \App\Models\Tenant\Professional|null $grantor
+ * @property-read \App\Models\Tenant\Patient|null $patient
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalDelegation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalDelegation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalDelegation query()
+ * @mixin \Eloquent
+ */
 final class ProfessionalDelegation extends Model
 {
     use HasUuids;

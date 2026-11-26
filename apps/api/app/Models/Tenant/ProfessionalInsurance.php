@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\HealthInsurance|null $healthInsurance
+ * @property-read \App\Models\Tenant\Professional|null $professional
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalInsurance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalInsurance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalInsurance query()
+ * @mixin \Eloquent
+ */
 final class ProfessionalInsurance extends Model
 {
     use HasUuids;

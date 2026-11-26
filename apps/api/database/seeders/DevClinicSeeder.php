@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\Central\SubscriptionStatus;
+use App\Enums\Central\UserRole;
 use App\Enums\Tenant\AppointmentStatus;
 use App\Enums\Tenant\RecordVisibility;
 use App\Models\Central\Tenant;
@@ -23,6 +24,7 @@ use App\Models\Tenant\PatientPackage;
 use App\Models\Tenant\Professional;
 use App\Models\Tenant\ProfessionalAvailability;
 use App\Models\Tenant\WaitlistEntry;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -45,6 +47,8 @@ final class DevClinicSeeder extends Seeder
         $existing = Tenant::query()->find(static::DEMO_TENANT_ID);
 
         if ($existing) {
+            $this->seedClinicUsers($existing->id);
+
             return;
         }
 
@@ -72,6 +76,9 @@ final class DevClinicSeeder extends Seeder
             'current_period_end_utc' => now()->addYear(),
             'is_exempt' => false,
         ]);
+
+        // Clinic users (admin, patient, professional, receptionist)
+        $this->seedClinicUsers($tenant->id);
 
         // 2. Populate isolated tenant schema
         $tenant->run(function (): void {
@@ -301,5 +308,29 @@ final class DevClinicSeeder extends Seeder
                 'status' => 'WAITING',
             ]);
         });
+    }
+
+    private function seedClinicUsers(string $tenantId): void
+    {
+        $clinicUsers = [
+            ['email' => 'admin@clinica1.com', 'name' => 'Admin Clinica 1', 'role' => UserRole::CLINIC_ADMIN],
+            ['email' => 'paciente1@clinica1.com', 'name' => 'Paciente 1 Clinica 1', 'role' => UserRole::PATIENT],
+            ['email' => 'pro1@clinica1.com', 'name' => 'Profissional 1 Clinica 1', 'role' => UserRole::PROFESSIONAL],
+            ['email' => 'atendente1@clinica1.com', 'name' => 'Atendente 1 Clinica 1', 'role' => UserRole::RECEPTIONIST],
+        ];
+
+        foreach ($clinicUsers as $clinicUser) {
+            $user = User::query()->updateOrCreate(
+                ['email' => $clinicUser['email']],
+                [
+                    'name' => $clinicUser['name'],
+                    'password' => 'password',
+                    'tenant_id' => $tenantId,
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $user->syncRoles([$clinicUser['role']->value]);
+        }
     }
 }

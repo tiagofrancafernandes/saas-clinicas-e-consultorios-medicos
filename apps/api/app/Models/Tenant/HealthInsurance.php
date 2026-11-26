@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\HealthInsurancePlan> $plans
+ * @property-read int|null $plans_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\Professional> $professionals
+ * @property-read int|null $professionals_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HealthInsurance query()
+ * @mixin \Eloquent
+ */
 final class HealthInsurance extends Model
 {
     use HasUuids;

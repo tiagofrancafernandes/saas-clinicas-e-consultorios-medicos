@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:8000/api
+@token = your-sanctum-token
+@tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
+@patientId = 00000000-0000-0000-0000-000000000000
+@messageId = 00000000-0000-0000-0000-000000000000
+
+### List patient messages (paginated, newest first)
+GET {{baseUrl}}/tenant/patients/{{patientId}}/messages?per_page=20&page=1
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+### Send immediate WhatsApp message
+POST {{baseUrl}}/tenant/patients/{{patientId}}/messages
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+{
+    "channel": "WHATSAPP",
+    "number": "5541984402684",
+    "message": "Olá! Confirmando sua consulta.",
+    "schedule": false
+}
+
+### Schedule WhatsApp message with timezone
+POST {{baseUrl}}/tenant/patients/{{patientId}}/messages
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+{
+    "channel": "WHATSAPP",
+    "number": "5541984402684",
+    "message": "Lembrete: sua consulta é amanhã.",
+    "schedule": true,
+    "scheduled_at": "2026-12-01 14:30:00",
+    "timezone": "America/Sao_Paulo"
+}
+
+### Cancel scheduled WhatsApp message
+POST {{baseUrl}}/tenant/patients/{{patientId}}/messages/{{messageId}}/cancel
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+### Send scheduled WhatsApp message immediately
+POST {{baseUrl}}/tenant/patients/{{patientId}}/messages/{{messageId}}/send-now
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}

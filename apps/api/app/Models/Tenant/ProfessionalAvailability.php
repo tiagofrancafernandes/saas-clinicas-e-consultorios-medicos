@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\Professional|null $professional
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalAvailability newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalAvailability newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalAvailability query()
+ * @mixin \Eloquent
+ */
 final class ProfessionalAvailability extends Model
 {
     use HasUuids;

@@ -33,4 +33,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'evolution_api' => [
+        'base_url' => env('EVOLUTION_API_BASE_URL', 'https://evolution-api.tiagofranca.com'),
+        'global_api_key' => env('EVOLUTION_API_GLOBAL_KEY'),
+        'timeout' => (int) env('EVOLUTION_API_TIMEOUT', 15),
+    ],
 ];

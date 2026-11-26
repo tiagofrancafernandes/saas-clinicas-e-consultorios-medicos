@@ -12,6 +12,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property AppointmentStatus $status
+ * @property AppointmentPaymentStatus $payment_status
+ * @property PaymentMethod $payment_method
+ * @property-read \App\Models\Tenant\AppointmentType|null $appointmentType
+ * @property-read \App\Models\Tenant\ClinicRoom|null $clinicRoom
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\MedicalRecord> $medicalRecords
+ * @property-read int|null $medical_records_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\NotificationLog> $notificationLogs
+ * @property-read int|null $notification_logs_count
+ * @property-read Appointment|null $parentAppointment
+ * @property-read \App\Models\Tenant\Patient|null $patient
+ * @property-read \App\Models\Tenant\PatientHealthInsurance|null $patientHealthInsurance
+ * @property-read \App\Models\Tenant\PatientPackage|null $patientPackage
+ * @property-read \App\Models\Tenant\Professional|null $professional
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tenant\AppointmentToken> $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment query()
+ * @mixin \Eloquent
+ */
 final class Appointment extends Model
 {
     use HasUuids;

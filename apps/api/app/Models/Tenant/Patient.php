@@ -9,6 +9,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Appointment> $appointments
+ * @property-read int|null $appointments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, PatientHealthInsurance> $healthInsurances
+ * @property-read int|null $health_insurances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, MedicalRecord> $medicalRecords
+ * @property-read int|null $medical_records_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, PatientPackage> $packages
+ * @property-read int|null $packages_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, WaitlistEntry> $waitlistEntries
+ * @property-read int|null $waitlist_entries_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient query()
+ * @mixin \Eloquent
+ */
 final class Patient extends Model
 {
     use HasApiTokens;
@@ -27,6 +45,14 @@ final class Patient extends Model
         'tax_id',
         'birth_date',
         'metadata',
+        'internal_note',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected $hidden = [
+        'internal_note',
     ];
 
     /**

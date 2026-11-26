@@ -1,13 +1,25 @@
 {
+    "$schema": "https://json.schemastore.org/prettierrc",
     "tabWidth": 4,
     "useTabs": false,
     "semi": true,
     "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 100,
+    "trailingComma": "es5",
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "vueIndentScriptAndStyle": false,
+    "htmlWhitespaceSensitivity": "ignore",
+    "bracketSpacing": true,
+    "printWidth": 120,
     "overrides": [
         {
-            "files": ["*.json", "*.yml", "*.yaml"],
+            "files": ["*.json", "*.ts", "*.js"],
+            "options": {
+                "tabWidth": 4
+            }
+        },
+        {
+            "files": ["*.yml", "*.yaml"],
             "options": {
                 "tabWidth": 2
             }

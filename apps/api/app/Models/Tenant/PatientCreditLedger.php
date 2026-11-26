@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read \App\Models\Tenant\Appointment|null $appointment
+ * @property-read \App\Models\Tenant\PatientPackage|null $patientPackage
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientCreditLedger newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientCreditLedger newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PatientCreditLedger query()
+ * @mixin \Eloquent
+ */
 final class PatientCreditLedger extends Model
 {
     use HasUuids;
