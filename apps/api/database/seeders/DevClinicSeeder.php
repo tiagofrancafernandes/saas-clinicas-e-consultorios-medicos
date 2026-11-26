@@ -100,7 +100,7 @@ final class DevClinicSeeder extends Seeder
             $proUserId = User::query()->where('email', 'pro1@clinica1.com')->value('id');
 
             // Professionals
-            $drCarter = Professional::create([
+            $drJamesWilson = Professional::create([
                 'id' => static::DEMO_DR_CARTER_ID,
                 'user_id' => $proUserId !== null ? (string) $proUserId : null,
                 'name' => 'Dr. James Wilson',
@@ -110,7 +110,7 @@ final class DevClinicSeeder extends Seeder
                 'is_active' => true,
             ]);
 
-            $drStone = Professional::create([
+            $draLisaCuddy = Professional::create([
                 'id' => static::DEMO_DR_STONE_ID,
                 'name' => 'Dra. Lisa Cuddy',
                 'specialty' => 'Dermatology',
@@ -129,7 +129,7 @@ final class DevClinicSeeder extends Seeder
             ]);
 
             // Weekly shifts (Monday to Friday, 08:00 - 17:00, 30m slots)
-            foreach ([$drCarter, $drStone, $drHouse] as $doctor) {
+            foreach ([$drJamesWilson, $draLisaCuddy, $drHouse] as $doctor) {
                 for ($day = 1; $day <= 5; $day++) {
                     ProfessionalAvailability::create([
                         'id' => (string) Str::uuid(),
@@ -252,7 +252,7 @@ final class DevClinicSeeder extends Seeder
 
             $demoAppointment = Appointment::create([
                 'id' => static::DEMO_APPOINTMENT_ID,
-                'professional_id' => $drCarter->id,
+                'professional_id' => $drJamesWilson->id,
                 'patient_id' => $carlos->id,
                 'clinic_room_id' => $room102->id,
                 'appointment_type_id' => $firstConsultation->id,
@@ -278,7 +278,7 @@ final class DevClinicSeeder extends Seeder
             MedicalRecord::create([
                 'id' => static::DEMO_MEDICAL_RECORD_ID,
                 'patient_id' => $carlos->id,
-                'professional_id' => $drCarter->id,
+                'professional_id' => $drJamesWilson->id,
                 'appointment_id' => $demoAppointment->id,
                 'type' => 'CLINICAL_NOTE',
                 'visibility' => RecordVisibility::PRIVATE,
@@ -304,7 +304,7 @@ final class DevClinicSeeder extends Seeder
             WaitlistEntry::create([
                 'id' => (string) Str::uuid(),
                 'patient_id' => $juliana->id,
-                'professional_id' => $drCarter->id,
+                'professional_id' => $drJamesWilson->id,
                 'appointment_type_id' => $firstConsultation->id,
                 'preferred_date' => $tomorrow->format('Y-m-d'),
                 'preferred_shift' => 'AFTERNOON',
