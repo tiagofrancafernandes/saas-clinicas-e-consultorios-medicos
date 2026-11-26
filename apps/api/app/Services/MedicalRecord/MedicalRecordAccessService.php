@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\MedicalRecord;
 
+use App\Enums\Tenant\MedicalRecordStatus;
 use App\Enums\Tenant\RecordVisibility;
 use App\Models\Tenant\MedicalRecord;
 use App\Models\Tenant\Patient;
@@ -21,6 +22,11 @@ final class MedicalRecordAccessService
         ?CarbonImmutable $nowUtc = null
     ): bool {
         $now = $nowUtc ?? CarbonImmutable::now();
+
+        // 0. DRAFT records are strictly private to their author
+        if ($record->status === MedicalRecordStatus::DRAFT) {
+            return $record->professional_id === $requestingProfessional->id;
+        }
 
         // 1. PUBLIC_CLINIC and SHARED_TEAM are accessible by any active clinic professional
         if ($record->visibility === RecordVisibility::PUBLIC_CLINIC || $record->visibility === RecordVisibility::SHARED_TEAM) {
@@ -83,11 +89,16 @@ final class MedicalRecordAccessService
         return MedicalRecord::query()
             ->where('patient_id', $patient->id)
             ->where(function (Builder $query) use ($requestingProfessional, $grantorIdsWithActiveDelegation): void {
-                $query->whereIn('visibility', [RecordVisibility::PUBLIC_CLINIC->value, RecordVisibility::SHARED_TEAM->value])
-                    ->orWhere('professional_id', $requestingProfessional->id)
-                    ->orWhere(function (Builder $sub) use ($grantorIdsWithActiveDelegation): void {
-                        $sub->where('visibility', RecordVisibility::PRIVATE->value)
-                            ->whereIn('professional_id', $grantorIdsWithActiveDelegation);
+                $query->where('professional_id', $requestingProfessional->id)
+                    ->orWhere(function (Builder $finalized) use ($grantorIdsWithActiveDelegation): void {
+                        $finalized->where('status', MedicalRecordStatus::FINALIZED->value)
+                            ->where(function (Builder $vis) use ($grantorIdsWithActiveDelegation): void {
+                                $vis->whereIn('visibility', [RecordVisibility::PUBLIC_CLINIC->value, RecordVisibility::SHARED_TEAM->value])
+                                    ->orWhere(function (Builder $sub) use ($grantorIdsWithActiveDelegation): void {
+                                        $sub->where('visibility', RecordVisibility::PRIVATE->value)
+                                            ->whereIn('professional_id', $grantorIdsWithActiveDelegation);
+                                    });
+                            });
                     });
             });
     }

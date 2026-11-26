@@ -3,7 +3,7 @@ interface Props {
     open: boolean;
     title: string;
     description?: string;
-    maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+    maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 }
 
 withDefaults(defineProps<Props>(), {
@@ -18,6 +18,7 @@ const widths = {
     lg: 'max-w-lg',
     xl: 'max-w-xl',
     '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
 };
 </script>
 

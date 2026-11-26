@@ -64,7 +64,7 @@ const sortLabel = computed(() => {
 
 <template>
     <div>
-        <!-- Page Heading & Top Actions -->
+        <!-- Page Heading e Top Actions -->
         <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
                 <h1 class="text-[20px] font-medium tracking-tight text-gray-900">{{ props.title }}</h1>

@@ -41,10 +41,13 @@ final class RolesAndPermissionsSeeder extends Seeder
                 PermissionName::WAITLIST_VIEW->value,
                 PermissionName::WAITLIST_MANAGE->value,
                 PermissionName::MEDICAL_RECORDS_VIEW->value,
+                PermissionName::MEDICAL_RECORDS_CREATE->value,
+                PermissionName::MEDICAL_RECORDS_CREATE_ON_BEHALF->value,
                 PermissionName::DELEGATIONS_MANAGE->value,
                 PermissionName::FILES_VIEW->value,
                 PermissionName::FILES_UPLOAD->value,
                 PermissionName::CLINIC_SETTINGS_MANAGE->value,
+                PermissionName::PROFILE_IDENTITY_UPDATE->value,
             ],
             UserRole::RECEPTIONIST->value => [
                 PermissionName::PATIENTS_VIEW->value,

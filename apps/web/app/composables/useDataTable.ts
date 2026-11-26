@@ -13,16 +13,24 @@ const SELECT_OPERATORS: FilterOperator[] = [
     { value: 'not_equals', label: 'diferente de' },
 ];
 
-const NUMBER_DATE_OPERATORS: FilterOperator[] = [
+const NUMBER_OPERATORS: FilterOperator[] = [
     { value: 'equals', label: 'igual a' },
     { value: 'gt', label: 'maior que' },
     { value: 'lt', label: 'menor que' },
 ];
 
+const DATE_OPERATORS: FilterOperator[] = [
+    { value: 'between', label: 'de ... até ...' },
+    { value: 'gte', label: 'a partir de' },
+    { value: 'lte', label: 'até' },
+    { value: 'equals', label: 'igual a' },
+];
+
 export function getOperatorsForField(field?: FilterField): FilterOperator[] {
     if (!field) return TEXT_OPERATORS;
     if (field.type === 'select' || field.type === 'boolean') return SELECT_OPERATORS;
-    if (field.type === 'number' || field.type === 'date') return NUMBER_DATE_OPERATORS;
+    if (field.type === 'number') return NUMBER_OPERATORS;
+    if (field.type === 'date') return DATE_OPERATORS;
     return TEXT_OPERATORS;
 }
 
@@ -63,7 +71,13 @@ export function useDataTable<T extends Record<string, any>>(
 
     function applyFilters(): void {
         appliedFilters.value = draftFilters.value
-            .filter((f) => ['is_empty', 'is_not_empty'].includes(f.operator) || String(f.value).trim() !== '')
+            .filter((f) => {
+                if (['is_empty', 'is_not_empty'].includes(f.operator)) return true;
+                if (f.operator === 'between') {
+                    return String(f.value ?? '').trim() !== '' || String(f.valueEnd ?? '').trim() !== '';
+                }
+                return String(f.value).trim() !== '';
+            })
             .map((f) => ({ ...f }));
         currentPage.value = 1;
         filterPanelOpen.value = false;
@@ -104,7 +118,10 @@ export function useDataTable<T extends Record<string, any>>(
 
             return appliedFilters.value.every((cond) => {
                 const rawVal = item[cond.field];
-                const itemStr = String(rawVal ?? '').toLowerCase();
+                const fieldMeta = fields.find((f) => f.key === cond.field);
+                const isDate = fieldMeta?.type === 'date';
+                const normalizedRaw = isDate ? String(rawVal ?? '').slice(0, 10) : String(rawVal ?? '');
+                const itemStr = normalizedRaw.toLowerCase();
                 const condStr = String(cond.value ?? '').toLowerCase();
 
                 switch (cond.operator) {
@@ -121,9 +138,20 @@ export function useDataTable<T extends Record<string, any>>(
                     case 'is_not_empty':
                         return rawVal !== null && rawVal !== undefined && String(rawVal).trim() !== '';
                     case 'gt':
-                        return String(rawVal ?? '') > String(cond.value ?? '');
+                        return normalizedRaw > String(cond.value ?? '');
                     case 'lt':
-                        return String(rawVal ?? '') < String(cond.value ?? '');
+                        return normalizedRaw < String(cond.value ?? '');
+                    case 'gte':
+                        return normalizedRaw >= String(cond.value ?? '');
+                    case 'lte':
+                        return normalizedRaw <= String(cond.value ?? '');
+                    case 'between': {
+                        const start = String(cond.value ?? '').trim();
+                        const end = String(cond.valueEnd ?? '').trim();
+                        if (start && normalizedRaw < start) return false;
+                        if (end && normalizedRaw > end) return false;
+                        return true;
+                    }
                     default:
                         return true;
                 }

@@ -51,7 +51,7 @@ final class PatientController
 
         $patient = Patient::query()
             ->with([
-                'appointments' => fn ($q) => $q->with(['professional', 'room'])->latest('start_time_utc'),
+                'appointments' => fn ($q) => $q->with(['professional', 'clinicRoom'])->latest('start_time_utc'),
             ])
             ->find($patientId);
 
@@ -66,7 +66,8 @@ final class PatientController
         if ($user !== null && $user->can(PermissionName::MEDICAL_RECORDS_VIEW->value)) {
             $medicalRecords = MedicalRecord::query()
                 ->where('patient_id', $patient->id)
-                ->with('author')
+                ->whereNull('parent_record_id')
+                ->with(['patient:id,name,phone', 'professional:id,name,specialty', 'createdBy:id,name,email', 'addendums.professional:id,name,specialty'])
                 ->latest()
                 ->get();
         }
@@ -105,6 +106,56 @@ final class PatientController
             'message' => 'Patient registered successfully.',
             'data' => $patient,
         ], Response::HTTP_CREATED);
+    }
+
+    public function update(Request $request, string $patientId): JsonResponse
+    {
+        if (! Str::isUuid($patientId)) {
+            return new JsonResponse(['message' => 'Patient not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $patient = Patient::query()->find($patientId);
+
+        if ($patient === null) {
+            return new JsonResponse(['message' => 'Patient not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:150'],
+            'phone' => ['required', 'string', 'max:32'],
+            'secondary_phone' => ['nullable', 'string', 'max:32'],
+            'email' => ['nullable', 'email', 'max:150'],
+            'tax_id' => ['nullable', 'string', 'max:32'],
+            'birth_date' => ['nullable', 'date'],
+            'gender' => ['nullable', 'string', 'in:M,F,UNINFORMED'],
+            'address' => ['nullable', 'array'],
+            'address.zip_code' => ['nullable', 'string', 'max:16'],
+            'address.street' => ['nullable', 'string', 'max:180'],
+            'address.number' => ['nullable', 'string', 'max:24'],
+            'address.complement' => ['nullable', 'string', 'max:100'],
+            'address.neighborhood' => ['nullable', 'string', 'max:100'],
+            'address.city' => ['nullable', 'string', 'max:100'],
+            'address.state' => ['nullable', 'string', 'max:8'],
+        ]);
+
+        $metadata = is_array($patient->metadata) ? $patient->metadata : [];
+        $metadata['secondary_phone'] = $validated['secondary_phone'] ?? null;
+        $metadata['gender'] = $validated['gender'] ?? 'UNINFORMED';
+        $metadata['address'] = $validated['address'] ?? ($metadata['address'] ?? null);
+
+        $patient->update([
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'] ?? null,
+            'tax_id' => $validated['tax_id'] ?? null,
+            'birth_date' => $validated['birth_date'] ?? null,
+            'metadata' => $metadata,
+        ]);
+
+        return new JsonResponse([
+            'message' => 'Patient updated successfully.',
+            'data' => $patient->fresh(),
+        ], Response::HTTP_OK);
     }
 
     public function revealInternalNote(Request $request, string $patientId): JsonResponse

@@ -32,7 +32,7 @@ export const SIDEBAR_NAV_GROUPS: NavGroup[] = [
             },
             {
                 id: 'users-group',
-                label: 'Usuários & ACL',
+                label: 'Usuários e ACL',
                 icon: 'lucide:users',
                 children: [
                     {

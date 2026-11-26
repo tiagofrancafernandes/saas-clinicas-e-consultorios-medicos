@@ -16,6 +16,18 @@ const emit = defineEmits<{
 
 const auth = useAuthStore();
 const hovered = ref(false);
+const userMenuOpen = ref(false);
+const userMenuRef = ref<HTMLElement | null>(null);
+
+function handleUserMenuOutside(event: MouseEvent): void {
+    if (!userMenuRef.value) return;
+    if (!userMenuRef.value.contains(event.target as Node)) {
+        userMenuOpen.value = false;
+    }
+}
+
+onMounted(() => document.addEventListener('mousedown', handleUserMenuOutside));
+onBeforeUnmount(() => document.removeEventListener('mousedown', handleUserMenuOutside));
 
 const visuallyExpanded = computed(() => !props.collapsed || hovered.value || props.open);
 
@@ -96,11 +108,44 @@ const initials = computed(() => {
             />
         </nav>
 
-        <!-- Fixed Sidebar Footer -->
-        <div class="shrink-0 overflow-hidden border-t border-gray-100 p-3">
-            <div class="flex items-center gap-2.5 overflow-hidden rounded p-1">
-                <div class="flex size-7 shrink-0 items-center justify-center rounded bg-teal-50 text-[11px] font-medium text-teal-700">
-                    {{ initials }}
+        <!-- Fixed Sidebar Footer (User Dropup) -->
+        <div ref="userMenuRef" class="relative shrink-0 border-t border-gray-100 p-3">
+            <div
+                v-if="userMenuOpen && visuallyExpanded"
+                class="absolute bottom-full left-3 right-3 z-50 mb-1 rounded border border-gray-200 bg-white py-1 shadow-lg"
+            >
+                <NuxtLink
+                    to="/profile"
+                    class="flex h-8 items-center gap-2 px-3 text-[12px] text-gray-700 hover:bg-gray-50"
+                    @click="userMenuOpen = false; emit('close')"
+                >
+                    <Icon name="lucide:user-cog" class="size-3.5 text-gray-500" />
+                    <span>Meu Perfil</span>
+                </NuxtLink>
+                <button
+                    type="button"
+                    class="flex h-8 w-full items-center gap-2 px-3 text-left text-[12px] text-rose-600 hover:bg-rose-50"
+                    @click="userMenuOpen = false; emit('logout')"
+                >
+                    <Icon name="lucide:log-out" class="size-3.5" />
+                    <span>Sair</span>
+                </button>
+            </div>
+
+            <button
+                id="btn-sidebar-user-menu"
+                type="button"
+                class="flex w-full items-center gap-2.5 overflow-hidden rounded p-1 text-left transition-colors hover:bg-gray-50"
+                @click="userMenuOpen = !userMenuOpen"
+            >
+                <div class="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-teal-50 text-[11px] font-medium text-teal-700">
+                    <img
+                        v-if="auth.user?.avatar_url"
+                        :src="auth.user.avatar_url"
+                        alt="Avatar"
+                        class="size-full object-cover"
+                    />
+                    <span v-else>{{ initials }}</span>
                 </div>
                 <div v-show="visuallyExpanded" class="min-w-0 flex-1 overflow-hidden whitespace-nowrap">
                     <div class="truncate text-[12px] font-normal text-gray-800">
@@ -110,16 +155,12 @@ const initials = computed(() => {
                         {{ auth.primaryRole }}
                     </div>
                 </div>
-                <button
+                <Icon
                     v-show="visuallyExpanded"
-                    type="button"
-                    title="Sair"
-                    class="flex size-7 shrink-0 items-center justify-center rounded text-gray-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
-                    @click="emit('logout')"
-                >
-                    <Icon name="lucide:log-out" class="size-3.5" />
-                </button>
-            </div>
+                    name="lucide:chevrons-up-down"
+                    class="size-3.5 shrink-0 text-gray-400"
+                />
+            </button>
         </div>
     </aside>
 </template>

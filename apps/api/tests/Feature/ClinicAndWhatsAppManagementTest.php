@@ -71,7 +71,7 @@ final class ClinicAndWhatsAppManagementTest extends TestCase
             'timezone' => 'UTC',
         ], ['X-Tenant-ID' => $tenantId])->assertForbidden();
 
-        // Clinic Admin can read full info & update editable settings
+        // Clinic Admin can read full info e update editable settings
         Sanctum::actingAs($admin);
         $this->putJson('/api/tenant/clinic', [
             'name' => 'Clinica Editada',

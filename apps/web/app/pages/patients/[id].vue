@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { toast } from 'vue3-toastify';
+import type { MedicalRecordApiItem } from '~/components/medical-records/MedicalRecordEditorDrawer.vue';
 import { useAuthStore } from '~/stores/auth';
 import { apiRequest } from '~/utils/api';
 
@@ -21,7 +22,11 @@ const patientId = computed(() => String(route.params.id));
 const activeTab = ref<PatientTabId>(resolveTabFromQuery(route.query.tab));
 
 const patient = ref<any>(null);
-const medicalRecords = ref<any[]>([]);
+const medicalRecords = ref<MedicalRecordApiItem[]>([]);
+const professionals = ref<Array<{ id: string; name: string; specialty?: string }>>([]);
+const recordEditorOpen = ref(false);
+const editingRecord = ref<MedicalRecordApiItem | null>(null);
+const editPatientModalOpen = ref(false);
 const messages = ref<any[]>([]);
 const messagesPage = ref(1);
 const hasMoreMessages = ref(false);
@@ -42,7 +47,7 @@ const tabs = computed(() =>
     [
         { id: 'appointments', label: 'Histórico de Atendimentos', icon: 'lucide:calendar-days', visible: true },
         { id: 'records', label: 'Prontuário SOAP', icon: 'lucide:file-text', visible: auth.can('medical_records.view') },
-        { id: 'files', label: 'Arquivos & Exames', icon: 'lucide:folder', visible: auth.can('files.view') },
+        { id: 'files', label: 'Arquivos e Exames', icon: 'lucide:folder', visible: auth.can('files.view') },
         { id: 'messages', label: 'Mensagens', icon: 'lucide:message-circle', visible: true },
         { id: 'internal-note', label: 'Nota Interna', icon: 'lucide:lock', visible: true },
     ].filter((t) => t.visible),
@@ -171,16 +176,45 @@ async function loadClinicTimezone(): Promise<void> {
     }
 }
 
+async function loadProfessionalsIfAllowed(): Promise<void> {
+    if (!auth.tenantId) return;
+    const canSelectOther =
+        auth.can('medical_records.create_on_behalf')
+        || auth.primaryRole === 'CLINIC_ADMIN'
+        || auth.primaryRole === 'SUPER_ADMIN';
+    if (!canSelectOther) return;
+    try {
+        const res = await apiRequest<{ data: Array<{ id: string; name: string; specialty?: string }> }>(
+            '/api/tenant/professionals',
+            { tenantId: auth.tenantId },
+        );
+        professionals.value = res.data ?? [];
+    } catch {
+        // Ignore
+    }
+}
+
+function openNewPatientRecord(): void {
+    editingRecord.value = null;
+    recordEditorOpen.value = true;
+}
+
+function openExistingPatientRecord(rec: MedicalRecordApiItem): void {
+    editingRecord.value = rec;
+    recordEditorOpen.value = true;
+}
+
 async function loadPatient(): Promise<void> {
     if (!auth.tenantId) return;
     loading.value = true;
     try {
         const [res] = await Promise.all([
-            apiRequest<{ data: any; medical_records: any[]; has_internal_note: boolean }>(
+            apiRequest<{ data: any; medical_records: MedicalRecordApiItem[]; has_internal_note: boolean }>(
                 `/api/tenant/patients/${patientId.value}`,
                 { tenantId: auth.tenantId },
             ),
             loadClinicTimezone(),
+            loadProfessionalsIfAllowed(),
         ]);
         patient.value = res.data;
         medicalRecords.value = res.medical_records ?? [];
@@ -210,8 +244,10 @@ onMounted(loadPatient);
             <div v-if="patient" class="flex items-center gap-2">
                 <button
                     v-if="auth.can('patients.update')"
+                    id="btn-edit-patient"
                     type="button"
                     class="inline-flex h-8 items-center gap-1.5 rounded border border-gray-200 bg-white px-2.5 text-[12px] text-gray-700 hover:bg-gray-50"
+                    @click="editPatientModalOpen = true"
                 >
                     <Icon name="lucide:pencil" class="size-3.5" />
                     <span>Editar</span>
@@ -290,8 +326,37 @@ onMounted(loadPatient);
                     </div>
                     <div class="mt-1.5 flex flex-wrap items-center gap-4 text-[11px] text-gray-500">
                         <span>Telefone: <strong class="font-normal text-gray-700">{{ patient.phone }}</strong></span>
+                        <span v-if="patient.metadata?.secondary_phone">
+                            Tel. 2: <strong class="font-normal text-gray-700">{{ patient.metadata.secondary_phone }}</strong>
+                        </span>
                         <span>E-mail: <strong class="font-normal text-gray-700">{{ patient.email || '—' }}</strong></span>
                         <span>CPF: <strong class="font-normal text-gray-700">{{ patient.tax_id || '—' }}</strong></span>
+                        <span v-if="patient.birth_date">
+                            Nascimento: <strong class="font-normal text-gray-700">{{ String(patient.birth_date).slice(0, 10) }}</strong>
+                        </span>
+                        <span v-if="patient.metadata?.gender && patient.metadata.gender !== 'UNINFORMED'">
+                            Sexo: <strong class="font-normal text-gray-700">{{ patient.metadata.gender === 'F' ? 'Feminino' : patient.metadata.gender === 'M' ? 'Masculino' : 'Não informado' }}</strong>
+                        </span>
+                    </div>
+                    <div
+                        v-if="patient.metadata?.address?.street || patient.metadata?.address?.city"
+                        class="mt-1 text-[11px] text-gray-500"
+                    >
+                        Endereço:
+                        <strong class="font-normal text-gray-700">
+                            {{
+                                [
+                                    patient.metadata.address.street,
+                                    patient.metadata.address.number,
+                                    patient.metadata.address.complement,
+                                    patient.metadata.address.neighborhood,
+                                    patient.metadata.address.city,
+                                    patient.metadata.address.state,
+                                ]
+                                    .filter(Boolean)
+                                    .join(', ')
+                            }}
+                        </strong>
                     </div>
                 </div>
             </div>
@@ -329,7 +394,7 @@ onMounted(loadPatient);
                     class="flex items-center justify-between py-2.5"
                 >
                     <div>
-                        <div class="text-gray-800">{{ apt.professional?.name || 'Profissional' }} · {{ apt.room?.name || 'Consultório' }}</div>
+                        <div class="text-gray-800">{{ apt.professional?.name || 'Profissional' }} · {{ apt.clinic_room?.name || apt.room?.name || 'Consultório' }}</div>
                         <div class="font-mono text-[10px] text-gray-400">{{ apt.start_time_utc }}</div>
                     </div>
                     <span class="rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] text-gray-700">{{ apt.status }}</span>
@@ -339,25 +404,65 @@ onMounted(loadPatient);
 
         <!-- Tab: SOAP Medical Records -->
         <div v-else-if="activeTab === 'records'" class="rounded border border-gray-200 bg-white p-4">
-            <h2 class="mb-3 text-[13px] font-normal text-gray-900">Prontuário SOAP</h2>
+            <div class="mb-3 flex items-center justify-between gap-2">
+                <h2 class="text-[13px] font-normal text-gray-900">Prontuário &amp; Evoluções</h2>
+                <button
+                    v-if="auth.can('medical_records.create')"
+                    type="button"
+                    class="inline-flex h-7 items-center gap-1.5 rounded bg-teal-600 px-2.5 text-[11px] text-white hover:bg-teal-700"
+                    @click="openNewPatientRecord"
+                >
+                    <Icon name="lucide:plus" class="size-3" />
+                    <span>Nova evolução</span>
+                </button>
+            </div>
             <div v-if="medicalRecords.length === 0" class="py-8 text-center text-[12px] text-gray-400">
                 Nenhuma evolução clínica registrada.
             </div>
             <div v-else class="divide-y divide-gray-100 text-[12px]">
-                <div v-for="rec in medicalRecords" :key="rec.id" class="py-2.5">
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-900">{{ rec.title }}</span>
-                        <span class="rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] text-gray-600">{{ rec.visibility }}</span>
+                <div v-for="rec in medicalRecords" :key="rec.id" class="flex flex-wrap items-center justify-between gap-2 py-2.5">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span
+                                class="rounded border px-1.5 py-0.5 text-[10px]"
+                                :class="
+                                    rec.status === 'DRAFT'
+                                        ? 'border-amber-200 bg-amber-50 text-amber-700'
+                                        : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                "
+                            >
+                                {{ rec.status === 'DRAFT' ? 'Rascunho' : 'Finalizado' }}
+                            </span>
+                            <span class="text-gray-900">{{ rec.title }}</span>
+                            <span class="rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] text-gray-600">{{ rec.visibility }}</span>
+                        </div>
+                        <div class="mt-0.5 text-[11px] text-gray-400">
+                            Profissional: {{ rec.professional?.name || 'Profissional' }}
+                            <span v-if="rec.created_by?.name"> · Inserido por: {{ rec.created_by.name }}</span>
+                        </div>
                     </div>
-                    <div class="mt-0.5 text-[11px] text-gray-400">Autor: {{ rec.author?.name || 'Profissional' }}</div>
+                    <button
+                        type="button"
+                        class="inline-flex h-7 items-center gap-1 rounded border px-2 text-[11px]"
+                        :class="
+                            rec.status === 'DRAFT'
+                                ? 'border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100'
+                                : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                        "
+                        @click="openExistingPatientRecord(rec)"
+                    >
+                        <Icon :name="rec.status === 'DRAFT' ? 'lucide:pencil' : 'lucide:eye'" class="size-3" />
+                        <span>{{ rec.status === 'DRAFT' ? 'Continuar rascunho' : 'Visualizar / Adendo' }}</span>
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Tab: Files -->
-        <div v-else-if="activeTab === 'files'" class="rounded border border-gray-200 bg-white p-4 text-[12px] text-gray-500">
-            Nenhum arquivo ou exame anexado recentemente.
-        </div>
+        <PatientsPatientFilesTab
+            v-else-if="activeTab === 'files'"
+            :patient-id="patientId"
+        />
 
         <!-- Tab: Messages History -->
         <div v-else-if="activeTab === 'messages'" class="rounded border border-gray-200 bg-white p-4">
@@ -458,6 +563,24 @@ onMounted(loadPatient);
             :default-timezone="clinicTimezone"
             @close="sendMessageModalOpen = false"
             @sent="handleMessageSent"
+        />
+
+        <MedicalRecordsMedicalRecordEditorDrawer
+            v-if="patient"
+            :open="recordEditorOpen"
+            :record="editingRecord"
+            :professionals="professionals"
+            :fixed-patient="{ id: patient.id, name: patient.name }"
+            @close="recordEditorOpen = false"
+            @saved="loadPatient"
+        />
+
+        <PatientsPatientEditModal
+            v-if="patient"
+            :open="editPatientModalOpen"
+            :patient="patient"
+            @close="editPatientModalOpen = false"
+            @saved="loadPatient"
         />
 
         <UiModal

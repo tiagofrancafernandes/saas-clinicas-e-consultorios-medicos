@@ -24,7 +24,7 @@ const breadcrumbLabel = computed(() => {
         return 'Assinaturas e Planos';
     }
     if (path.startsWith('/users')) {
-        return 'Usuários & ACL';
+        return 'Usuários e ACL';
     }
     if (path.startsWith('/audit-logs')) {
         return 'Auditoria Central';

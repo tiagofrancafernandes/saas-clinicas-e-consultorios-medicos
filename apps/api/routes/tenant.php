@@ -34,13 +34,13 @@ Route::middleware([
     Route::get('/', fn (): string => 'Multi-tenant clinic portal. Tenant: ' . tenant('id'));
 });
 
-// REST API routes with header identification & subscription enforcement
+// REST API routes with header identification e subscription enforcement
 Route::prefix('api/tenant')->middleware([
     'api',
     InitializeTenancyByHeader::class,
     CheckTenantSubscription::class,
 ])->group(function (): void {
-    // Public Fast Action Tokens & Patient OTP Passwordless Auth
+    // Public Fast Action Tokens e Patient OTP Passwordless Auth
     Route::get('/tokens/{token}', [AppointmentTokenController::class, 'show']);
     Route::post('/tokens/{token}/consume', [AppointmentTokenController::class, 'consume']);
     Route::post('/auth/otp/request', [PatientAuthController::class, 'requestOtp']);
@@ -50,17 +50,25 @@ Route::prefix('api/tenant')->middleware([
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/auth/me', [PatientAuthController::class, 'me']);
 
-        // Clinic User & Permission Management (ACL)
+        // Clinic User e Permission Management (ACL)
         Route::get('/permissions', [UserManagementController::class, 'permissionsCatalog'])
             ->middleware('permission:' . PermissionName::USERS_VIEW->value);
         Route::get('/users', [UserManagementController::class, 'index'])
             ->middleware('permission:' . PermissionName::USERS_VIEW->value);
+        Route::get('/users/{userId}', [UserManagementController::class, 'show'])
+            ->middleware('permission:' . PermissionName::USERS_VIEW->value);
         Route::post('/users', [UserManagementController::class, 'store'])
             ->middleware('permission:' . PermissionName::USERS_CREATE->value);
+        Route::put('/users/{userId}', [UserManagementController::class, 'update'])
+            ->middleware('permission:' . PermissionName::USERS_UPDATE->value);
         Route::put('/users/{userId}/permissions', [UserManagementController::class, 'updatePermissions'])
             ->middleware('permission:' . PermissionName::USERS_PERMISSIONS_ASSIGN->value);
+        Route::post('/users/{userId}/toggle-active', [UserManagementController::class, 'toggleActive'])
+            ->middleware('permission:' . PermissionName::USERS_UPDATE->value);
+        Route::post('/users/{userId}/send-password-reset', [UserManagementController::class, 'sendPasswordReset'])
+            ->middleware('permission:' . PermissionName::USERS_UPDATE->value);
 
-        // Availability, Professionals, Unavailabilities & Appointments
+        // Availability, Professionals, Unavailabilities e Appointments
         Route::get('/professionals', [ProfessionalController::class, 'index'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_VIEW->value);
         Route::get('/clinic-rooms', [ProfessionalController::class, 'rooms'])
@@ -88,7 +96,15 @@ Route::prefix('api/tenant')->middleware([
         Route::post('/appointments/{id}/summon', [AppointmentController::class, 'summon'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_SUMMON->value);
 
-        // Medical Records & Delegations
+        // Medical Records e Delegations
+        Route::get('/medical-records', [MedicalRecordController::class, 'list'])
+            ->middleware('permission:' . PermissionName::MEDICAL_RECORDS_VIEW->value);
+        Route::get('/medical-records/{recordId}', [MedicalRecordController::class, 'showRecord'])
+            ->middleware('permission:' . PermissionName::MEDICAL_RECORDS_VIEW->value);
+        Route::put('/medical-records/{recordId}', [MedicalRecordController::class, 'update'])
+            ->middleware('permission:' . PermissionName::MEDICAL_RECORDS_CREATE->value);
+        Route::post('/medical-records/{recordId}/finalize', [MedicalRecordController::class, 'finalize'])
+            ->middleware('permission:' . PermissionName::MEDICAL_RECORDS_CREATE->value);
         Route::get('/patients/{patientId}/medical-records', [MedicalRecordController::class, 'index'])
             ->middleware('permission:' . PermissionName::MEDICAL_RECORDS_VIEW->value);
         Route::post('/patients/{patientId}/medical-records', [MedicalRecordController::class, 'store'])
@@ -98,10 +114,14 @@ Route::prefix('api/tenant')->middleware([
         Route::post('/delegations', [ProfessionalDelegationController::class, 'store'])
             ->middleware('permission:' . PermissionName::DELEGATIONS_MANAGE->value);
 
-        // Patient Documents & Files
+        // Patient Documents e Files
         Route::get('/patients/{patientId}/files', [FileController::class, 'index'])
             ->middleware('permission:' . PermissionName::FILES_VIEW->value);
         Route::post('/patients/{patientId}/files', [FileController::class, 'store'])
+            ->middleware('permission:' . PermissionName::FILES_UPLOAD->value);
+        Route::get('/patients/{patientId}/files/{fileId}/download', [FileController::class, 'download'])
+            ->middleware('permission:' . PermissionName::FILES_VIEW->value);
+        Route::delete('/patients/{patientId}/files/{fileId}', [FileController::class, 'destroy'])
             ->middleware('permission:' . PermissionName::FILES_UPLOAD->value);
 
         // Smart Waitlist
@@ -125,13 +145,15 @@ Route::prefix('api/tenant')->middleware([
         Route::post('/whatsapp/instances/{instanceId}/send-test', [TenantWhatsAppManagementController::class, 'sendTest'])
             ->middleware('permission:' . PermissionName::CLINIC_SETTINGS_MANAGE->value);
 
-        // Patients & WhatsApp Number Verification
+        // Patients e WhatsApp Number Verification
         Route::get('/patients', [PatientController::class, 'index'])
             ->middleware('permission:' . PermissionName::PATIENTS_VIEW->value);
         Route::post('/patients', [PatientController::class, 'store'])
             ->middleware('permission:' . PermissionName::PATIENTS_CREATE->value);
         Route::get('/patients/{patientId}', [PatientController::class, 'show'])
             ->middleware('permission:' . PermissionName::PATIENTS_VIEW->value);
+        Route::put('/patients/{patientId}', [PatientController::class, 'update'])
+            ->middleware('permission:' . PermissionName::PATIENTS_UPDATE->value);
         Route::post('/patients/{patientId}/internal-note/reveal', [PatientController::class, 'revealInternalNote'])
             ->middleware('permission:' . PermissionName::PATIENTS_VIEW->value);
         Route::put('/patients/{patientId}/internal-note', [PatientController::class, 'updateInternalNote'])

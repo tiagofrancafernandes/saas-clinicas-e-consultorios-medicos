@@ -31,6 +31,14 @@ function getOperatorLabel(cond: FilterCondition): string {
 }
 
 function getValueLabel(cond: FilterCondition): string {
+    if (cond.operator === 'between') {
+        const start = String(cond.value ?? '').trim();
+        const end = String(cond.valueEnd ?? '').trim();
+        if (start && end) return `de ${start} até ${end}`;
+        if (start) return `a partir de ${start}`;
+        if (end) return `até ${end}`;
+        return '';
+    }
     const field = getField(cond);
     if (field?.options) {
         return field.options.find((opt) => String(opt.value) === String(cond.value))?.label ?? '';
@@ -43,6 +51,7 @@ function changeField(cond: FilterCondition, fieldKey: string): void {
     const ops = getOperatorsForField(getField(cond));
     cond.operator = ops[0]?.value ?? 'contains';
     cond.value = '';
+    cond.valueEnd = '';
     openDropdown.value = null;
 }
 
@@ -171,6 +180,23 @@ function removeCondition(id: string): void {
                                     <Icon v-if="String(cond.value) === String(opt.value)" name="lucide:check" class="size-3 text-teal-600" />
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- Date Range (between) -->
+                        <div v-else-if="cond.operator === 'between'" class="flex flex-1 items-center gap-1.5">
+                            <input
+                                v-model="cond.value"
+                                type="date"
+                                title="Data inicial"
+                                class="h-8 min-w-[130px] flex-1 rounded border border-gray-200 bg-white px-2 text-[12px] text-gray-800 focus:border-gray-400"
+                            />
+                            <span class="text-[11px] text-gray-400">até</span>
+                            <input
+                                v-model="cond.valueEnd"
+                                type="date"
+                                title="Data final"
+                                class="h-8 min-w-[130px] flex-1 rounded border border-gray-200 bg-white px-2 text-[12px] text-gray-800 focus:border-gray-400"
+                            />
                         </div>
 
                         <!-- Text / Number / Date input -->

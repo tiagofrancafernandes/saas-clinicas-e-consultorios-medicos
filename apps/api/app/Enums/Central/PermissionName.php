@@ -11,7 +11,7 @@ enum PermissionName: string
     case WHATSAPP_MANAGE = 'whatsapp.manage';
     case CENTRAL_AUDIT_VIEW = 'central_audit.view';
 
-    // Users & ACL
+    // Users e ACL
     case USERS_VIEW = 'users.view';
     case USERS_CREATE = 'users.create';
     case USERS_UPDATE = 'users.update';
@@ -22,7 +22,7 @@ enum PermissionName: string
     case PATIENTS_CREATE = 'patients.create';
     case PATIENTS_UPDATE = 'patients.update';
 
-    // Appointments & Waitlist
+    // Appointments e Waitlist
     case APPOINTMENTS_VIEW = 'appointments.view';
     case APPOINTMENTS_CREATE = 'appointments.create';
     case APPOINTMENTS_CANCEL = 'appointments.cancel';
@@ -30,13 +30,17 @@ enum PermissionName: string
     case WAITLIST_VIEW = 'waitlist.view';
     case WAITLIST_MANAGE = 'waitlist.manage';
 
-    // Medical Records & Files
+    // Medical Records e Files
     case MEDICAL_RECORDS_VIEW = 'medical_records.view';
     case MEDICAL_RECORDS_CREATE = 'medical_records.create';
+    case MEDICAL_RECORDS_CREATE_ON_BEHALF = 'medical_records.create_on_behalf';
     case DELEGATIONS_MANAGE = 'delegations.manage';
     case FILES_VIEW = 'files.view';
     case FILES_UPLOAD = 'files.upload';
 
     // Clinic Settings
     case CLINIC_SETTINGS_MANAGE = 'clinic.settings.manage';
+
+    // Profile
+    case PROFILE_IDENTITY_UPDATE = 'profile.identity.update';
 }

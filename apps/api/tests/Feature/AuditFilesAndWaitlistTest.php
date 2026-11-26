@@ -27,7 +27,7 @@ final class AuditFilesAndWaitlistTest extends TestCase
         $tenantId = (string) Str::uuid();
         $this->tenant = Tenant::create([
             'id' => $tenantId,
-            'name' => 'Audit & Files Test Clinic',
+            'name' => 'Audit e Files Test Clinic',
             'slug' => 'clinic-' . substr($tenantId, 0, 6),
             'timezone' => 'America/Sao_Paulo',
         ]);

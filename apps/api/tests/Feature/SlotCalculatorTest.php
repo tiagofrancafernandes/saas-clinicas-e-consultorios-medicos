@@ -48,7 +48,7 @@ final class SlotCalculatorTest extends TestCase
 
         $tenant->run(function (): void {
             $professional = Professional::create([
-                'name' => 'Dr. Amanda Stone',
+                'name' => 'Dra. Lisa Cuddy',
                 'specialty' => 'Dermatology',
                 'license_number' => 'CRM-99881',
             ]);

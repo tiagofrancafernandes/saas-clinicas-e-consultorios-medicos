@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Central\Tenant;
+use App\Models\Tenant\Professional;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthController
@@ -25,6 +28,12 @@ final class AuthController
             return new JsonResponse([
                 'message' => 'Invalid credentials.',
             ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (! $user->is_active) {
+            return new JsonResponse([
+                'message' => 'This account is inactive. Please contact your clinic administrator.',
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
@@ -57,11 +66,28 @@ final class AuthController
      */
     private function formatUser(User $user): array
     {
+        $professionalId = null;
+
+        if ($user->tenant_id !== null) {
+            $tenant = Tenant::query()->find($user->tenant_id);
+
+            if ($tenant !== null) {
+                $professionalId = $tenant->run(
+                    static fn (): ?string => Professional::query()
+                        ->where('user_id', (string) $user->id)
+                        ->value('id')
+                );
+            }
+        }
+
         return [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'tenant_id' => $user->tenant_id,
+            'is_active' => (bool) $user->is_active,
+            'avatar_url' => $user->avatar_path ? Storage::disk('public')->url($user->avatar_path) : null,
+            'professional_id' => $professionalId,
             'roles' => $user->getRoleNames()->values()->all(),
             'direct_permissions' => $user->getDirectPermissions()->pluck('name')->values()->all(),
             'all_permissions' => $user->getAllPermissions()->pluck('name')->values()->all(),

@@ -22,6 +22,7 @@ export interface FilterCondition {
     field: string;
     operator: string;
     value: string | boolean;
+    valueEnd?: string;
 }
 
 export interface TableColumn {

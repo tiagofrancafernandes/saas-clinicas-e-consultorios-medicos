@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { toast } from 'vue3-toastify';
 import type { AppointmentModalInitialData } from '~/components/appointments/AppointmentBookingModal.vue';
+import type { TypeaheadOption } from '~/components/ui/UiTypeaheadSelect.vue';
 import { useAuthStore } from '~/stores/auth';
 import { apiRequest } from '~/utils/api';
 import { formatUtcInTimezone, getDatePartsInTimezone } from '~/utils/timezone';
@@ -24,6 +25,9 @@ const currentDate = ref<string>(
 );
 const selectedProfessionalId = ref<string>(
     typeof route.query.professional_id === 'string' ? route.query.professional_id : '',
+);
+const selectedPatientId = ref<string>(
+    typeof route.query.patient_id === 'string' ? route.query.patient_id : '',
 );
 const selectedStatus = ref<string>('');
 
@@ -117,8 +121,24 @@ function syncUrl(): void {
             view: viewMode.value,
             date: currentDate.value,
             ...(selectedProfessionalId.value ? { professional_id: selectedProfessionalId.value } : { professional_id: undefined }),
+            ...(selectedPatientId.value ? { patient_id: selectedPatientId.value } : { patient_id: undefined }),
         },
     });
+}
+
+async function searchPatients(searchQuery: string): Promise<TypeaheadOption[]> {
+    if (!auth.tenantId) return [];
+    const params = new URLSearchParams({ limit: '20' });
+    if (searchQuery) params.set('search', searchQuery);
+    const res = await apiRequest<{ data: Array<{ id: string; name: string; phone?: string; email?: string }> }>(
+        `/api/tenant/patients?${params.toString()}`,
+        { tenantId: auth.tenantId },
+    );
+    return (res.data ?? []).map((p) => ({
+        value: p.id,
+        label: p.name,
+        description: p.phone || p.email || undefined,
+    }));
 }
 
 function navigatePeriod(direction: -1 | 0 | 1): void {
@@ -178,6 +198,7 @@ async function loadSchedule(): Promise<void> {
             per_page: '200',
         });
         if (selectedProfessionalId.value) apptParams.set('professional_id', selectedProfessionalId.value);
+        if (selectedPatientId.value) apptParams.set('patient_id', selectedPatientId.value);
         if (selectedStatus.value) apptParams.set('status', selectedStatus.value);
 
         const blockParams = new URLSearchParams({
@@ -231,7 +252,7 @@ watch(
     { immediate: true },
 );
 
-watch([viewMode, currentDate, selectedProfessionalId, selectedStatus], () => {
+watch([viewMode, currentDate, selectedProfessionalId, selectedPatientId, selectedStatus], () => {
     syncUrl();
     if (auth.tenantId) {
         loadSchedule();
@@ -345,10 +366,10 @@ function statusBadgeClass(status: string): string {
 
 <template>
     <div class="space-y-4">
-        <!-- Header & Actions -->
+        <!-- Header e Actions -->
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-[18px] font-normal text-gray-900">Agenda & Agendamentos</h1>
+                <h1 class="text-[18px] font-normal text-gray-900">Agenda e Agendamentos</h1>
                 <p class="text-[12px] text-gray-500">
                     Fuso horário da clínica: <span class="font-mono text-gray-700">{{ clinicTimezone }}</span>
                 </p>
@@ -408,15 +429,26 @@ function statusBadgeClass(status: string): string {
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <select
-                    v-model="selectedProfessionalId"
-                    class="h-8 rounded border border-gray-200 bg-white px-2.5 text-[12px] text-gray-700"
-                >
-                    <option value="">Todos os profissionais</option>
-                    <option v-for="prof in professionals" :key="prof.id" :value="prof.id">
-                        {{ prof.name }}
-                    </option>
-                </select>
+                <div class="w-56">
+                    <UiTypeaheadSelect
+                        :model-value="selectedProfessionalId || null"
+                        :options="professionals.map((prof) => ({ value: prof.id, label: prof.name, description: prof.specialty || undefined }))"
+                        placeholder="Todos os profissionais"
+                        empty-text="Nenhum profissional encontrado."
+                        @update:model-value="selectedProfessionalId = $event ? String($event) : ''"
+                    />
+                </div>
+
+                <div class="w-56">
+                    <UiTypeaheadSelect
+                        :model-value="selectedPatientId || null"
+                        :preload="Boolean(auth.tenantId)"
+                        :fetch-options="searchPatients"
+                        placeholder="Todos os pacientes"
+                        empty-text="Nenhum paciente encontrado."
+                        @update:model-value="selectedPatientId = $event ? String($event) : ''"
+                    />
+                </div>
 
                 <select
                     v-model="selectedStatus"
@@ -434,7 +466,7 @@ function statusBadgeClass(status: string): string {
 
         <!-- DAY VIEW -->
         <div v-if="viewMode === 'day'" class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <!-- Left 2 cols: Appointments & Blocks -->
+            <!-- Left 2 cols: Appointments e Blocks -->
             <div class="space-y-3 lg:col-span-2">
                 <div v-if="blocksOnDate(currentDate).length > 0" class="space-y-1.5">
                     <div

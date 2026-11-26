@@ -97,10 +97,13 @@ final class DevClinicSeeder extends Seeder
                 'is_active' => true,
             ]);
 
+            $proUserId = User::query()->where('email', 'pro1@clinica1.com')->value('id');
+
             // Professionals
             $drCarter = Professional::create([
                 'id' => static::DEMO_DR_CARTER_ID,
-                'name' => 'Dr. Robert Carter',
+                'user_id' => $proUserId !== null ? (string) $proUserId : null,
+                'name' => 'Dr. James Wilson',
                 'specialty' => 'Neurology',
                 'license_number' => 'CRM/SP 123456',
                 'color_code' => '#2563eb',
@@ -109,7 +112,7 @@ final class DevClinicSeeder extends Seeder
 
             $drStone = Professional::create([
                 'id' => static::DEMO_DR_STONE_ID,
-                'name' => 'Dr. Amanda Stone',
+                'name' => 'Dra. Lisa Cuddy',
                 'specialty' => 'Dermatology',
                 'license_number' => 'CRM/SP 654321',
                 'color_code' => '#059669',
@@ -140,7 +143,7 @@ final class DevClinicSeeder extends Seeder
                 }
             }
 
-            // Health insurances & plans
+            // Health insurances e plans
             $unimed = HealthInsurance::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'Unimed Seguros',
@@ -262,7 +265,7 @@ final class DevClinicSeeder extends Seeder
                 'notes' => 'Patient requested initial consultation for migraine study',
             ]);
 
-            // Fast action confirmation token (pre-seeded for demo requests & portal)
+            // Fast action confirmation token (pre-seeded for demo requests e portal)
             AppointmentToken::create([
                 'id' => (string) Str::uuid(),
                 'appointment_id' => $demoAppointment->id,

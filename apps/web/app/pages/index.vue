@@ -27,7 +27,7 @@ const quickModules = computed(() =>
             permission: 'medical_records.view',
         },
         {
-            title: 'Usuários & Permissões',
+            title: 'Usuários e Permissões',
             desc: 'Papéis e permissões individuais (ACL)',
             to: '/users',
             icon: 'lucide:key-round',

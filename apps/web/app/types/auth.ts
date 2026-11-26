@@ -5,6 +5,9 @@ export interface AuthUser {
     name: string;
     email: string;
     tenant_id: string | null;
+    is_active?: boolean;
+    avatar_url?: string | null;
+    professional_id?: string | null;
     roles: string[];
     direct_permissions?: string[];
     all_permissions: string[];

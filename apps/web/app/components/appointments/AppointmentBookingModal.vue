@@ -255,7 +255,7 @@ async function handleSubmit(): Promise<void> {
     <UiModal
         :open="props.open"
         :title="props.initialData?.mode === 'reschedule' ? 'Remarcar Agendamento' : 'Novo Agendamento'"
-        max-width="xl"
+        max-width="2xl"
         @close="!saving && emit('close')"
     >
         <form class="space-y-3 text-[12px]" @submit.prevent="handleSubmit">
@@ -281,17 +281,15 @@ async function handleSubmit(): Promise<void> {
             <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <div>
                     <label class="mb-1 block text-[11px] text-gray-600">Profissional</label>
-                    <select
-                        v-model="form.professional_id"
+                    <UiTypeaheadSelect
+                        :model-value="form.professional_id || null"
+                        :options="props.professionals.map((prof) => ({ value: prof.id, label: prof.name, description: prof.specialty || undefined }))"
                         :disabled="props.initialData?.mode === 'reschedule'"
+                        placeholder="Selecione o profissional..."
+                        empty-text="Nenhum profissional encontrado."
                         required
-                        class="h-8 w-full rounded border border-gray-200 bg-white px-2 text-[12px] disabled:bg-gray-50"
-                    >
-                        <option value="" disabled>Selecione o profissional...</option>
-                        <option v-for="prof in props.professionals" :key="prof.id" :value="prof.id">
-                            {{ prof.name }} {{ prof.specialty ? `· ${prof.specialty}` : '' }}
-                        </option>
-                    </select>
+                        @update:model-value="form.professional_id = $event ? String($event) : ''"
+                    />
                 </div>
 
                 <div>

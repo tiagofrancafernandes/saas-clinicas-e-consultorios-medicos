@@ -79,5 +79,30 @@ final class PatientSearchTest extends TestCase
         $this->getJson('/api/tenant/patients?limit=2', ['X-Tenant-ID' => $tenant->id])
             ->assertOk()
             ->assertJsonCount(2, 'data');
+
+        // 4. Update patient demographics, secondary phone, gender, and address
+        $targetId = (string) $this->getJson('/api/tenant/patients?search=paula', ['X-Tenant-ID' => $tenant->id])->json('data.0.id');
+
+        $this->putJson("/api/tenant/patients/{$targetId}", [
+            'name' => 'Ana Paula Silva Atualizada',
+            'phone' => '5541999990001',
+            'secondary_phone' => '554133334444',
+            'email' => 'ana.nova@example.com',
+            'tax_id' => '111.222.333-44',
+            'birth_date' => '1990-04-15',
+            'gender' => 'F',
+            'address' => [
+                'zip_code' => '80000-000',
+                'street' => 'Rua XV de Novembro',
+                'number' => '100',
+                'city' => 'Curitiba',
+                'state' => 'PR',
+            ],
+        ], ['X-Tenant-ID' => $tenant->id])
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Ana Paula Silva Atualizada')
+            ->assertJsonPath('data.metadata.gender', 'F')
+            ->assertJsonPath('data.metadata.secondary_phone', '554133334444')
+            ->assertJsonPath('data.metadata.address.city', 'Curitiba');
     }
 }

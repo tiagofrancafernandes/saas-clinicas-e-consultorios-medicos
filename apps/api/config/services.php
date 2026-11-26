@@ -42,7 +42,7 @@ return [
         /**
          * For when you want to force a recipient (Useful for example for testing or local environment, demonstration or others)
          */
-        'forced_recipient_enabled' => env('EVOLUTION_API_FORCED_RECIPIENT_ENABLED', false),
-        'forced_recipient' => preg_replace('/\D+/', '', strval(env('EVOLUTION_API_FORCED_RECIPIENT', null))) ?: null,
+        'forced_recipient_enabled' => filter_var(env('EVOLUTION_API_FORCED_RECIPIENT_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
+        'forced_recipient' => preg_replace('/\D+/', '', (string) env('EVOLUTION_API_FORCED_RECIPIENT', '')) ?: null,
     ],
 ];

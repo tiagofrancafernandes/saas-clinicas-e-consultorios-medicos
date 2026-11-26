@@ -1,63 +1,66 @@
-@baseUrl = http://localhost:8000
+@baseUrl = http://localhost:8000/api
+@token = your-sanctum-token
 @tenantId = f47ac10b-58cc-4372-a567-0e02b2c3d479
-@patientId = 44444444-4444-4444-4444-444444444444
-@requesterProfessionalId = 11111111-1111-1111-1111-111111111111
-@professionalId = 11111111-1111-1111-1111-111111111111
-@recordId = 66666666-6666-6666-6666-666666666666
-@grantorProfessionalId = 11111111-1111-1111-1111-111111111111
-@granteeProfessionalId = 22222222-2222-2222-2222-222222222222
+@patientId = 00000000-0000-0000-0000-000000000000
+@recordId = 00000000-0000-0000-0000-000000000000
 
-### List Accessible Medical Records for a Patient
-# @prompt patientId The UUID of the patient
-# @prompt requesterProfessionalId The UUID of the viewing practitioner
-GET {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records?requester_professional_id={{requesterProfessionalId}}
+### List clinic medical records (with filters)
+GET {{baseUrl}}/tenant/medical-records?per_page=20&status=DRAFT
 Accept: application/json
+Authorization: Bearer {{token}}
 X-Tenant-ID: {{tenantId}}
 
-###
-
-### Create Confidential Clinical Note (Enforces Visibility Tiers: PRIVATE / SHARED_TEAM / PUBLIC_CLINIC)
-# @prompt patientId The UUID of the patient
-# @prompt professionalId The UUID of the authoring professional
-POST {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records
-Content-Type: application/json
+### Create medical record as DRAFT
+POST {{baseUrl}}/tenant/patients/{{patientId}}/medical-records
 Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
 X-Tenant-ID: {{tenantId}}
 
 {
-    "professional_id": "{{professionalId}}",
-    "title": "Neurological Assessment - Initial Exam",
-    "content": "Patient reports intermittent cephalalgia with photophobia. Cranial nerve examination intact. Prescribed prophylactic treatment.",
+    "title": "Sessão de Acompanhamento",
+    "type": "PSYCHOTHERAPY",
+    "status": "DRAFT",
     "visibility": "PRIVATE",
-    "type": "CLINICAL_NOTE"
+    "content": "Anotações iniciais durante o atendimento...",
+    "structured_data": {
+        "demand": "Relato de ansiedade",
+        "interventions": "Escuta ativa"
+    }
 }
 
-###
-
-### View Specific Confidential Medical Record (Authorized via Author or Active Delegation)
-# @prompt patientId The UUID of the patient
-# @prompt recordId The UUID of the medical record
-# @prompt requesterProfessionalId The UUID of the viewing practitioner
-GET {{baseUrl}}/api/tenant/patients/{{patientId}}/medical-records/{{recordId}}?requester_professional_id={{requesterProfessionalId}}
+### Auto-save / update DRAFT medical record
+PUT {{baseUrl}}/tenant/medical-records/{{recordId}}
 Accept: application/json
-X-Tenant-ID: {{tenantId}}
-
-###
-
-### Grant Temporary Professional Delegation (Covering Doctor Access Delegation)
-# @prompt grantorProfessionalId The author doctor granting access
-# @prompt granteeProfessionalId The substitute doctor receiving access
-# @prompt patientId The specific patient (or leave empty for all patients of grantor)
-POST {{baseUrl}}/api/tenant/delegations
 Content-Type: application/json
-Accept: application/json
+Authorization: Bearer {{token}}
 X-Tenant-ID: {{tenantId}}
 
 {
-    "grantor_professional_id": "{{grantorProfessionalId}}",
-    "grantee_professional_id": "{{granteeProfessionalId}}",
-    "patient_id": "{{patientId}}",
-    "starts_at_utc": "2026-10-15T00:00:00Z",
-    "ends_at_utc": "2026-10-17T23:59:59Z",
-    "reason": "Covering on-call shift during annual leave"
+    "title": "Sessão de Acompanhamento (Atualizado)",
+    "content": "Evolução registrada ao longo da sessão.",
+    "structured_data": {
+        "demand": "Relato de ansiedade",
+        "interventions": "Escuta ativa e respiração diafragmática"
+    }
+}
+
+### Finalize medical record (becomes immutable)
+POST {{baseUrl}}/tenant/medical-records/{{recordId}}/finalize
+Accept: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+### Add Addendum to finalized medical record
+POST {{baseUrl}}/tenant/patients/{{patientId}}/medical-records
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+{
+    "title": "Adendo pós-atendimento",
+    "parent_record_id": "{{recordId}}",
+    "visibility": "PRIVATE",
+    "content": "Complemento registrado após o encerramento."
 }

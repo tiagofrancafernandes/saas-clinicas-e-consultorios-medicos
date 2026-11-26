@@ -42,10 +42,20 @@ export interface ClinicUserRecord {
     name: string;
     email: string;
     tenant_id: string | null;
+    is_active: boolean;
+    created_at?: string | null;
+    email_verified_at?: string | null;
     roles: string[];
     role_permissions: string[];
     extra_permissions: string[];
     all_permissions: string[];
+    professional?: {
+        id: string;
+        name: string;
+        specialty: string;
+        license_number: string;
+        is_active: boolean;
+    } | null;
 }
 
 export interface WhatsAppInstanceSummary {

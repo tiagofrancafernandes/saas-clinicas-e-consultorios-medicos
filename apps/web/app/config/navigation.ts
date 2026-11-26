@@ -41,7 +41,7 @@ export const SIDEBAR_GROUPS: NavGroup[] = [
     },
     {
         id: 'clinical',
-        label: 'Pacientes & Clínico',
+        label: 'Pacientes e Clínico',
         icon: 'lucide:heart-pulse',
         children: [
             { label: 'Pacientes', to: '/patients', icon: 'lucide:users', permission: 'patients.view' },
@@ -53,7 +53,7 @@ export const SIDEBAR_GROUPS: NavGroup[] = [
         label: 'Administração',
         icon: 'lucide:shield-check',
         children: [
-            { label: 'Usuários & Permissões', to: '/users', icon: 'lucide:key-round', permission: 'users.view' },
+            { label: 'Usuários e Permissões', to: '/users', icon: 'lucide:key-round', permission: 'users.view' },
             { label: 'WhatsApp da Clínica', to: '/whatsapp', icon: 'lucide:message-circle', permission: 'clinic.settings.manage' },
             { label: 'Dados da Clínica', to: '/clinic', icon: 'lucide:building-2' },
         ],

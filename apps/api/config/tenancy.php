@@ -59,7 +59,7 @@ return [
         'suffix' => '',
 
         /**
-         * TenantDatabaseManagers are classes that handle the creation & deletion of tenant databases.
+         * TenantDatabaseManagers are classes that handle the creation e deletion of tenant databases.
          */
         'managers' => [
             'sqlite' => SQLiteDatabaseManager::class,

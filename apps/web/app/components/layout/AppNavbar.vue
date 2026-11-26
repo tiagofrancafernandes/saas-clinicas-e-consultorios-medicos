@@ -13,7 +13,7 @@ const pageTitle = computed(() => {
         '/waitlist': 'Fila de Espera',
         '/patients': 'Pacientes',
         '/medical-records': 'Prontuários SOAP',
-        '/users': 'Usuários & Permissões',
+        '/users': 'Usuários e Permissões',
         '/clinic': 'Dados da Clínica',
     };
     return titles[route.path] ?? 'Clínica';

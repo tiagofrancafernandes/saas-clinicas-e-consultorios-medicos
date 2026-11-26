@@ -10,7 +10,7 @@ const activeView = ref<'action-token' | 'otp-login' | 'patient-dashboard'>('acti
 const tokenData = ref({
     token: 'sec_tok_99fa12b8478cd39',
     clinicName: 'Clinica Santa Monica',
-    doctorName: 'Dr. Robert Carter',
+    doctorName: 'Dr. James Wilson',
     specialty: 'Neurology',
     dateFormatted: 'Thursday, October 15, 2026',
     timeFormatted: '14:00 (UTC-3)',
@@ -33,7 +33,7 @@ function handleTokenCancel(): void {
 function handleTokenCheckin(): void {
     tokenData.value.status = 'ARRIVED';
     tokenData.value.message =
-        'Reception alerted! Dr. Robert Carter has been notified that you have arrived.';
+        'Reception alerted! Dr. James Wilson has been notified that you have arrived.';
 }
 
 // OTP Passwordless Login State
@@ -405,7 +405,7 @@ function handleLogout(): void {
                         </div>
                         <div class="p-3 bg-[#fbfbfa] rounded border border-[#dededb] flex items-center justify-between">
                             <div>
-                                <span class="text-xs font-medium text-[#1d1d1a] block">Dr. Robert Carter (Neurology)</span>
+                                <span class="text-xs font-medium text-[#1d1d1a] block">Dr. James Wilson (Neurology)</span>
                                 <span class="text-[11px] text-[#73736c]">Room 102 - Neurology Suite • October 15, 2026 at 14:00 (UTC-3)</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -434,7 +434,7 @@ function handleLogout(): void {
                                 <span class="text-[10px] text-[#73736c]">2026-10-14</span>
                             </div>
                             <p class="text-xs text-[#52524e]">
-                                Continuous oral medication prescribed by Dr. Robert Carter. Patient advised to avoid prolonged screen exposure after 20:00.
+                                Continuous oral medication prescribed by Dr. James Wilson. Patient advised to avoid prolonged screen exposure after 20:00.
                             </p>
                             <div class="text-[10px] text-emerald-700 font-medium">
                                 Validated with digital CRM/SP 123456 signature.

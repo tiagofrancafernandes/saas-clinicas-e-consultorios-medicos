@@ -1,6 +1,6 @@
 import type { AuthUser, LoginPayload } from '~/types/auth';
 
-type SanctumUserPayload = ({ user?: AuthUser } & Partial<AuthUser>) | null;
+type SanctumUserPayload = ({ user?: AuthUser } e Partial<AuthUser>) | null;
 
 export function useAuth() {
     const { isAuthenticated, login: sanctumLogin, logout: sanctumLogout, refreshIdentity } = useSanctumAuth();

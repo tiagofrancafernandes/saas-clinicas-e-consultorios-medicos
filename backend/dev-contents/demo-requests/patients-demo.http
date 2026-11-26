@@ -13,3 +13,29 @@ GET {{baseUrl}}/tenant/patients?search=silva&limit=20
 Accept: application/json
 Authorization: Bearer {{token}}
 X-Tenant-ID: {{tenantId}}
+
+### Update patient demographics and address
+PUT {{baseUrl}}/tenant/patients/{{patientId}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+X-Tenant-ID: {{tenantId}}
+
+{
+    "name": "Tiago França",
+    "phone": "5541984402684",
+    "secondary_phone": "554133334444",
+    "email": "tiago@example.com",
+    "tax_id": "123.456.789-00",
+    "birth_date": "1992-05-10",
+    "gender": "M",
+    "address": {
+        "zip_code": "80000-000",
+        "street": "Rua XV de Novembro",
+        "number": "100",
+        "complement": "Sala 12",
+        "neighborhood": "Centro",
+        "city": "Curitiba",
+        "state": "PR"
+    }
+}

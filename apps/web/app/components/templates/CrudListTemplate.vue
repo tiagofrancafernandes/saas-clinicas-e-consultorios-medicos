@@ -64,7 +64,7 @@ withDefaults(defineProps<Props>(), {
                 <slot name="card-extra" />
             </div>
 
-            <!-- Search & Filter Toolbar -->
+            <!-- Search e Filter Toolbar -->
             <div class="flex flex-wrap items-center gap-2 border-b border-gray-100 px-4 py-2.5 lg:px-5">
                 <div class="relative min-w-[180px] max-w-[320px] flex-1">
                     <Icon name="lucide:search" class="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-gray-400" />

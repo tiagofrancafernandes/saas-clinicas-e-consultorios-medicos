@@ -9,14 +9,16 @@ use App\Models\Tenant\File;
 use App\Models\Tenant\Patient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class FileController extends Controller
 {
     public function index(string $patientId): JsonResponse
     {
-        $patient = Patient::query()->find($patientId);
+        $patient = Str::isUuid($patientId) ? Patient::query()->find($patientId) : null;
 
         if (! $patient) {
             return response()->json([
@@ -41,7 +43,7 @@ final class FileController extends Controller
 
     public function store(Request $request, string $patientId): JsonResponse
     {
-        $patient = Patient::query()->find($patientId);
+        $patient = Str::isUuid($patientId) ? Patient::query()->find($patientId) : null;
 
         if (! $patient) {
             return response()->json([
@@ -100,5 +102,43 @@ final class FileController extends Controller
             'message' => 'File attached to patient record successfully.',
             'data' => $fileModel,
         ], Response::HTTP_CREATED);
+    }
+
+    public function download(string $patientId, string $fileId): StreamedResponse|JsonResponse
+    {
+        $file = Str::isUuid($patientId) && Str::isUuid($fileId)
+            ? File::query()
+                ->where('fileable_type', Patient::class)
+                ->where('fileable_id', $patientId)
+                ->find($fileId)
+            : null;
+
+        if (! $file) {
+            return response()->json(['message' => 'File not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (! Storage::disk($file->disk)->exists($file->file_path)) {
+            return response()->json(['message' => 'File content not available on storage disk.'], Response::HTTP_NOT_FOUND);
+        }
+
+        return Storage::disk($file->disk)->download($file->file_path, $file->original_filename);
+    }
+
+    public function destroy(string $patientId, string $fileId): JsonResponse
+    {
+        $file = Str::isUuid($patientId) && Str::isUuid($fileId)
+            ? File::query()
+                ->where('fileable_type', Patient::class)
+                ->where('fileable_id', $patientId)
+                ->find($fileId)
+            : null;
+
+        if (! $file) {
+            return response()->json(['message' => 'File not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $file->delete();
+
+        return response()->json(['message' => 'File removed successfully.']);
     }
 }

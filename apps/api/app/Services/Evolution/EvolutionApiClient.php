@@ -16,7 +16,7 @@ final class EvolutionApiClient
      */
     public function sendText(WhatsAppInstance $instance, string $number, string $text): array
     {
-        $sanitizedNumber = $this->normalizeNumber($number);
+        $sanitizedNumber = $this->resolveRecipientNumber($number);
         $url = $this->buildUrl($instance, 'message/sendText');
 
         $response = $this->request($instance)->post($url, [
@@ -105,15 +105,28 @@ final class EvolutionApiClient
         return "{$baseUrl}/{$endpoint}/{$encodedInstance}";
     }
 
-    private function normalizeNumber(string $number): string
+    private function resolveRecipientNumber(string $number): string
     {
-        $forcedRecipientEnabled = config('services.evolution_api.forced_recipient_enabled', false);
-        $forcedRecipient = config('services.evolution_api.forced_recipient');
+        $forcedRecipientEnabled = filter_var(
+            config('services.evolution_api.forced_recipient_enabled', false),
+            FILTER_VALIDATE_BOOLEAN
+        );
 
-        if ($forcedRecipientEnabled) {
-            $number = preg_replace('/\D+/', '', strval($forcedRecipient)) ?: '5541984402684';
+        if (! $forcedRecipientEnabled) {
+            return $this->normalizeNumber($number);
         }
 
+        $forcedRecipient = $this->normalizeNumber((string) config('services.evolution_api.forced_recipient', ''));
+
+        if ($forcedRecipient === '') {
+            throw new RuntimeException('Evolution API forced_recipient must be set when forced_recipient_enabled is true.');
+        }
+
+        return $forcedRecipient;
+    }
+
+    private function normalizeNumber(string $number): string
+    {
         return (string) preg_replace('/\D+/', '', $number);
     }
 }

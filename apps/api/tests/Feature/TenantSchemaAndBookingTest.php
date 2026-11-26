@@ -109,7 +109,7 @@ final class TenantSchemaAndBookingTest extends TestCase
 
         $tenant->run(function (): void {
             $professional = Professional::create([
-                'name' => 'Dr. Robert Carter',
+                'name' => 'Dr. James Wilson',
                 'specialty' => 'Neurology',
                 'license_number' => 'CRM-55443',
             ]);

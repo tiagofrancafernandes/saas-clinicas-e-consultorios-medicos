@@ -114,7 +114,7 @@ final class ScheduleBlockingAndValidationTest extends TestCase
             '*/message/sendText/*' => Http::response(['key' => ['id' => 'WA_NOTIF_1']], 201),
         ]);
 
-        // 1. Past date & invalid format rejected (422)
+        // 1. Past date e invalid format rejected (422)
         $this->postJson('/api/tenant/appointments', [
             'professional_id' => $professionalId,
             'patient_id' => $patientId,
