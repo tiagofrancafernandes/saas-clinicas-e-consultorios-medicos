@@ -151,7 +151,7 @@ function lockNote(): void {
             :open="passwordModalOpen"
             title="Confirmar Senha"
             description="Informe sua senha atual para acessar a nota interna confidencial."
-            max-width="sm"
+            max-width="lg"
             @close="passwordModalOpen = false"
         >
             <form class="space-y-3 text-[12px]" @submit.prevent="handleReveal">

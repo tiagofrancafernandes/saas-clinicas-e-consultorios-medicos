@@ -6,6 +6,10 @@
     "scripts": {
         "build": "turbo build",
         "dev": "turbo dev",
+        "dev:api": "cd apps/api && php artisan serve --host=0.0.0.0 --port=8000",
+        "dev:web": "pnpm --filter @saas/web dev",
+        "dev:super-admin": "pnpm --filter @saas/super-admin dev",
+        "dev:patient": "pnpm --filter @saas/patient dev",
         "lint": "turbo lint",
         "format": "prettier --write \"**/*.{js,ts,vue,json,md}\""
     },

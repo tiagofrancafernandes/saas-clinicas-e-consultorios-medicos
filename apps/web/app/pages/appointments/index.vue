@@ -15,6 +15,7 @@ const route = useRoute();
 const router = useRouter();
 
 const clinicTimezone = ref('America/Sao_Paulo');
+const todayDateStr = computed(() => getDatePartsInTimezone(new Date(), clinicTimezone.value).date);
 const viewMode = ref<CalendarView>(
     ['day', 'week', 'month'].includes(String(route.query.view)) ? (String(route.query.view) as CalendarView) : 'day',
 );
@@ -36,6 +37,13 @@ const rooms = ref<Array<{ id: string; name: string }>>([]);
 const appointments = ref<any[]>([]);
 const unavailabilities = ref<any[]>([]);
 const daySlots = ref<Array<{ start_time_utc: string; end_time_utc: string }>>([]);
+const visibleDaySlots = computed(() => {
+    if (currentDate.value !== todayDateStr.value) {
+        return daySlots.value;
+    }
+    const nowMs = Date.now();
+    return daySlots.value.filter((slot) => new Date(slot.start_time_utc).getTime() > nowMs);
+});
 const loading = ref(false);
 
 const bookingModalOpen = ref(false);
@@ -43,6 +51,8 @@ const bookingInitialData = ref<AppointmentModalInitialData | null>(null);
 const blockModalOpen = ref(false);
 const cancelTarget = ref<any | null>(null);
 const confirmTarget = ref<any | null>(null);
+const notifyTarget = ref<any | null>(null);
+const detailTarget = ref<any | null>(null);
 const confirmingAppointment = ref(false);
 const removeBlockTarget = ref<any | null>(null);
 
@@ -235,7 +245,9 @@ async function loadSchedule(): Promise<void> {
         unavailabilities.value = blockRes?.data ?? [];
         daySlots.value = slotRes?.data ?? [];
     } catch {
-        toast.error('Erro ao carregar agenda.');
+        if (import.meta.client) {
+            toast.error('Erro ao carregar agenda.');
+        }
     } finally {
         loading.value = false;
     }
@@ -357,7 +369,7 @@ async function removeBlock(): Promise<void> {
 
 function statusBadgeClass(status: string): string {
     if (status === 'CONFIRMED') return 'border-emerald-200 bg-emerald-50 text-emerald-700';
-    if (status === 'SCHEDULED') return 'border-blue-200 bg-blue-50 text-blue-700';
+    if (status === 'SCHEDULED') return 'border-teal-200 bg-teal-50 text-teal-700';
     if (status === 'IN_CONSULTATION') return 'border-violet-200 bg-violet-50 text-violet-700';
     if (status === 'CANCELLED') return 'border-rose-200 bg-rose-50 text-rose-700';
     return 'border-gray-200 bg-gray-50 text-gray-600';
@@ -388,7 +400,7 @@ function statusBadgeClass(status: string): string {
                 <button
                     v-if="auth.can('appointments.create')"
                     type="button"
-                    class="inline-flex h-8 items-center gap-1.5 rounded bg-blue-600 px-3 text-[12px] text-white hover:bg-blue-700"
+                    class="inline-flex h-8 items-center gap-1.5 rounded bg-teal-600 px-3 text-[12px] text-white hover:bg-teal-700"
                     @click="openCreateModal()"
                 >
                     <Icon name="lucide:plus" class="size-3.5" />
@@ -516,7 +528,7 @@ function statusBadgeClass(status: string): string {
                                     <NuxtLink
                                         v-if="apt.patient_id"
                                         :to="`/patients/${apt.patient_id}`"
-                                        class="text-blue-700 hover:underline"
+                                        class="text-teal-700 hover:underline"
                                     >
                                         {{ apt.patient?.name || 'Paciente' }}
                                     </NuxtLink>
@@ -530,7 +542,15 @@ function statusBadgeClass(status: string): string {
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-1">
+                            <div class="flex items-center gap-1" @click.stop>
+                                <button
+                                    type="button"
+                                    class="inline-flex h-7 items-center gap-1 rounded border border-gray-200 bg-white px-2 text-[11px] text-gray-700 hover:bg-gray-50"
+                                    @click="detailTarget = apt"
+                                >
+                                    <Icon name="lucide:panel-right-open" class="size-3" />
+                                    <span>Detalhes</span>
+                                </button>
                                 <button
                                     v-if="apt.status === 'SCHEDULED' && auth.can('appointments.create')"
                                     type="button"
@@ -538,6 +558,15 @@ function statusBadgeClass(status: string): string {
                                     @click="confirmTarget = apt"
                                 >
                                     Confirmar
+                                </button>
+                                <button
+                                    v-if="apt.status !== 'CANCELLED' && apt.status !== 'COMPLETED' && new Date(apt.start_time_utc).getTime() > Date.now()"
+                                    type="button"
+                                    class="inline-flex h-7 items-center gap-1 rounded border border-blue-200 bg-blue-50 px-2 text-[11px] text-blue-700 hover:bg-blue-100"
+                                    @click="notifyTarget = apt"
+                                >
+                                    <Icon name="lucide:bell" class="size-3" />
+                                    <span>Notificar</span>
                                 </button>
                                 <button
                                     v-if="apt.status !== 'CANCELLED' && apt.status !== 'COMPLETED' && auth.can('appointments.create')"
@@ -551,7 +580,7 @@ function statusBadgeClass(status: string): string {
                                     v-if="apt.status !== 'CANCELLED' && auth.can('appointments.summon')"
                                     type="button"
                                     title="Chamar à sala"
-                                    class="inline-flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-blue-50 hover:text-blue-600"
+                                    class="inline-flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-teal-50 hover:text-teal-600"
                                     @click="summonPatient(apt)"
                                 >
                                     <Icon name="lucide:volume-2" class="size-3.5" />
@@ -576,12 +605,12 @@ function statusBadgeClass(status: string): string {
                 <p v-if="!selectedProfessionalId" class="py-6 text-[12px] text-gray-400">
                     Selecione um profissional no filtro acima para visualizar e clicar nos slots livres deste dia.
                 </p>
-                <div v-else-if="daySlots.length === 0" class="py-6 text-[12px] text-gray-400">
+                <div v-else-if="visibleDaySlots.length === 0" class="py-6 text-[12px] text-gray-400">
                     Nenhum horário disponível para este profissional nesta data.
                 </div>
                 <div v-else class="grid grid-cols-2 gap-1.5">
                     <button
-                        v-for="slot in daySlots"
+                        v-for="slot in visibleDaySlots"
                         :key="slot.start_time_utc"
                         type="button"
                         class="flex items-center justify-between rounded border border-emerald-200 bg-emerald-50/50 px-2.5 py-1.5 font-mono text-[11px] text-emerald-800 hover:bg-emerald-100"
@@ -599,14 +628,32 @@ function statusBadgeClass(status: string): string {
             <div
                 v-for="day in weekDays"
                 :key="day"
-                class="flex min-h-44 flex-col rounded border border-gray-200 bg-white p-2.5"
+                class="flex min-h-44 cursor-pointer flex-col rounded border p-2.5 transition-opacity"
+                :class="
+                    day === todayDateStr
+                        ? 'border-teal-500 bg-teal-50/30 ring-1 ring-teal-500/20 hover:border-teal-600'
+                        : day < todayDateStr
+                            ? 'border-gray-200 bg-gray-50/80 opacity-65 hover:border-gray-300 hover:opacity-95'
+                            : 'border-gray-200 bg-white hover:border-teal-300'
+                "
+                @click="openDay(day)"
             >
                 <button
                     type="button"
-                    class="mb-2 flex items-center justify-between border-b border-gray-100 pb-1 text-left text-[11px] font-medium text-gray-700 hover:text-blue-600"
+                    class="mb-2 flex items-center justify-between border-b border-gray-100 pb-1 text-left text-[11px] font-medium hover:text-teal-700"
+                    :class="
+                        day === todayDateStr
+                            ? 'text-teal-800'
+                            : day < todayDateStr
+                                ? 'text-gray-400'
+                                : 'text-gray-700'
+                    "
                     @click="openDay(day)"
                 >
-                    <span>{{ day.split('-').reverse().slice(0, 2).join('/') }}</span>
+                    <span class="flex items-center gap-1.5">
+                        <span>{{ day.split('-').reverse().slice(0, 2).join('/') }}</span>
+                        <span v-if="day === todayDateStr" class="rounded bg-teal-600 px-1.5 py-0.5 text-[9px] font-normal text-white">Hoje</span>
+                    </span>
                     <span v-if="blocksOnDate(day).length > 0" class="rounded bg-amber-100 px-1 text-[9px] text-amber-800">Bloq.</span>
                 </button>
 
@@ -643,20 +690,40 @@ function statusBadgeClass(status: string): string {
                 <div
                     v-for="(cell, idx) in monthCells"
                     :key="idx"
-                    class="min-h-20 rounded border p-1.5 text-[11px]"
-                    :class="cell.date ? 'cursor-pointer border-gray-200 bg-white hover:border-blue-300' : 'border-transparent bg-gray-50/40'"
+                    class="min-h-20 rounded border p-1.5 text-[11px] transition-opacity"
+                    :class="
+                        !cell.date
+                            ? 'border-transparent bg-gray-50/40'
+                            : cell.date === todayDateStr
+                                ? 'cursor-pointer border-teal-500 bg-teal-50/35 ring-1 ring-teal-500/20 hover:border-teal-600'
+                                : cell.date < todayDateStr
+                                    ? 'cursor-pointer border-gray-200 bg-gray-50/80 opacity-65 hover:border-gray-300 hover:opacity-95'
+                                    : 'cursor-pointer border-gray-200 bg-white hover:border-teal-300'
+                    "
                     @click="cell.date && openDay(cell.date)"
                 >
                     <template v-if="cell.date">
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-700">{{ cell.dayNumber }}</span>
+                            <span
+                                class="flex items-center gap-1"
+                                :class="
+                                    cell.date === todayDateStr
+                                        ? 'font-medium text-teal-800'
+                                        : cell.date < todayDateStr
+                                            ? 'text-gray-400'
+                                            : 'text-gray-700'
+                                "
+                            >
+                                <span>{{ cell.dayNumber }}</span>
+                                <span v-if="cell.date === todayDateStr" class="rounded bg-teal-600 px-1 py-0.2 text-[9px] font-normal text-white">Hoje</span>
+                            </span>
                             <span v-if="blocksOnDate(cell.date).length > 0" class="rounded bg-amber-100 px-1 text-[9px] text-amber-800">Bloq.</span>
                         </div>
                         <div class="mt-1 space-y-0.5">
                             <div
                                 v-for="apt in appointmentsOnDate(cell.date).slice(0, 2)"
                                 :key="apt.id"
-                                class="truncate rounded bg-blue-50 px-1 text-[10px] text-blue-700"
+                                class="truncate rounded bg-teal-50 px-1 text-[10px] text-teal-700"
                             >
                                 {{ formatUtcInTimezone(apt.start_time_utc, clinicTimezone) }} {{ apt.patient?.name }}
                             </div>
@@ -670,6 +737,23 @@ function statusBadgeClass(status: string): string {
         </div>
 
         <!-- Modals -->
+        <AppointmentsAppointmentDetailModal
+            :open="Boolean(detailTarget)"
+            :appointment="detailTarget"
+            :default-timezone="clinicTimezone"
+            @close="detailTarget = null"
+            @updated="loadSchedule"
+            @reschedule="openRescheduleModal($event)"
+            @notify="notifyTarget = $event"
+            @cancel="cancelTarget = $event"
+        />
+
+        <AppointmentsAppointmentNotifyModal
+            :open="Boolean(notifyTarget)"
+            :appointment="notifyTarget"
+            :default-timezone="clinicTimezone"
+            @close="notifyTarget = null"
+        />
         <AppointmentsAppointmentBookingModal
             :open="bookingModalOpen"
             :professionals="professionals"

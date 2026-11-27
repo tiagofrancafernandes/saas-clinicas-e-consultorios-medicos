@@ -71,7 +71,7 @@ async function handleSend(): Promise<void> {
         :open="props.open"
         title="Enviar mensagem de teste"
         :description="props.instance ? `Instância: ${props.instance.label}` : ''"
-        max-width="sm"
+        max-width="lg"
         @close="emit('close')"
     >
         <form id="clinic-wa-send-test-form" class="space-y-3 text-[12px]" @submit.prevent="handleSend">

@@ -6,7 +6,10 @@ namespace Database\Seeders;
 
 use App\Enums\Central\SubscriptionStatus;
 use App\Enums\Central\UserRole;
+use App\Enums\Tenant\AppointmentPaymentStatus;
 use App\Enums\Tenant\AppointmentStatus;
+use App\Enums\Tenant\MedicalRecordStatus;
+use App\Enums\Tenant\MedicalRecordType;
 use App\Enums\Tenant\RecordVisibility;
 use App\Models\Central\Tenant;
 use App\Models\Tenant\Appointment;
@@ -38,6 +41,7 @@ final class DevClinicSeeder extends Seeder
     public const string DEMO_DR_STONE_ID = '22222222-2222-2222-2222-222222222222';
     public const string DEMO_DR_HOUSE_ID = '33333333-3333-3333-3333-333333333333';
     public const string DEMO_PATIENT_CARLOS_ID = '44444444-4444-4444-4444-444444444444';
+    public const string DEMO_PATIENT_PACIENTE1_ID = '44444444-4444-4444-4444-444444444445';
     public const string DEMO_APPOINTMENT_ID = '55555555-5555-5555-5555-555555555555';
     public const string DEMO_CONFIRMATION_TOKEN = 'demo_confirmation_token_carlos_abcdef1234567890abcdef123456789012';
     public const string DEMO_MEDICAL_RECORD_ID = '66666666-6666-6666-6666-666666666666';
@@ -45,11 +49,16 @@ final class DevClinicSeeder extends Seeder
     public function run(): void
     {
         $existing = Tenant::query()->find(static::DEMO_TENANT_ID);
+        $forced = $this->command?->hasOption('force') === true && (bool) $this->command?->option('force');
 
-        if ($existing) {
+        if (! $forced && $existing !== null) {
             $this->seedClinicUsers($existing->id);
 
             return;
+        }
+
+        if ($forced && $existing !== null) {
+            $existing->delete();
         }
 
         // 1. Create Demo Tenant (triggers Stancl schema creation and tenant migrations)
@@ -156,7 +165,6 @@ final class DevClinicSeeder extends Seeder
                 'health_insurance_id' => $unimed->id,
                 'name' => 'Unimed Nacional Especial',
                 'requires_prior_authorization' => false,
-                'max_return_days_limit' => 30,
                 'is_active' => true,
             ]);
 
@@ -172,7 +180,6 @@ final class DevClinicSeeder extends Seeder
                 'health_insurance_id' => $bradesco->id,
                 'name' => 'Bradesco Top Nacional Plus',
                 'requires_prior_authorization' => true,
-                'max_return_days_limit' => 21,
                 'is_active' => true,
             ]);
 
@@ -180,16 +187,19 @@ final class DevClinicSeeder extends Seeder
             $firstConsultation = AppointmentType::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'First Consultation',
-                'default_duration_minutes' => 60,
-                'color_code' => '#3b82f6',
+                'duration_minutes' => 60,
+                'price_in_cents' => 15000,
+                'is_return' => false,
                 'is_active' => true,
             ]);
 
             $followUp = AppointmentType::create([
                 'id' => (string) Str::uuid(),
                 'name' => 'Follow-up Consultation',
-                'default_duration_minutes' => 30,
-                'color_code' => '#10b981',
+                'duration_minutes' => 30,
+                'price_in_cents' => 0,
+                'is_return' => true,
+                'max_return_days_limit' => 30,
                 'is_active' => true,
             ]);
 
@@ -247,6 +257,50 @@ final class DevClinicSeeder extends Seeder
                 'phone' => '+5511988221100',
             ]);
 
+            $paciente1 = Patient::create([
+                'id' => static::DEMO_PATIENT_PACIENTE1_ID,
+                'name' => 'Paciente 1 Clinica 1',
+                'tax_id' => '45678901234',
+                'email' => 'paciente1@clinica1.com',
+                'phone' => '+5541998877665',
+                'birth_date' => '1990-05-15',
+                'metadata' => [
+                    'whatsapp_verified' => true,
+                    'gender' => 'M',
+                    'address' => [
+                        'zip_code' => '80000-000',
+                        'street' => 'Rua XV de Novembro',
+                        'number' => '100',
+                        'neighborhood' => 'Centro',
+                        'city' => 'Curitiba',
+                        'state' => 'PR',
+                    ],
+                ],
+            ]);
+
+            PatientHealthInsurance::create([
+                'id' => (string) Str::uuid(),
+                'patient_id' => $paciente1->id,
+                'health_insurance_id' => $unimed->id,
+                'health_insurance_plan_id' => $unimedPlan->id,
+                'card_number' => 'UNIMED-11223344',
+            ]);
+
+            PatientPackage::create([
+                'id' => (string) Str::uuid(),
+                'patient_id' => $paciente1->id,
+                'package_id' => $physioPackage->id,
+                'total_credits' => 10,
+                'remaining_credits' => 9,
+                'expires_at_utc' => CarbonImmutable::now()->addMonths(3),
+                'payment_status' => 'PAID_OFFLINE',
+            ]);
+
+            // Ensure every seeded patient has a central User with the same email
+            foreach ([$carlos, $mariana, $juliana, $paciente1] as $seededPatient) {
+                $this->ensurePatientUser($seededPatient, static::DEMO_TENANT_ID);
+            }
+
             // Demo Appointments
             $tomorrow = CarbonImmutable::now()->addDay()->setTime(14, 0, 0);
 
@@ -300,6 +354,56 @@ final class DevClinicSeeder extends Seeder
                 'size_bytes' => 2048576,
             ]);
 
+            // Demo Appointment, Medical Record & File for paciente1@clinica1.com
+            $paciente1Appointment = Appointment::create([
+                'id' => (string) Str::uuid(),
+                'professional_id' => $drJamesWilson->id,
+                'patient_id' => $paciente1->id,
+                'clinic_room_id' => $room102->id,
+                'appointment_type_id' => $firstConsultation->id,
+                'start_time_utc' => $tomorrow->addHours(2)->setTimezone('UTC'),
+                'end_time_utc' => $tomorrow->addHours(2)->addMinutes(30)->setTimezone('UTC'),
+                'status' => AppointmentStatus::CONFIRMED,
+                'price_in_cents' => 15000,
+                'payment_status' => AppointmentPaymentStatus::PAID_OFFLINE,
+                'origin_timezone' => 'America/Sao_Paulo',
+                'notes' => 'Consulta inicial vinculada ao usuário paciente1@clinica1.com',
+            ]);
+
+            MedicalRecord::create([
+                'id' => (string) Str::uuid(),
+                'patient_id' => $paciente1->id,
+                'professional_id' => $drJamesWilson->id,
+                'appointment_id' => $paciente1Appointment->id,
+                'created_by_user_id' => $proUserId !== null ? (int) $proUserId : null,
+                'type' => MedicalRecordType::SOAP,
+                'visibility' => RecordVisibility::PUBLIC_CLINIC,
+                'status' => MedicalRecordStatus::FINALIZED,
+                'title' => 'Avaliação Inicial - Paciente 1',
+                'content' => 'Paciente compareceu para avaliação inicial sem intercorrências.',
+                'structured_data' => [
+                    'subjective' => 'Relata acompanhamento preventivo.',
+                    'objective' => 'Sinais vitais estáveis.',
+                    'assessment' => 'Quadro clínico estável.',
+                    'plan' => 'Solicitado hemograma de rotina.',
+                ],
+                'finalized_at_utc' => CarbonImmutable::now('UTC'),
+                'finalized_by_user_id' => $proUserId !== null ? (int) $proUserId : null,
+            ]);
+
+            File::create([
+                'id' => (string) Str::uuid(),
+                'fileable_type' => Patient::class,
+                'fileable_id' => $paciente1->id,
+                'collection' => 'exams',
+                'visibility' => 'SHARED_TEAM',
+                'disk' => 'local',
+                'file_path' => 'tenants/' . static::DEMO_TENANT_ID . '/exams/hemograma_paciente1.pdf',
+                'original_filename' => 'hemograma_paciente1.pdf',
+                'mime_type' => 'application/pdf',
+                'size_bytes' => 1048576,
+            ]);
+
             // Waitlist entry
             WaitlistEntry::create([
                 'id' => (string) Str::uuid(),
@@ -335,5 +439,25 @@ final class DevClinicSeeder extends Seeder
 
             $user->syncRoles([$clinicUser['role']->value]);
         }
+    }
+
+    private function ensurePatientUser(Patient $patient, string $tenantId): void
+    {
+        if (! $patient->email) {
+            return;
+        }
+
+        $user = User::query()->updateOrCreate(
+            ['email' => $patient->email],
+            [
+                'name' => $patient->name,
+                'password' => 'password',
+                'tenant_id' => $tenantId,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $user->syncRoles([UserRole::PATIENT->value]);
     }
 }

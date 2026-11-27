@@ -4,6 +4,10 @@ const apiBase = (process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000').re
 
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
+    devServer: {
+        host: true,
+        port: 3000,
+    },
     devtools: {
         enabled: true,
         timeline: {

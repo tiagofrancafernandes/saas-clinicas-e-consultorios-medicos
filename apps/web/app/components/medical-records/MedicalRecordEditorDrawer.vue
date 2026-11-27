@@ -400,7 +400,7 @@ async function submitAddendum(): Promise<void> {
 
             <div
                 v-if="props.record?.created_by?.name || props.record?.professional?.name"
-                class="flex flex-wrap items-center gap-3 rounded border border-blue-100 bg-blue-50/50 px-3 py-1.5 text-[11px] text-gray-600"
+                class="flex flex-wrap items-center gap-3 rounded border border-teal-100 bg-teal-50/50 px-3 py-1.5 text-[11px] text-gray-600"
             >
                 <span v-if="props.record?.professional?.name">
                     Profissional titular: <strong class="font-medium text-gray-800">{{ props.record.professional.name }}</strong>
@@ -558,7 +558,7 @@ async function submitAddendum(): Promise<void> {
                     <button
                         v-if="!addendumOpen && auth.can('medical_records.create')"
                         type="button"
-                        class="inline-flex h-7 items-center gap-1 rounded border border-blue-200 bg-blue-50 px-2 text-[11px] text-blue-700 hover:bg-blue-100"
+                        class="inline-flex h-7 items-center gap-1 rounded border border-teal-200 bg-teal-50 px-2 text-[11px] text-teal-700 hover:bg-teal-100"
                         @click="addendumOpen = true"
                     >
                         <Icon name="lucide:plus" class="size-3" />
@@ -596,7 +596,7 @@ async function submitAddendum(): Promise<void> {
                         <button
                             type="button"
                             :disabled="savingAddendum"
-                            class="inline-flex h-7 items-center gap-1 rounded bg-blue-600 px-2.5 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                            class="inline-flex h-7 items-center gap-1 rounded bg-teal-600 px-2.5 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                             @click="submitAddendum"
                         >
                             <Icon v-if="savingAddendum" name="lucide:loader-2" class="size-3 animate-spin" />

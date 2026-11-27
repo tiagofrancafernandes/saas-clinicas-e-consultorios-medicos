@@ -591,7 +591,7 @@ onMounted(loadPatient);
                     ? 'A mensagem será enviada imediatamente para o WhatsApp do paciente.'
                     : 'A mensagem agendada não será enviada para o paciente.'
             "
-            max-width="sm"
+            max-width="lg"
             @close="!processingMessageAction && (confirmMessageAction = null)"
         >
             <div v-if="confirmMessageAction" class="space-y-3 text-[12px]">

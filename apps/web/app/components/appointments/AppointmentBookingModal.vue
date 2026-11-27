@@ -374,8 +374,8 @@ async function handleSubmit(): Promise<void> {
                         class="rounded border px-2 py-1 font-mono text-[11px] transition-colors"
                         :class="
                             getDatePartsInTimezone(new Date(slot.start_time_utc), form.timezone).time === form.start_time
-                                ? 'border-blue-600 bg-blue-600 text-white'
-                                : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50'
+                                ? 'border-teal-600 bg-teal-600 text-white'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-teal-300 hover:bg-teal-50'
                         "
                         @click="selectSlot(slot)"
                     >
@@ -392,18 +392,34 @@ async function handleSubmit(): Promise<void> {
                     placeholder="Ex: Primeira consulta, retorno..."
                     class="h-8 w-full rounded border border-gray-200 px-2.5 text-[12px]"
                 />
+                <div class="mt-1.5 flex flex-wrap gap-1.5">
+                    <button
+                        v-for="suggestion in ['Primeira consulta', 'Retorno', 'Avaliação', 'Dúvidas', 'Entrega de exames']"
+                        :key="suggestion"
+                        type="button"
+                        class="rounded-full border px-2.5 py-0.5 text-[10px] transition-colors"
+                        :class="
+                            form.notes === suggestion
+                                ? 'border-teal-300 bg-teal-50 text-teal-700'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100'
+                        "
+                        @click="form.notes = suggestion"
+                    >
+                        {{ suggestion }}
+                    </button>
+                </div>
             </div>
 
             <!-- Notify Patient -->
             <div class="space-y-2 rounded border border-gray-200 bg-gray-50/70 p-2.5">
                 <label class="flex cursor-pointer items-center gap-2 text-[12px] text-gray-700">
-                    <input v-model="form.notify_patient" type="checkbox" class="size-3.5 accent-blue-600" />
+                    <input v-model="form.notify_patient" type="checkbox" class="size-3.5 accent-teal-600" />
                     <span>Notificar cliente via WhatsApp</span>
                 </label>
 
                 <template v-if="form.notify_patient">
                     <label class="flex cursor-pointer items-center gap-2 text-[11px] text-gray-600">
-                        <input v-model="form.customize_message" type="checkbox" class="size-3.5 accent-blue-600" />
+                        <input v-model="form.customize_message" type="checkbox" class="size-3.5 accent-teal-600" />
                         <span>Customizar mensagem</span>
                     </label>
 
@@ -432,7 +448,7 @@ async function handleSubmit(): Promise<void> {
                 <button
                     type="submit"
                     :disabled="saving"
-                    class="inline-flex h-7 items-center gap-1.5 rounded bg-blue-600 px-3 text-[11px] text-white hover:bg-blue-700 disabled:opacity-50"
+                    class="inline-flex h-7 items-center gap-1.5 rounded bg-teal-600 px-3 text-[11px] text-white hover:bg-teal-700 disabled:opacity-50"
                 >
                     <Icon v-if="saving" name="lucide:loader-2" class="size-3 animate-spin" />
                     <span>{{ props.initialData?.mode === 'reschedule' ? 'Salvar remarcação' : 'Agendar' }}</span>

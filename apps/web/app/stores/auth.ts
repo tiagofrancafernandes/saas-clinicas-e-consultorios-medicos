@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('clinic-auth', () => {
     const sanctumUser = useSanctumUser<AuthUser>();
 
     const user = computed(() => sanctumUser.value ?? null);
-    const token = computed(() => useCookie<string | null>('sanctum.token.cookie').value ?? null);
+    const token = computed(() => useCookie<string | null>('clinic_sanctum_token').value ?? null);
     const tenantId = computed(() => user.value?.tenant_id ?? null);
     const permissions = computed(() => user.value?.all_permissions ?? []);
     const primaryRole = computed(() => user.value?.roles?.[0] ?? '');

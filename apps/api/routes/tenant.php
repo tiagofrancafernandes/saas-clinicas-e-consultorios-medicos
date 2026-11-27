@@ -12,6 +12,7 @@ use App\Http\Controllers\Tenant\MedicalRecordController;
 use App\Http\Controllers\Tenant\PatientAuthController;
 use App\Http\Controllers\Tenant\PatientController;
 use App\Http\Controllers\Tenant\PatientMessageController;
+use App\Http\Controllers\Tenant\PatientPortalController;
 use App\Http\Controllers\Tenant\ProfessionalController;
 use App\Http\Controllers\Tenant\ProfessionalDelegationController;
 use App\Http\Controllers\Tenant\ProfessionalUnavailabilityController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Tenant\UserManagementController;
 use App\Http\Controllers\Tenant\WaitlistController;
 use App\Http\Controllers\Tenant\WhatsAppVerificationController;
 use App\Http\Middleware\CheckTenantSubscription;
+use App\Http\Middleware\EnsurePatientPortalAccess;
 use App\Http\Middleware\InitializeTenancyByHeader;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -49,6 +51,18 @@ Route::prefix('api/tenant')->middleware([
     // Authenticated Sanctum endpoints with Spatie Permission middlewares
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/auth/me', [PatientAuthController::class, 'me']);
+
+        // Patient Portal (strictly PATIENT or roleless User)
+        Route::prefix('portal')->middleware(EnsurePatientPortalAccess::class)->group(function (): void {
+            Route::get('/summary', [PatientPortalController::class, 'summary']);
+            Route::get('/appointments', [PatientPortalController::class, 'appointments']);
+            Route::post('/appointments/{id}/confirm', [PatientPortalController::class, 'confirmAppointment']);
+            Route::post('/appointments/{id}/cancel', [PatientPortalController::class, 'cancelAppointment']);
+            Route::get('/documents', [PatientPortalController::class, 'documents']);
+            Route::get('/documents/{fileId}/download', [PatientPortalController::class, 'downloadDocument']);
+            Route::get('/profile', [PatientPortalController::class, 'profile']);
+            Route::put('/profile', [PatientPortalController::class, 'updateProfile']);
+        });
 
         // Clinic User e Permission Management (ACL)
         Route::get('/permissions', [UserManagementController::class, 'permissionsCatalog'])
@@ -95,6 +109,8 @@ Route::prefix('api/tenant')->middleware([
             ->middleware('permission:' . PermissionName::APPOINTMENTS_CREATE->value);
         Route::post('/appointments/{id}/summon', [AppointmentController::class, 'summon'])
             ->middleware('permission:' . PermissionName::APPOINTMENTS_SUMMON->value);
+        Route::patch('/appointments/{id}/status', [AppointmentController::class, 'updateStatus'])
+            ->middleware('permission:' . PermissionName::APPOINTMENTS_CREATE->value);
 
         // Medical Records e Delegations
         Route::get('/medical-records', [MedicalRecordController::class, 'list'])

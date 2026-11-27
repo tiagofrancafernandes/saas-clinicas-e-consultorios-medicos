@@ -93,7 +93,7 @@ async function handleSubmit(): Promise<void> {
         :open="props.open"
         title="Bloquear Agenda"
         description="Registre férias, faltas, licenças ou indisponibilidades para impedir agendamentos."
-        max-width="sm"
+        max-width="lg"
         @close="!saving && emit('close')"
     >
         <form class="space-y-3 text-[12px]" @submit.prevent="handleSubmit">
@@ -120,6 +120,7 @@ async function handleSubmit(): Promise<void> {
                     >
                         <option value="Férias">Férias</option>
                         <option value="Falta">Falta</option>
+                        <option value="Descanso">Descanso</option>
                         <option value="Licença médica">Licença médica</option>
                         <option value="Congresso / Evento">Congresso / Evento</option>
                         <option value="Outro">Outro</option>
@@ -151,7 +152,7 @@ async function handleSubmit(): Promise<void> {
             </div>
 
             <label class="flex cursor-pointer items-center gap-2 text-[12px] text-gray-700">
-                <input v-model="form.full_day" type="checkbox" class="size-3.5 accent-blue-600" />
+                <input v-model="form.full_day" type="checkbox" class="size-3.5 accent-teal-600" />
                 <span>Dia(s) inteiro(s)</span>
             </label>
 

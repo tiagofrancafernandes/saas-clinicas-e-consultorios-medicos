@@ -61,6 +61,8 @@ final class PatientMessageController
             'schedule' => ['sometimes', 'boolean'],
             'scheduled_at' => ['required_if:schedule,true', 'nullable', 'date'],
             'timezone' => ['nullable', 'string', 'timezone:all'],
+            'appointment_id' => ['nullable', 'uuid'],
+            'type' => ['nullable', 'string', 'max:32'],
         ]);
 
         $digits = (string) preg_replace('/\D+/', '', $validated['number']);
@@ -82,9 +84,10 @@ final class PatientMessageController
 
             $log = NotificationLog::create([
                 'id' => (string) Str::uuid(),
+                'appointment_id' => $validated['appointment_id'] ?? null,
                 'patient_id' => $patient->id,
                 'channel' => 'WHATSAPP',
-                'type' => 'SCHEDULED_MESSAGE',
+                'type' => $validated['type'] ?? 'SCHEDULED_MESSAGE',
                 'recipient' => $digits,
                 'status' => NotificationLogStatus::SCHEDULED,
                 'payload' => [
@@ -108,9 +111,10 @@ final class PatientMessageController
 
         $log = NotificationLog::create([
             'id' => (string) Str::uuid(),
+            'appointment_id' => $validated['appointment_id'] ?? null,
             'patient_id' => $patient->id,
             'channel' => 'WHATSAPP',
-            'type' => 'DIRECT_MESSAGE',
+            'type' => $validated['type'] ?? 'DIRECT_MESSAGE',
             'recipient' => $digits,
             'external_message_id' => $result['external_id'],
             'status' => $result['status'],

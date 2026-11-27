@@ -337,7 +337,7 @@ async function confirmToggleActive(): Promise<void> {
                         v-if="auth.can('users.update')"
                         type="button"
                         title="Enviar e-mail de reset de senha"
-                        class="inline-flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-blue-50 hover:text-blue-600"
+                        class="inline-flex size-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-teal-50 hover:text-teal-600"
                         @click="resetConfirmTarget = record"
                     >
                         <Icon name="lucide:mail" class="size-3.5" />
@@ -386,7 +386,7 @@ async function confirmToggleActive(): Promise<void> {
                 </div>
             </div>
 
-            <div v-if="selectedUser.professional" class="rounded border border-blue-100 bg-blue-50/50 p-3">
+            <div v-if="selectedUser.professional" class="rounded border border-teal-100 bg-teal-50/50 p-3">
                 <div class="text-[11px] font-medium text-gray-700">Perfil Profissional Vinculado</div>
                 <div class="mt-1 text-[11px] text-gray-600">
                     Especialidade: {{ selectedUser.professional.specialty }} · Registro: {{ selectedUser.professional.license_number }}

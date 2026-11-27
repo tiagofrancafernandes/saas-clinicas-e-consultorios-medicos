@@ -189,7 +189,7 @@ async function confirmDelete(): Promise<void> {
             <div v-for="file in files" :key="file.id" class="flex flex-wrap items-center justify-between gap-2 py-2.5">
                 <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="rounded border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700">
+                        <span class="rounded border border-teal-200 bg-teal-50 px-1.5 py-0.5 text-[10px] text-teal-700">
                             {{ collectionLabel(file.collection) }}
                         </span>
                         <span class="truncate font-medium text-gray-900">{{ file.original_filename }}</span>
@@ -227,7 +227,7 @@ async function confirmDelete(): Promise<void> {
             :open="uploadModalOpen"
             title="Anexar documento do paciente"
             description="Envie exames, receitas, digitalizações ou laudos (máx. 20 MB)."
-            max-width="sm"
+            max-width="lg"
             @close="uploadModalOpen = false"
         >
             <form class="space-y-3 text-[12px]" @submit.prevent="handleUpload">

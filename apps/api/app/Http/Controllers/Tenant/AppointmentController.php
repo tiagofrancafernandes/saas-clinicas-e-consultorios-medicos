@@ -327,4 +327,32 @@ final class AppointmentController extends Controller
             ],
         ]);
     }
+
+    public function updateStatus(Request $request, string $id): JsonResponse
+    {
+        $appointment = Str::isUuid($id) ? Appointment::query()->find($id) : null;
+
+        if (! $appointment) {
+            return response()->json(['message' => 'Appointment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($appointment->status->isFinalized()) {
+            return response()->json([
+                'message' => "Cannot change status of an already finalized appointment ({$appointment->status->value}).",
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $validated = $request->validate([
+            'status' => ['required', 'string', 'in:SCHEDULED,CONFIRMED,ARRIVED,IN_CONSULTATION,COMPLETED,NO_SHOW'],
+        ]);
+
+        $appointment->update([
+            'status' => AppointmentStatus::from($validated['status']),
+        ]);
+
+        return response()->json([
+            'message' => 'Appointment status updated successfully.',
+            'data' => $appointment->fresh(['professional', 'patient', 'clinicRoom', 'appointmentType']),
+        ]);
+    }
 }

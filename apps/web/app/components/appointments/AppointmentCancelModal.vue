@@ -80,7 +80,7 @@ async function handleCancel(): Promise<void> {
                 ? `Cancelar consulta de ${props.appointment.patient?.name || 'Paciente'}?`
                 : ''
         "
-        max-width="sm"
+        max-width="lg"
         @close="!cancelling && emit('close')"
     >
         <form class="space-y-3 text-[12px]" @submit.prevent="handleCancel">
@@ -96,13 +96,13 @@ async function handleCancel(): Promise<void> {
 
             <div class="space-y-2 rounded border border-gray-200 bg-gray-50/70 p-2.5">
                 <label class="flex cursor-pointer items-center gap-2 text-[12px] text-gray-700">
-                    <input v-model="notifyPatient" type="checkbox" class="size-3.5 accent-blue-600" />
+                    <input v-model="notifyPatient" type="checkbox" class="size-3.5 accent-teal-600" />
                     <span>Notificar cliente via WhatsApp</span>
                 </label>
 
                 <template v-if="notifyPatient">
                     <label class="flex cursor-pointer items-center gap-2 text-[11px] text-gray-600">
-                        <input v-model="customizeMessage" type="checkbox" class="size-3.5 accent-blue-600" />
+                        <input v-model="customizeMessage" type="checkbox" class="size-3.5 accent-teal-600" />
                         <span>Customizar mensagem</span>
                     </label>
 

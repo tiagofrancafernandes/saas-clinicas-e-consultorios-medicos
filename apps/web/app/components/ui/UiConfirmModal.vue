@@ -16,7 +16,7 @@ const emit = defineEmits<{ (e: 'close'): void; (e: 'confirm'): void }>();
 </script>
 
 <template>
-    <UiModal :open="open" :title="title" max-width="sm" @close="emit('close')">
+    <UiModal :open="open" :title="title" max-width="lg" @close="emit('close')">
         <div class="space-y-4">
             <div class="flex items-start gap-3">
                 <div

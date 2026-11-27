@@ -301,7 +301,7 @@ function formatDateTime(iso?: string | null): string {
                                 {{ typeLabel(rec.type) }}
                             </span>
                             <span class="font-medium text-gray-900">{{ rec.title }}</span>
-                            <span v-if="rec.addendums?.length" class="text-[10px] text-blue-600">
+                            <span v-if="rec.addendums?.length" class="text-[10px] text-teal-600">
                                 · {{ rec.addendums.length }} adendo(s)
                             </span>
                         </div>
